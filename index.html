@@ -61,6 +61,19 @@
                 align-items: center;
             }
 
+            .setup-notice {
+                background: rgba(255, 165, 0, 0.2);
+                border: 1px solid #ff9900;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 20px;
+                font-size: 13px;
+            }
+
+            .setup-notice strong {
+                color: #ff9900;
+            }
+
             nav a {
                 color: #a0a0a0;
                 text-decoration: none;
@@ -799,29 +812,31 @@
                 <h2>Welcome Back</h2>
                 <p>Sign in to access your API key and dashboard.</p>
 
-                <button class="google-btn" onclick="handleGoogleSignIn()">
-                    <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                    </svg>
-                    Continue with Google
-                </button>
+                <div id="googleSignInSection">
+                    <button class="google-btn" onclick="handleGoogleSignIn()">
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                            <path
+                                fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            />
+                            <path
+                                fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                            />
+                            <path
+                                fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                            />
+                            <path
+                                fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                            />
+                        </svg>
+                        Continue with Google
+                    </button>
 
-                <div class="divider"><span>or</span></div>
+                    <div class="divider"><span>or</span></div>
+                </div>
 
                 <form onsubmit="handleEmailLogin(event)">
                     <div class="form-group">
@@ -866,40 +881,33 @@
                 <h2>Create Account</h2>
                 <p>Get your free API key and start coding with AI.</p>
 
-                <button class="google-btn" onclick="handleGoogleSignIn()">
-                    <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                    </svg>
-                    Continue with Google
-                </button>
+                <div id="googleSignUpSection">
+                    <button class="google-btn" onclick="handleGoogleSignIn()">
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                            <path
+                                fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            />
+                            <path
+                                fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                            />
+                            <path
+                                fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                            />
+                            <path
+                                fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                            />
+                        </svg>
+                        Continue with Google
+                    </button>
 
-                <div class="divider"><span>or</span></div>
+                    <div class="divider"><span>or</span></div>
+                </div>
 
                 <form onsubmit="handleEmailSignup(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input
-                            type="text"
-                            id="signupName"
-                            placeholder="John Doe"
-                            required
-                        />
-                    </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input
@@ -933,72 +941,6 @@
                         Already have an account?
                         <a onclick="switchToLogin()">Sign in</a>
                     </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Verification Modal -->
-        <div id="verifyModal" class="modal">
-            <div class="modal-content">
-                <h2>Verify Your Email</h2>
-                <p>
-                    We've sent a 6-digit code to
-                    <span id="verifyEmail" style="color: #00d4ff"></span>
-                </p>
-
-                <div class="code-input">
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code1"
-                        oninput="handleCodeInput(this, 'code2')"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code2"
-                        oninput="handleCodeInput(this, 'code3')"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code3"
-                        oninput="handleCodeInput(this, 'code4')"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code4"
-                        oninput="handleCodeInput(this, 'code5')"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code5"
-                        oninput="handleCodeInput(this, 'code6')"
-                    />
-                    <input
-                        type="text"
-                        maxlength="1"
-                        id="code6"
-                        oninput="handleCodeInput(this, null)"
-                    />
-                </div>
-
-                <div class="timer" id="timer">
-                    Code expires in <span id="timerValue">5:00</span>
-                </div>
-
-                <button
-                    class="btn btn-primary"
-                    style="width: 100%; margin-top: 20px"
-                    onclick="verifyCode()"
-                >
-                    Verify
-                </button>
-
-                <div class="form-footer">
-                    <p><a onclick="resendCode()">Resend code</a></p>
                 </div>
             </div>
         </div>
@@ -1253,10 +1195,8 @@
 
         <script>
             // Google Sign-In Configuration
-            // Note: Replace YOUR_CLIENT_ID with your actual Google OAuth Client ID
-            // Get it from: https://console.cloud.google.com/apis/credentials
             let googleClientId =
-                "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+                "562425398418-al9902tg637jqlvp0map6luk85qu2ag9.apps.googleusercontent.com";
 
             // Temporary storage for signup process
             let pendingSignup = null;
@@ -1347,6 +1287,20 @@
 
             // Handle Google Sign-In
             function handleGoogleSignIn() {
+                // Check if Google Client ID is configured
+                if (
+                    !googleClientId ||
+                    googleClientId === "" ||
+                    googleClientId.includes("YOUR_GOOGLE")
+                ) {
+                    showToast(
+                        "Google Sign-In is not configured yet. Please use Email/Password signup.",
+                        true,
+                    );
+                    showConfigNotice();
+                    return;
+                }
+
                 // Initialize Google Identity Services
                 if (typeof google !== "undefined" && google.accounts) {
                     google.accounts.id.initialize({
@@ -1355,9 +1309,38 @@
                     });
                     google.accounts.id.prompt();
                 } else {
-                    // Fallback: Simulate Google Sign-In for demo
-                    // In production, Google's script would handle this
-                    simulateGoogleSignIn();
+                    showToast(
+                        "Google Sign-In failed to load. Please use Email/Password.",
+                        true,
+                    );
+                }
+            }
+
+            function showConfigNotice() {
+                const notice = document.createElement("div");
+                notice.className = "setup-notice";
+                notice.innerHTML = `
+            <strong>Setup Required:</strong> Google Sign-In needs configuration.
+            <br><br>
+            To enable Google Sign-In:
+            <br>1. Go to <a href="https://console.cloud.google.com/apis/credentials" style="color: #00d4ff">Google Cloud Console</a>
+            <br>2. Create an OAuth Client ID
+            <br>3. Add your domain to authorized origins
+            <br>4. Paste the Client ID in the website code
+            <br><br>
+            For now, please use Email/Password signup below.
+            `;
+                const modalContent = document.querySelector(
+                    "#loginModal .modal-content, #signupModal .modal-content",
+                );
+                if (
+                    modalContent &&
+                    !modalContent.querySelector(".setup-notice")
+                ) {
+                    modalContent.insertBefore(
+                        notice,
+                        modalContent.firstChild.nextSibling,
+                    );
                 }
             }
 
@@ -1421,26 +1404,15 @@
                 return JSON.parse(jsonPayload);
             }
 
-            function simulateGoogleSignIn() {
-                // For demo purposes when Google SDK isn't loaded
-                const email = prompt("Enter your Google email:");
-                if (!email) return;
-
-                const name = email.split("@")[0];
-                handleGoogleCredentialResponse({
-                    credential: btoa(JSON.stringify({ email, name })),
-                });
-            }
-
             // Handle Email Signup
             function handleEmailSignup(e) {
                 e.preventDefault();
 
-                const name = document.getElementById("signupName").value;
                 const email = document.getElementById("signupEmail").value;
                 const password =
                     document.getElementById("signupPassword").value;
 
+                // Check if user exists
                 const users = JSON.parse(
                     localStorage.getItem("openshell_users") || "{}",
                 );
@@ -1453,34 +1425,27 @@
                     return;
                 }
 
-                // Store pending signup
-                pendingSignup = {
+                // Create account immediately (no verification needed when using Google Client ID)
+                const apiKey = generateApiKey();
+                const name = email.split("@")[0]; // Use email username as name
+                users[email] = {
                     name: name,
                     email: email,
                     password: password,
+                    apiKey: apiKey,
+                    plan: "free",
+                    requests: 0,
+                    tokens: 0,
+                    signInMethod: "email",
+                    createdAt: new Date().toISOString(),
                 };
 
-                // Generate and send verification code
-                verificationCode = generateVerificationCode();
-                simulateSendEmail(email, verificationCode);
+                localStorage.setItem("openshell_users", JSON.stringify(users));
+                localStorage.setItem("openshell_current_user", email);
 
-                // Show verification modal
-                document.getElementById("verifyEmail").textContent = email;
                 closeAllModals();
-                document.getElementById("verifyModal").classList.add("active");
-
-                // Start timer
-                startTimer();
-
-                // Clear code inputs
-                document
-                    .querySelectorAll(".code-input input")
-                    .forEach((input) => {
-                        input.value = "";
-                    });
-                document.getElementById("code1").focus();
-
-                showToast("Verification code sent to " + email);
+                showDashboard(users[email]);
+                showToast("Account created! Your API key is ready.");
             }
 
             // Handle Email Login

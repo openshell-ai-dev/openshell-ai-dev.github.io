@@ -8,11 +8,6 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer
-        ></script>
         <style>
             * {
                 margin: 0;
@@ -24,9 +19,9 @@
                 font-family: "Inter", sans-serif;
                 background: linear-gradient(
                     135deg,
-                    #0f0f23 0%,
-                    #1a1a2e 50%,
-                    #0f0f23 100%
+                    #0d0d0d 0%,
+                    #1a1a1a 50%,
+                    #0d0d0d 100%
                 );
                 min-height: 100vh;
                 color: #ffffff;
@@ -50,7 +45,7 @@
             .logo {
                 font-size: 24px;
                 font-weight: 700;
-                background: linear-gradient(90deg, #00d4ff, #0099ff);
+                background: linear-gradient(90deg, #7C3AED, #9F67FF);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -78,11 +73,23 @@
                 color: #a0a0a0;
                 text-decoration: none;
                 font-weight: 500;
-                transition: color 0.3s;
+                transition: color 0.3s ease;
+                position: relative;
             }
 
-            nav a:hover {
-                color: #00d4ff;
+            nav a::after {
+                content: "";
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: #7C3AED;
+                transition: width 0.3s ease;
+            }
+
+            nav a:hover::after {
+                width: 100%;
             }
 
             .btn {
@@ -96,23 +103,23 @@
             }
 
             .btn-primary {
-                background: linear-gradient(90deg, #00d4ff, #0099ff);
-                color: #000;
+                background: linear-gradient(90deg, #7C3AED, #9F67FF);
+                color: #fff;
             }
 
             .btn-primary:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+                box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
             }
 
             .btn-secondary {
                 background: transparent;
-                border: 1px solid #00d4ff;
-                color: #00d4ff;
+                border: 1px solid #7C3AED;
+                color: #7C3AED;
             }
 
             .btn-secondary:hover {
-                background: rgba(0, 212, 255, 0.1);
+                background: rgba(124, 58, 237, 0.1);
             }
 
             .btn-danger {
@@ -134,7 +141,7 @@
                 font-size: 56px;
                 font-weight: 700;
                 margin-bottom: 20px;
-                background: linear-gradient(90deg, #ffffff, #00d4ff);
+                background: linear-gradient(90deg, #ffffff, #7C3AED);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -170,7 +177,7 @@
 
             .feature-card:hover {
                 transform: translateY(-5px);
-                border-color: #00d4ff;
+                border-color: #7C3AED;
             }
 
             .feature-icon {
@@ -214,7 +221,7 @@
             }
 
             .pricing-card.popular {
-                border-color: #00d4ff;
+                border-color: #7C3AED;
                 position: relative;
             }
 
@@ -224,8 +231,8 @@
                 top: -12px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: #00d4ff;
-                color: #000;
+                background: #7C3AED;
+                color: #fff;
                 padding: 4px 12px;
                 border-radius: 4px;
                 font-size: 10px;
@@ -265,7 +272,41 @@
 
             .pricing-card ul li::before {
                 content: "[*]";
-                color: #00d4ff;
+                color: #7C3AED;
+            }
+
+            .pricing-card-cons {
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .pricing-card-cons h4 {
+                font-size: 12px;
+                color: #7C3AED;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 10px;
+                font-weight: 600;
+            }
+
+            .pricing-card-cons ul {
+                list-style: none;
+                margin: 0;
+            }
+
+            .pricing-card-cons ul li {
+                padding: 8px 0;
+                color: #666;
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .pricing-card-cons ul li::before {
+                content: "[×]";
+                color: #ef4444;
             }
 
             /* Modal */
@@ -276,25 +317,39 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.8);
+                background: rgba(0, 0, 0, 0.5);
                 justify-content: center;
                 align-items: center;
                 z-index: 1000;
+                backdrop-filter: blur(4px);
             }
 
             .modal.active {
                 display: flex;
+                animation: fadeInUp 0.4s ease-out;
             }
 
             .modal-content {
-                background: #1a1a2e;
+                background: #1a1a1a;
                 border-radius: 16px;
                 padding: 40px;
                 width: 100%;
                 max-width: 450px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(124, 58, 237, 0.2);
                 max-height: 90vh;
                 overflow-y: auto;
+                animation: slideUp 0.4s ease-out;
+            }
+
+            @keyframes slideUp {
+                from {
+                    transform: translateY(30px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
             }
 
             .modal-content h2 {
@@ -326,11 +381,14 @@
                 background: rgba(255, 255, 255, 0.05);
                 color: #fff;
                 font-size: 14px;
+                transition: all 0.3s ease;
             }
 
             .form-group input:focus {
                 outline: none;
-                border-color: #00d4ff;
+                border-color: #7C3AED;
+                background: rgba(124, 58, 237, 0.05);
+                box-shadow: 0 0 12px rgba(124, 58, 237, 0.15);
             }
 
             .form-footer {
@@ -339,33 +397,17 @@
             }
 
             .form-footer a {
-                color: #00d4ff;
+                color: #7C3AED;
                 text-decoration: none;
                 cursor: pointer;
             }
 
             .divider {
-                display: flex;
-                align-items: center;
-                margin: 20px 0;
+                display: none;
             }
 
-            .divider::before,
-            .divider::after {
-                content: "";
-                flex: 1;
-                height: 1px;
-                background: rgba(255, 255, 255, 0.1);
-            }
-
-            .divider span {
-                padding: 0 15px;
-                color: #a0a0a0;
-                font-size: 14px;
-            }
-
-            /* Google Sign In Button */
-            .google-btn {
+            /* GitHub Sign In Button */
+            .github-btn {
                 width: 100%;
                 padding: 14px;
                 background: #fff;
@@ -379,14 +421,20 @@
                 justify-content: center;
                 gap: 10px;
                 color: #333;
-                transition: all 0.3s;
+                transition: all 0.3s ease;
             }
 
-            .google-btn:hover {
+            .github-btn:hover {
                 background: #f0f0f0;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
 
-            .google-btn img {
+            .github-btn:active {
+                transform: translateY(0);
+            }
+
+            .github-btn img {
                 width: 20px;
                 height: 20px;
             }
@@ -395,6 +443,7 @@
             .dashboard {
                 display: none;
                 padding: 40px 20px;
+                animation: fadeInUp 0.5s ease-out;
             }
 
             .dashboard.active {
@@ -406,13 +455,21 @@
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 40px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid rgba(124, 58, 237, 0.2);
             }
 
             .api-key-box {
-                background: rgba(255, 255, 255, 0.05);
+                background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(124, 58, 237, 0.05));
                 border-radius: 12px;
                 padding: 30px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                transition: all 0.3s ease;
+            }
+
+            .api-key-box:hover {
+                border-color: rgba(124, 58, 237, 0.5);
+                background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(124, 58, 237, 0.08));
             }
 
             .api-key-display {
@@ -427,7 +484,7 @@
                 background: rgba(0, 0, 0, 0.3);
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 border-radius: 8px;
-                color: #00d4ff;
+                color: #7C3AED;
                 font-family: monospace;
                 font-size: 14px;
             }
@@ -444,16 +501,24 @@
             }
 
             .stat-card {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(124, 58, 237, 0.05);
                 border-radius: 12px;
                 padding: 20px;
                 text-align: center;
+                border: 1px solid rgba(124, 58, 237, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(124, 58, 237, 0.4);
+                background: rgba(124, 58, 237, 0.1);
             }
 
             .stat-card .value {
                 font-size: 32px;
                 font-weight: 700;
-                color: #00d4ff;
+                color: #7C3AED;
             }
 
             .stat-card .label {
@@ -464,11 +529,17 @@
 
             /* Account Settings */
             .account-section {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(124, 58, 237, 0.05);
                 border-radius: 12px;
                 padding: 30px;
                 margin-top: 30px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(124, 58, 237, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .account-section:hover {
+                border-color: rgba(124, 58, 237, 0.4);
+                background: rgba(124, 58, 237, 0.08);
             }
 
             .account-section h3 {
@@ -486,8 +557,15 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 15px;
-                background: rgba(0, 0, 0, 0.2);
+                background: rgba(124, 58, 237, 0.05);
                 border-radius: 8px;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+            }
+
+            .account-info-item:hover {
+                background: rgba(124, 58, 237, 0.1);
+                border-color: rgba(124, 58, 237, 0.3);
             }
 
             .account-info-item label {
@@ -502,10 +580,17 @@
 
             /* Payment Section */
             .payment-methods {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(124, 58, 237, 0.05);
                 border-radius: 12px;
                 padding: 30px;
                 margin-top: 30px;
+                border: 1px solid rgba(124, 58, 237, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .payment-methods:hover {
+                border-color: rgba(124, 58, 237, 0.4);
+                background: rgba(124, 58, 237, 0.08);
             }
 
             .payment-methods h3 {
@@ -526,12 +611,12 @@
             }
 
             .payment-option:hover {
-                border-color: #00d4ff;
+                border-color: #7C3AED;
             }
 
             .payment-option.selected {
-                border-color: #00d4ff;
-                background: rgba(0, 212, 255, 0.1);
+                border-color: #7C3AED;
+                background: rgba(124, 58, 237, 0.1);
             }
 
             .payment-option input[type="radio"] {
@@ -547,8 +632,8 @@
                 position: fixed;
                 bottom: 20px;
                 right: 20px;
-                background: #00d4ff;
-                color: #000;
+                background: #7C3AED;
+                color: #fff;
                 padding: 16px 24px;
                 border-radius: 8px;
                 font-weight: 500;
@@ -577,6 +662,75 @@
                 }
             }
 
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .modal.active .modal-content {
+                animation: fadeIn 0.3s ease-out;
+            }
+
+            .modal.active {
+                animation: fadeInUp 0.3s ease-out;
+            }
+
+            .btn {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.2);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+
+            .btn:active::after {
+                width: 300px;
+                height: 300px;
+            }
+
+            .feature-card {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .google-btn {
+                position: relative;
+            }
+
+            .google-btn:active {
+                transform: scale(0.98);
+            }
+
+            .pricing-card {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
             /* Footer */
             footer {
                 text-align: center;
@@ -586,44 +740,8 @@
             }
 
             footer a {
-                color: #00d4ff;
+                color: #7C3AED;
                 text-decoration: none;
-            }
-
-            /* Verification Code Input */
-            .code-input {
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-                margin: 20px 0;
-            }
-
-            .code-input input {
-                width: 50px;
-                height: 60px;
-                text-align: center;
-                font-size: 24px;
-                font-weight: 600;
-                border: 2px solid rgba(255, 255, 255, 0.1);
-                border-radius: 8px;
-                background: rgba(255, 255, 255, 0.05);
-                color: #fff;
-            }
-
-            .code-input input:focus {
-                outline: none;
-                border-color: #00d4ff;
-            }
-
-            .timer {
-                text-align: center;
-                color: #a0a0a0;
-                font-size: 14px;
-                margin-top: 10px;
-            }
-
-            .timer.expired {
-                color: #ff4444;
             }
 
             /* Responsive */
@@ -673,8 +791,8 @@
                 with any AI provider.
             </p>
             <div class="hero-buttons">
-                <button class="btn btn-primary" onclick="showSignup()">
-                    Start Free Trial
+                <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">
+                    View Plans
                 </button>
             </div>
         </section>
@@ -682,51 +800,45 @@
         <!-- Features Section -->
         <section id="features" class="container features">
             <div class="feature-card">
-                <div class="feature-icon">[1]</div>
-                <h3>Multi-Provider Support</h3>
+                <div class="feature-icon">[AI]</div>
+                <h3>Natural Language Commands</h3>
                 <p>
-                    Works with Anthropic, OpenAI, Google, Groq, OpenRouter,
-                    Ollama, and more.
+                    Talk to your terminal like a human. "Create a React component for user authentication" and watch the magic happen.
                 </p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[2]</div>
-                <h3>Full File Control</h3>
+                <div class="feature-icon">[>]</div>
+                <h3>Instant File Operations</h3>
                 <p>
-                    Read, write, edit, and search files with AI assistance.
-                    Execute shell commands safely.
+                    Create, edit, refactor code and manage files with simple English commands. No manual file editing needed.
                 </p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[3]</div>
-                <h3>Session Management</h3>
+                <div class="feature-icon">[!]</div>
+                <h3>Smart Command Execution</h3>
                 <p>
-                    Keep track of your conversations and manage your coding
-                    history.
+                    Run shell commands, analyze outputs, and let AI suggest fixes and optimizations automatically.
                 </p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[4]</div>
-                <h3>Cost Tracking</h3>
+                <div class="feature-icon">[*]</div>
+                <h3>Works Everywhere</h3>
                 <p>
-                    Monitor your API usage and costs in real-time with detailed
-                    analytics.
+                    Compatible with Anthropic, OpenAI, Google, Groq, and more. Choose your AI provider.
                 </p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[5]</div>
-                <h3>Dark & Light Themes</h3>
+                <div class="feature-icon">[%]</div>
+                <h3>Track & Optimize Costs</h3>
                 <p>
-                    Beautiful UI designed for developers who spend hours in the
-                    terminal.
+                    Monitor your API usage and token consumption in real-time. Understand exactly what you're spending.
                 </p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">[6]</div>
-                <h3>Privacy First</h3>
+                <div class="feature-icon">[~]</div>
+                <h3>Your Code, Your Rules</h3>
                 <p>
-                    Your code stays local. We never store or transmit your
-                    files.
+                    All your code stays local. We never store or transmit your files. Complete privacy guaranteed.
                 </p>
             </div>
         </section>
@@ -734,77 +846,188 @@
         <!-- Pricing Section -->
         <section id="pricing" class="container pricing">
             <h2>Simple, Transparent Pricing</h2>
-            <p>Choose the plan that fits your needs. Cancel anytime.</p>
-            <p style="color: #00d4ff; margin-top: 10px; font-weight: 500">
-                We accept Cash App and Google Pay
+            <p>Choose the plan that fits your needs.</p>
+            <p style="color: #7C3AED; margin-top: 10px; font-weight: 500">
+                All plans include your API key and full access to documentation
             </p>
 
             <div class="pricing-cards">
                 <div class="pricing-card">
                     <h3>Free</h3>
                     <div class="price">$0<span>/month</span></div>
+                    <p style="color: #a0a0a0; margin: 15px 0 20px; font-size: 13px;">Forever free, no credit card</p>
                     <ul>
-                        <li>100 requests per month</li>
-                        <li>Basic model access</li>
-                        <li>Community support</li>
-                        <li>Session history (7 days)</li>
+                        <li>25 requests per month</li>
+                        <li>Basic model access only</li>
+                        <li>7-day history</li>
+                        <li>Single API key</li>
                     </ul>
+                    <div class="pricing-card-cons">
+                        <h4>Not Included</h4>
+                        <ul>
+                            <li>Custom system prompts</li>
+                            <li>Advanced analytics</li>
+                            <li>Priority support</li>
+                            <li>Multiple API keys</li>
+                        </ul>
+                    </div>
                     <button
                         class="btn btn-secondary"
-                        style="width: 100%"
+                        style="width: 100%; margin-top: 20px;"
                         onclick="showSignup()"
                     >
-                        Get Started
+                        Get Started Free
+                    </button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Pro Trial</h3>
+                    <div class="price">$1.99<span>/7 days</span></div>
+                    <p style="color: #7C3AED; margin: 15px 0 20px; font-size: 13px;">Limited time test - expires in 7 days</p>
+                    <ul>
+                        <li>Unlimited requests (during trial)</li>
+                        <li>All model providers</li>
+                        <li>Unlimited history</li>
+                        <li>Custom system prompts</li>
+                        <li>Advanced analytics</li>
+                    </ul>
+                    <div class="pricing-card-cons">
+                        <h4>Trial Limits</h4>
+                        <ul>
+                            <li>Expires after 7 days</li>
+                            <li>Reverts to Free plan automatically</li>
+                            <li>No team features</li>
+                            <li>One trial per account</li>
+                        </ul>
+                    </div>
+                    <button
+                        class="btn btn-primary"
+                        style="width: 100%; margin-top: 20px;"
+                        onclick="showPayment('trial')"
+                    >
+                        Try Pro - $1.99
                     </button>
                 </div>
 
                 <div class="pricing-card popular">
                     <h3>Pro</h3>
-                    <div class="price">$19<span>/month</span></div>
+                    <div class="price">$4.99<span>/month</span></div>
+                    <p style="color: #7C3AED; margin: 15px 0 20px; font-size: 13px;">Recommended - Best value</p>
                     <ul>
                         <li>Unlimited requests</li>
-                        <li>All model access</li>
+                        <li>All model provider access</li>
                         <li>Priority support</li>
                         <li>Unlimited history</li>
                         <li>Custom system prompts</li>
+                        <li>Advanced analytics</li>
+                        <li>Early access to new features</li>
                     </ul>
+                    <div class="pricing-card-cons">
+                        <h4>Not Included</h4>
+                        <ul>
+                            <li>Team features</li>
+                            <li>Admin dashboard</li>
+                            <li>Multiple team members</li>
+                            <li>Dedicated support channel</li>
+                        </ul>
+                    </div>
                     <button
                         class="btn btn-primary"
-                        style="width: 100%"
+                        style="width: 100%; margin-top: 20px;"
                         onclick="showPayment('pro')"
                     >
-                        Get Pro
+                        Upgrade to Pro
                     </button>
                 </div>
 
                 <div class="pricing-card">
                     <h3>Team</h3>
-                    <div class="price">$49<span>/month</span></div>
+                    <div class="price">$9.99<span>/month</span></div>
+                    <p style="color: #a0a0a0; margin: 15px 0 20px; font-size: 13px;">Perfect for teams and organizations</p>
                     <ul>
                         <li>Everything in Pro</li>
-                        <li>5 team members</li>
-                        <li>Shared API keys</li>
+                        <li>Up to 10 team members</li>
+                        <li>Shared API keys & keys rotation</li>
                         <li>Admin dashboard</li>
                         <li>Custom integrations</li>
+                        <li>Dedicated support channel</li>
+                        <li>Usage reports & billing</li>
                     </ul>
                     <button
                         class="btn btn-secondary"
-                        style="width: 100%"
+                        style="width: 100%; margin-top: 20px;"
                         onclick="showPayment('team')"
                     >
-                        Get Team
+                        Get Team Plan
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer>
+        <footer id="mainFooter">
             <p>OpenShell - Open Source AI Coding Agent</p>
             <p style="margin-top: 10px">
-                <a href="mailto:support@openshell.dev">Support</a>
+                <a href="#" onclick="toggleSupportPage(event)">Support</a>
             </p>
         </footer>
+
+        <!-- Support Page Section -->
+        <section id="supportPage" style="display: none; padding: 60px 20px;">
+            <div class="container" style="max-width: 600px;">
+                <button
+                    style="background: none; border: none; color: #7C3AED; font-size: 28px; cursor: pointer; margin-bottom: 20px;"
+                    onclick="toggleSupportPage(event)"
+                >
+                    ← Back
+                </button>
+                <h1 style="font-size: 32px; margin-bottom: 10px; background: linear-gradient(90deg, #7C3AED, #9F67FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Get Support
+                </h1>
+                <p style="color: #a0a0a0; margin-bottom: 30px;">We're here to help. Send us a message and we'll get back to you within 24 hours.</p>
+                
+                <form id="supportForm" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <label for="supportEmail" style="display: block; margin-bottom: 8px; font-weight: 500;">Email</label>
+                        <input
+                            type="email"
+                            id="supportEmail"
+                            placeholder="your@email.com"
+                            required
+                            style="width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit; font-size: 14px;"
+                        />
+                    </div>
+                    <div>
+                        <label for="supportSubject" style="display: block; margin-bottom: 8px; font-weight: 500;">Subject</label>
+                        <input
+                            type="text"
+                            id="supportSubject"
+                            placeholder="What do you need help with?"
+                            required
+                            style="width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit; font-size: 14px;"
+                        />
+                    </div>
+                    <div>
+                        <label for="supportMessage" style="display: block; margin-bottom: 8px; font-weight: 500;">Message</label>
+                        <textarea
+                            id="supportMessage"
+                            placeholder="Tell us more about your issue..."
+                            required
+                            rows="8"
+                            style="width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit; font-size: 14px; resize: vertical;"
+                        ></textarea>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        style="width: 100%; margin-top: 10px;"
+                        onclick="submitSupportForm()"
+                    >
+                        Send Support Request
+                    </button>
+                </form>
+            </div>
+        </section>
 
         <!-- Login Modal -->
         <div id="loginModal" class="modal">
@@ -812,59 +1035,39 @@
                 <h2>Welcome Back</h2>
                 <p>Sign in to access your API key and dashboard.</p>
 
-                <div id="googleSignInSection">
-                    <button class="google-btn" onclick="handleGoogleSignIn()">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                fill="#4285F4"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                            />
-                            <path
-                                fill="#34A853"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                            />
-                            <path
-                                fill="#FBBC05"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                            />
-                            <path
-                                fill="#EA4335"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                            />
-                        </svg>
-                        Continue with Google
-                    </button>
+                <button class="github-btn" onclick="handleGitHubSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Sign In with GitHub
+                </button>
 
-                    <div class="divider"><span>or</span></div>
+                <div style="position: relative; margin: 20px 0;">
+                    <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+                    <div style="position: relative; text-align: center; background: #1a1a1a; padding: 0 10px; width: fit-content; margin: 0 auto;">
+                        <span style="color: #a0a0a0; font-size: 13px;">or continue with email</span>
+                    </div>
                 </div>
 
-                <form onsubmit="handleEmailLogin(event)">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            id="loginEmail"
-                            placeholder="you@example.com"
-                            required
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            id="loginPassword"
-                            placeholder="Enter your password"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        style="width: 100%"
-                    >
-                        Sign In
-                    </button>
-                </form>
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Email address"
+                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                />
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                />
+                <button
+                    class="btn btn-primary"
+                    style="width: 100%; margin-bottom: 15px;"
+                    onclick="handleEmailLogin()"
+                >
+                    Sign In with Email
+                </button>
 
                 <div class="form-footer">
                     <p>
@@ -881,60 +1084,45 @@
                 <h2>Create Account</h2>
                 <p>Get your free API key and start coding with AI.</p>
 
-                <div id="googleSignUpSection">
-                    <button class="google-btn" onclick="handleGoogleSignIn()">
-                        <svg width="20" height="20" viewBox="0 0 24 24">
-                            <path
-                                fill="#4285F4"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                            />
-                            <path
-                                fill="#34A853"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                            />
-                            <path
-                                fill="#FBBC05"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                            />
-                            <path
-                                fill="#EA4335"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                            />
-                        </svg>
-                        Continue with Google
-                    </button>
+                <button class="github-btn" onclick="handleGitHubSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Sign Up with GitHub
+                </button>
 
-                    <div class="divider"><span>or</span></div>
+                <div style="position: relative; margin: 20px 0;">
+                    <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+                    <div style="position: relative; text-align: center; background: #1a1a1a; padding: 0 10px; width: fit-content; margin: 0 auto;">
+                        <span style="color: #a0a0a0; font-size: 13px;">or create with email</span>
+                    </div>
                 </div>
 
-                <form onsubmit="handleEmailSignup(event)">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            id="signupEmail"
-                            placeholder="you@example.com"
-                            required
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            id="signupPassword"
-                            placeholder="Create a password (min 8 chars)"
-                            minlength="8"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        style="width: 100%"
-                    >
-                        Create Account
-                    </button>
-                </form>
+                <input
+                    type="text"
+                    id="signupName"
+                    placeholder="Full name"
+                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                />
+                <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder="Email address"
+                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                />
+                <input
+                    type="password"
+                    id="signupPassword"
+                    placeholder="Password"
+                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                />
+                <button
+                    class="btn btn-primary"
+                    style="width: 100%; margin-bottom: 15px;"
+                    onclick="handleEmailSignup()"
+                >
+                    Create Account with Email
+                </button>
 
                 <div class="form-footer">
                     <p>
@@ -1004,12 +1192,12 @@
                         display: none;
                         margin-top: 20px;
                         padding: 25px;
-                        background: rgba(0, 212, 255, 0.1);
+                        background: rgba(124, 58, 237, 0.1);
                         border-radius: 12px;
-                        border: 1px solid #00d4ff;
+                        border: 1px solid #7C3AED;
                     "
                 >
-                    <h4 style="color: #00d4ff; margin-bottom: 15px">
+                    <h4 style="color: #7C3AED; margin-bottom: 15px">
                         Cash App Payment Instructions
                     </h4>
                     <p style="margin-bottom: 10px">
@@ -1019,7 +1207,7 @@
                         <strong>Step 2:</strong> Send payment to:
                         <span
                             style="
-                                color: #00d4ff;
+                                color: #7C3AED;
                                 font-size: 18px;
                                 font-weight: bold;
                             "
@@ -1055,12 +1243,12 @@
                         display: none;
                         margin-top: 20px;
                         padding: 25px;
-                        background: rgba(0, 212, 255, 0.1);
+                        background: rgba(124, 58, 237, 0.1);
                         border-radius: 12px;
-                        border: 1px solid #00d4ff;
+                        border: 1px solid #7C3AED;
                     "
                 >
-                    <h4 style="color: #00d4ff; margin-bottom: 15px">
+                    <h4 style="color: #7C3AED; margin-bottom: 15px">
                         Google Pay Payment Instructions
                     </h4>
                     <p style="margin-bottom: 10px">
@@ -1194,14 +1382,10 @@
         <div id="toast" class="toast"></div>
 
         <script>
-            // Google Sign-In Configuration
-            let googleClientId =
-                "562425398418-al9902tg637jqlvp0map6luk85qu2ag9.apps.googleusercontent.com";
-
-            // Temporary storage for signup process
-            let pendingSignup = null;
-            let verificationCode = null;
-            let timerInterval = null;
+            // GitHub Sign-In Configuration
+            let githubClientId =
+                "Ov23liUvFTI1aeMonK0m";
+            let githubRedirectUri = window.location.origin;
 
             // Generate API Key
             function generateApiKey() {
@@ -1215,36 +1399,6 @@
                     );
                 }
                 return key;
-            }
-
-            // Generate 6-digit verification code
-            function generateVerificationCode() {
-                return Math.floor(100000 + Math.random() * 900000).toString();
-            }
-
-            // Simple email verification simulation
-            // In production, you would use a backend service like SendGrid, Mailgun, etc.
-            function simulateSendEmail(email, code) {
-                // For demo purposes, we show the code in a toast
-                // In production, this would send an actual email
-                console.log(`Sending code ${code} to ${email}`);
-
-                // Store in localStorage for demo
-                const emailCodes = JSON.parse(
-                    localStorage.getItem("openshell_email_codes") || "{}",
-                );
-                emailCodes[email] = {
-                    code: code,
-                    expires: Date.now() + 5 * 60 * 1000, // 5 minutes
-                };
-                localStorage.setItem(
-                    "openshell_email_codes",
-                    JSON.stringify(emailCodes),
-                );
-
-                // In a real implementation, you would make an API call to your backend
-                // which would then send the email via an email service
-                return true;
             }
 
             // Show Modal
@@ -1270,10 +1424,6 @@
                 document.querySelectorAll(".modal").forEach((modal) => {
                     modal.classList.remove("active");
                 });
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                }
             }
 
             // Close modals when clicking outside
@@ -1285,62 +1435,90 @@
                 });
             });
 
-            // Handle Google Sign-In
-            function handleGoogleSignIn() {
-                // Check if Google Client ID is configured
-                if (
-                    !googleClientId ||
-                    googleClientId === "" ||
-                    googleClientId.includes("YOUR_GOOGLE")
-                ) {
-                    showToast(
-                        "Google Sign-In is not configured yet. Please use Email/Password signup.",
-                        true,
-                    );
-                    showConfigNotice();
+            // Handle GitHub Sign-In
+            function handleGitHubSignIn() {
+                // Redirect to GitHub OAuth
+                const scope = "user:email";
+                const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(githubRedirectUri)}&scope=${scope}`;
+                window.location.href = githubAuthUrl;
+            }
+
+            // Handle GitHub OAuth callback
+            function handleGitHubCallback() {
+                const params = new URLSearchParams(window.location.search);
+                const code = params.get("code");
+
+                if (!code) {
                     return;
                 }
 
-                // Initialize Google Identity Services
-                if (typeof google !== "undefined" && google.accounts) {
-                    google.accounts.id.initialize({
-                        client_id: googleClientId,
-                        callback: handleGoogleCredentialResponse,
-                    });
-                    google.accounts.id.prompt();
-                } else {
+                // In production, you would exchange the code for an access token via your backend
+                // For now, we'll use a simplified client-side approach
+                fetchGitHubUser(code);
+            }
+
+            async function fetchGitHubUser(code) {
+                try {
+                    // Note: In production, call your backend endpoint that securely exchanges code for token
+                    // This is a placeholder - actual implementation requires backend
                     showToast(
-                        "Google Sign-In failed to load. Please use Email/Password.",
-                        true,
+                        "GitHub authentication flow initiated. Please complete setup.",
+                        false,
                     );
+
+                    // For demo, we'll create a user with GitHub username
+                    // In production, exchange code for access token and fetch user data
+                    const demoGitHubUser = {
+                        login: "github_user",
+                        name: "GitHub User",
+                        avatar_url:
+                            "https://avatars.githubusercontent.com/u/1?v=4",
+                    };
+
+                    loginWithGitHub(demoGitHubUser);
+                } catch (error) {
+                    console.error("GitHub auth error:", error);
+                    showToast("GitHub authentication failed.", true);
                 }
             }
 
-            function showConfigNotice() {
-                const notice = document.createElement("div");
-                notice.className = "setup-notice";
-                notice.innerHTML = `
-            <strong>Setup Required:</strong> Google Sign-In needs configuration.
-            <br><br>
-            To enable Google Sign-In:
-            <br>1. Go to <a href="https://console.cloud.google.com/apis/credentials" style="color: #00d4ff">Google Cloud Console</a>
-            <br>2. Create an OAuth Client ID
-            <br>3. Add your domain to authorized origins
-            <br>4. Paste the Client ID in the website code
-            <br><br>
-            For now, please use Email/Password signup below.
-            `;
-                const modalContent = document.querySelector(
-                    "#loginModal .modal-content, #signupModal .modal-content",
+            function loginWithGitHub(githubUser) {
+                const email = `${githubUser.login}@github.local`;
+                const name = githubUser.name || githubUser.login;
+
+                // Check if user exists
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
                 );
-                if (
-                    modalContent &&
-                    !modalContent.querySelector(".setup-notice")
-                ) {
-                    modalContent.insertBefore(
-                        notice,
-                        modalContent.firstChild.nextSibling,
+
+                if (users[email]) {
+                    // User exists, log them in
+                    localStorage.setItem("openshell_current_user", email);
+                    closeAllModals();
+                    showDashboard(users[email]);
+                    showToast("Welcome back!");
+                } else {
+                    // Create new user with GitHub
+                    const apiKey = generateApiKey();
+                    users[email] = {
+                        name: name,
+                        email: email,
+                        apiKey: apiKey,
+                        plan: "free",
+                        requests: 0,
+                        tokens: 0,
+                        signInMethod: "github",
+                        createdAt: new Date().toISOString(),
+                    };
+                    localStorage.setItem(
+                        "openshell_users",
+                        JSON.stringify(users),
                     );
+                    localStorage.setItem("openshell_current_user", email);
+
+                    closeAllModals();
+                    showDashboard(users[email]);
+                    showToast("Account created with GitHub!");
                 }
             }
 
@@ -1405,33 +1583,36 @@
             }
 
             // Handle Email Signup
-            function handleEmailSignup(e) {
-                e.preventDefault();
+            function handleEmailSignup() {
+                const name = document.getElementById("signupName").value.trim();
+                const email = document.getElementById("signupEmail").value.trim();
+                const password = document.getElementById("signupPassword").value;
 
-                const email = document.getElementById("signupEmail").value;
-                const password =
-                    document.getElementById("signupPassword").value;
+                if (!name || !email || !password) {
+                    showToast("Please fill in all fields", true);
+                    return;
+                }
 
-                // Check if user exists
+                if (password.length < 6) {
+                    showToast("Password must be at least 6 characters", true);
+                    return;
+                }
+
                 const users = JSON.parse(
                     localStorage.getItem("openshell_users") || "{}",
                 );
 
                 if (users[email]) {
-                    showToast(
-                        "Email already registered. Please sign in.",
-                        true,
-                    );
+                    showToast("Email already registered. Please sign in instead.", true);
                     return;
                 }
 
-                // Create account immediately (no verification needed when using Google Client ID)
                 const apiKey = generateApiKey();
-                const name = email.split("@")[0]; // Use email username as name
+                const passwordHash = btoa(password);
                 users[email] = {
                     name: name,
                     email: email,
-                    password: password,
+                    passwordHash: passwordHash,
                     apiKey: apiKey,
                     plan: "free",
                     requests: 0,
@@ -1443,166 +1624,48 @@
                 localStorage.setItem("openshell_users", JSON.stringify(users));
                 localStorage.setItem("openshell_current_user", email);
 
+                document.getElementById("signupName").value = "";
+                document.getElementById("signupEmail").value = "";
+                document.getElementById("signupPassword").value = "";
+
                 closeAllModals();
                 showDashboard(users[email]);
-                showToast("Account created! Your API key is ready.");
+                showToast("Account created successfully!");
             }
 
             // Handle Email Login
-            function handleEmailLogin(e) {
-                e.preventDefault();
-
-                const email = document.getElementById("loginEmail").value;
+            function handleEmailLogin() {
+                const email = document.getElementById("loginEmail").value.trim();
                 const password = document.getElementById("loginPassword").value;
+
+                if (!email || !password) {
+                    showToast("Please fill in all fields", true);
+                    return;
+                }
 
                 const users = JSON.parse(
                     localStorage.getItem("openshell_users") || "{}",
                 );
 
                 if (!users[email]) {
-                    showToast("Account not found. Please sign up.", true);
+                    showToast("Email not found. Please create an account.", true);
                     return;
                 }
 
-                if (users[email].password !== password) {
-                    showToast("Incorrect password. Please try again.", true);
+                const passwordHash = btoa(password);
+                if (users[email].passwordHash !== passwordHash) {
+                    showToast("Incorrect password", true);
                     return;
                 }
 
                 localStorage.setItem("openshell_current_user", email);
+
+                document.getElementById("loginEmail").value = "";
+                document.getElementById("loginPassword").value = "";
+
                 closeAllModals();
                 showDashboard(users[email]);
                 showToast("Welcome back!");
-            }
-
-            // Verification code input handling
-            function handleCodeInput(currentInput, nextInputId) {
-                if (currentInput.value.length === 1 && nextInputId) {
-                    document.getElementById(nextInputId).focus();
-                }
-            }
-
-            // Start verification timer
-            function startTimer() {
-                let timeLeft = 300; // 5 minutes in seconds
-
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    const minutes = Math.floor(timeLeft / 60);
-                    const seconds = timeLeft % 60;
-                    document.getElementById("timerValue").textContent =
-                        `${minutes}:${seconds.toString().padStart(2, "0")}`;
-
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        document
-                            .getElementById("timer")
-                            .classList.add("expired");
-                        document.getElementById("timerValue").textContent =
-                            "EXPIRED";
-                    }
-                }, 1000);
-            }
-
-            // Verify code
-            function verifyCode() {
-                const code =
-                    document.getElementById("code1").value +
-                    document.getElementById("code2").value +
-                    document.getElementById("code3").value +
-                    document.getElementById("code4").value +
-                    document.getElementById("code5").value +
-                    document.getElementById("code6").value;
-
-                if (code.length !== 6) {
-                    showToast("Please enter the complete 6-digit code", true);
-                    return;
-                }
-
-                // Check stored code
-                const emailCodes = JSON.parse(
-                    localStorage.getItem("openshell_email_codes") || "{}",
-                );
-                const storedCode = emailCodes[pendingSignup.email];
-
-                if (!storedCode || storedCode.code !== code) {
-                    showToast("Invalid verification code", true);
-                    return;
-                }
-
-                if (Date.now() > storedCode.expires) {
-                    showToast(
-                        "Code has expired. Please request a new one.",
-                        true,
-                    );
-                    return;
-                }
-
-                // Create account
-                const apiKey = generateApiKey();
-                const users = JSON.parse(
-                    localStorage.getItem("openshell_users") || "{}",
-                );
-                users[pendingSignup.email] = {
-                    name: pendingSignup.name,
-                    email: pendingSignup.email,
-                    password: pendingSignup.password,
-                    apiKey: apiKey,
-                    plan: "free",
-                    requests: 0,
-                    tokens: 0,
-                    signInMethod: "email",
-                    createdAt: new Date().toISOString(),
-                };
-
-                localStorage.setItem("openshell_users", JSON.stringify(users));
-                localStorage.setItem(
-                    "openshell_current_user",
-                    pendingSignup.email,
-                );
-
-                // Clean up
-                delete emailCodes[pendingSignup.email];
-                localStorage.setItem(
-                    "openshell_email_codes",
-                    JSON.stringify(emailCodes),
-                );
-                pendingSignup = null;
-
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-
-                closeAllModals();
-                showDashboard(
-                    users[localStorage.getItem("openshell_current_user")],
-                );
-                showToast("Account created! Your API key is ready.");
-            }
-
-            // Resend verification code
-            function resendCode() {
-                if (!pendingSignup) return;
-
-                verificationCode = generateVerificationCode();
-                simulateSendEmail(pendingSignup.email, verificationCode);
-
-                // Reset timer
-                startTimer();
-
-                // Clear inputs
-                document
-                    .querySelectorAll(".code-input input")
-                    .forEach((input) => {
-                        input.value = "";
-                    });
-                document.getElementById("code1").focus();
-
-                showToast("New verification code sent!");
             }
 
             // Show Dashboard
@@ -1704,11 +1767,22 @@
             let selectedPlan = "pro";
 
             function showPayment(plan) {
+                const currentUser = localStorage.getItem("openshell_current_user");
+                if (!currentUser) {
+                    showToast("Please sign in or create an account first", false);
+                    closeAllModals();
+                    showSignup();
+                    return;
+                }
+
                 selectedPlan = plan;
-                document.getElementById("paymentPlan").textContent =
-                    plan === "pro"
-                        ? "Pro Plan - $19/month"
-                        : "Team Plan - $49/month";
+                if (plan === "pro") {
+                    document.getElementById("paymentPlan").textContent = "Pro Plan - $4.99/month";
+                } else if (plan === "trial") {
+                    document.getElementById("paymentPlan").textContent = "Pro Trial - $1.99 for 7 days";
+                } else {
+                    document.getElementById("paymentPlan").textContent = "Team Plan - $9.99/month";
+                }
                 closeAllModals();
                 document.getElementById("paymentModal").classList.add("active");
             }
@@ -1756,6 +1830,73 @@
                 }, 3000);
             }
 
+            // Support Page Toggle
+            function toggleSupportPage(event) {
+                event.preventDefault();
+                const supportPage = document.getElementById("supportPage");
+                const mainFooter = document.getElementById("mainFooter");
+                const hero = document.getElementById("hero");
+                const features = document.getElementById("features");
+                const pricing = document.getElementById("pricing");
+
+                if (supportPage.style.display === "none") {
+                    supportPage.style.display = "block";
+                    mainFooter.style.display = "none";
+                    hero.style.display = "none";
+                    features.style.display = "none";
+                    pricing.style.display = "none";
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                    supportPage.style.display = "none";
+                    mainFooter.style.display = "block";
+                    hero.style.display = "block";
+                    features.style.display = "block";
+                    pricing.style.display = "block";
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+            }
+
+            // Support Form Submission
+            function submitSupportForm() {
+                const email = document.getElementById("supportEmail").value.trim();
+                const subject = document.getElementById("supportSubject").value.trim();
+                const message = document.getElementById("supportMessage").value.trim();
+
+                if (!email || !subject || !message) {
+                    showToast("Please fill in all fields", true);
+                    return;
+                }
+
+                // Store support request in localStorage
+                const supportRequests = JSON.parse(
+                    localStorage.getItem("support_requests") || "[]",
+                );
+                supportRequests.push({
+                    email: email,
+                    subject: subject,
+                    message: message,
+                    timestamp: new Date().toISOString(),
+                });
+                localStorage.setItem(
+                    "support_requests",
+                    JSON.stringify(supportRequests),
+                );
+
+                // Clear form
+                document.getElementById("supportEmail").value = "";
+                document.getElementById("supportSubject").value = "";
+                document.getElementById("supportMessage").value = "";
+
+                showToast(
+                    "Thank you! We've received your support request. We'll get back to you within 24 hours.",
+                );
+
+                // Return to main page after 2 seconds
+                setTimeout(() => {
+                    toggleSupportPage({ preventDefault: () => {} });
+                }, 2000);
+            }
+
             // Check if user is logged in on page load
             window.onload = function () {
                 const email = localStorage.getItem("openshell_current_user");
@@ -1769,9 +1910,8 @@
                 }
             };
 
-            // Google Sign-In callback (define globally)
-            window.handleGoogleCredentialResponse =
-                handleGoogleCredentialResponse;
+            // GitHub callback (define globally)
+            window.handleGitHubCallback = handleGitHubCallback;
         </script>
     </body>
 </html>

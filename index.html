@@ -1,0 +1,1812 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenShell - AI Coding Agent</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script
+            src="https://accounts.google.com/gsi/client"
+            async
+            defer
+        ></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Inter", sans-serif;
+                background: linear-gradient(
+                    135deg,
+                    #0f0f23 0%,
+                    #1a1a2e 50%,
+                    #0f0f23 100%
+                );
+                min-height: 100vh;
+                color: #ffffff;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Header */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .logo {
+                font-size: 24px;
+                font-weight: 700;
+                background: linear-gradient(90deg, #00d4ff, #0099ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            nav {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+
+            nav a {
+                color: #a0a0a0;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+            nav a:hover {
+                color: #00d4ff;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .btn-primary {
+                background: linear-gradient(90deg, #00d4ff, #0099ff);
+                color: #000;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                border: 1px solid #00d4ff;
+                color: #00d4ff;
+            }
+
+            .btn-secondary:hover {
+                background: rgba(0, 212, 255, 0.1);
+            }
+
+            .btn-danger {
+                background: #ff4444;
+                color: #fff;
+            }
+
+            .btn-danger:hover {
+                background: #cc0000;
+            }
+
+            /* Hero Section */
+            .hero {
+                text-align: center;
+                padding: 100px 20px;
+            }
+
+            .hero h1 {
+                font-size: 56px;
+                font-weight: 700;
+                margin-bottom: 20px;
+                background: linear-gradient(90deg, #ffffff, #00d4ff);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .hero p {
+                font-size: 20px;
+                color: #a0a0a0;
+                max-width: 600px;
+                margin: 0 auto 40px;
+            }
+
+            .hero-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+            }
+
+            /* Features */
+            .features {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                padding: 80px 20px;
+            }
+
+            .feature-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                padding: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.3s;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-5px);
+                border-color: #00d4ff;
+            }
+
+            .feature-icon {
+                font-size: 40px;
+                margin-bottom: 20px;
+            }
+
+            .feature-card h3 {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .feature-card p {
+                color: #a0a0a0;
+                font-size: 14px;
+            }
+
+            /* Pricing */
+            .pricing {
+                padding: 80px 20px;
+                text-align: center;
+            }
+
+            .pricing h2 {
+                font-size: 40px;
+                margin-bottom: 20px;
+            }
+
+            .pricing-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                margin-top: 40px;
+            }
+
+            .pricing-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 16px;
+                padding: 40px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .pricing-card.popular {
+                border-color: #00d4ff;
+                position: relative;
+            }
+
+            .pricing-card.popular::before {
+                content: "MOST POPULAR";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #00d4ff;
+                color: #000;
+                padding: 4px 12px;
+                border-radius: 4px;
+                font-size: 10px;
+                font-weight: 600;
+            }
+
+            .pricing-card h3 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .pricing-card .price {
+                font-size: 48px;
+                font-weight: 700;
+                margin: 20px 0;
+            }
+
+            .pricing-card .price span {
+                font-size: 16px;
+                color: #a0a0a0;
+                font-weight: 400;
+            }
+
+            .pricing-card ul {
+                list-style: none;
+                text-align: left;
+                margin: 20px 0;
+            }
+
+            .pricing-card ul li {
+                padding: 10px 0;
+                color: #a0a0a0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .pricing-card ul li::before {
+                content: "[*]";
+                color: #00d4ff;
+            }
+
+            /* Modal */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            }
+
+            .modal.active {
+                display: flex;
+            }
+
+            .modal-content {
+                background: #1a1a2e;
+                border-radius: 16px;
+                padding: 40px;
+                width: 100%;
+                max-width: 450px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-content h2 {
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+
+            .modal-content p {
+                color: #a0a0a0;
+                margin-bottom: 30px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #a0a0a0;
+                font-size: 14px;
+            }
+
+            .form-group input {
+                width: 100%;
+                padding: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                color: #fff;
+                font-size: 14px;
+            }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #00d4ff;
+            }
+
+            .form-footer {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .form-footer a {
+                color: #00d4ff;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .divider {
+                display: flex;
+                align-items: center;
+                margin: 20px 0;
+            }
+
+            .divider::before,
+            .divider::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .divider span {
+                padding: 0 15px;
+                color: #a0a0a0;
+                font-size: 14px;
+            }
+
+            /* Google Sign In Button */
+            .google-btn {
+                width: 100%;
+                padding: 14px;
+                background: #fff;
+                border: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                color: #333;
+                transition: all 0.3s;
+            }
+
+            .google-btn:hover {
+                background: #f0f0f0;
+            }
+
+            .google-btn img {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* Dashboard */
+            .dashboard {
+                display: none;
+                padding: 40px 20px;
+            }
+
+            .dashboard.active {
+                display: block;
+            }
+
+            .dashboard-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 40px;
+            }
+
+            .api-key-box {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .api-key-display {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .api-key-display input {
+                flex: 1;
+                padding: 14px;
+                background: rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                color: #00d4ff;
+                font-family: monospace;
+                font-size: 14px;
+            }
+
+            .api-key-display button {
+                padding: 14px 20px;
+            }
+
+            .usage-stats {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-top: 30px;
+            }
+
+            .stat-card {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .stat-card .value {
+                font-size: 32px;
+                font-weight: 700;
+                color: #00d4ff;
+            }
+
+            .stat-card .label {
+                color: #a0a0a0;
+                font-size: 14px;
+                margin-top: 5px;
+            }
+
+            /* Account Settings */
+            .account-section {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 30px;
+                margin-top: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .account-section h3 {
+                margin-bottom: 20px;
+            }
+
+            .account-info {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .account-info-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+            }
+
+            .account-info-item label {
+                color: #a0a0a0;
+                font-size: 14px;
+            }
+
+            .account-info-item span {
+                color: #fff;
+                font-weight: 500;
+            }
+
+            /* Payment Section */
+            .payment-methods {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 30px;
+                margin-top: 30px;
+            }
+
+            .payment-methods h3 {
+                margin-bottom: 20px;
+            }
+
+            .payment-option {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                border: 1px solid transparent;
+                transition: all 0.3s;
+            }
+
+            .payment-option:hover {
+                border-color: #00d4ff;
+            }
+
+            .payment-option.selected {
+                border-color: #00d4ff;
+                background: rgba(0, 212, 255, 0.1);
+            }
+
+            .payment-option input[type="radio"] {
+                display: none;
+            }
+
+            .payment-option .icon {
+                font-size: 24px;
+            }
+
+            /* Toast Notification */
+            .toast {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #00d4ff;
+                color: #000;
+                padding: 16px 24px;
+                border-radius: 8px;
+                font-weight: 500;
+                display: none;
+                z-index: 2000;
+            }
+
+            .toast.show {
+                display: block;
+                animation: slideIn 0.3s ease;
+            }
+
+            .toast.error {
+                background: #ff4444;
+                color: #fff;
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            /* Footer */
+            footer {
+                text-align: center;
+                padding: 40px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                color: #a0a0a0;
+            }
+
+            footer a {
+                color: #00d4ff;
+                text-decoration: none;
+            }
+
+            /* Verification Code Input */
+            .code-input {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin: 20px 0;
+            }
+
+            .code-input input {
+                width: 50px;
+                height: 60px;
+                text-align: center;
+                font-size: 24px;
+                font-weight: 600;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                color: #fff;
+            }
+
+            .code-input input:focus {
+                outline: none;
+                border-color: #00d4ff;
+            }
+
+            .timer {
+                text-align: center;
+                color: #a0a0a0;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+
+            .timer.expired {
+                color: #ff4444;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .features,
+                .pricing-cards {
+                    grid-template-columns: 1fr;
+                }
+
+                .hero h1 {
+                    font-size: 36px;
+                }
+
+                .hero-buttons {
+                    flex-direction: column;
+                }
+
+                .usage-stats {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="container">
+            <div class="logo">OpenShell</div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <button
+                    class="btn btn-primary"
+                    id="headerBtn"
+                    onclick="showLogin()"
+                >
+                    Get Started
+                </button>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <h1>AI-Powered Terminal Assistant</h1>
+            <p>
+                OpenShell is your intelligent coding companion. Read, write,
+                edit files and execute commands with natural language. Works
+                with any AI provider.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="showSignup()">
+                    Start Free Trial
+                </button>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="container features">
+            <div class="feature-card">
+                <div class="feature-icon">[1]</div>
+                <h3>Multi-Provider Support</h3>
+                <p>
+                    Works with Anthropic, OpenAI, Google, Groq, OpenRouter,
+                    Ollama, and more.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[2]</div>
+                <h3>Full File Control</h3>
+                <p>
+                    Read, write, edit, and search files with AI assistance.
+                    Execute shell commands safely.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[3]</div>
+                <h3>Session Management</h3>
+                <p>
+                    Keep track of your conversations and manage your coding
+                    history.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[4]</div>
+                <h3>Cost Tracking</h3>
+                <p>
+                    Monitor your API usage and costs in real-time with detailed
+                    analytics.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[5]</div>
+                <h3>Dark & Light Themes</h3>
+                <p>
+                    Beautiful UI designed for developers who spend hours in the
+                    terminal.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[6]</div>
+                <h3>Privacy First</h3>
+                <p>
+                    Your code stays local. We never store or transmit your
+                    files.
+                </p>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="container pricing">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Choose the plan that fits your needs. Cancel anytime.</p>
+            <p style="color: #00d4ff; margin-top: 10px; font-weight: 500">
+                We accept Cash App and Google Pay
+            </p>
+
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price">$0<span>/month</span></div>
+                    <ul>
+                        <li>100 requests per month</li>
+                        <li>Basic model access</li>
+                        <li>Community support</li>
+                        <li>Session history (7 days)</li>
+                    </ul>
+                    <button
+                        class="btn btn-secondary"
+                        style="width: 100%"
+                        onclick="showSignup()"
+                    >
+                        Get Started
+                    </button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <h3>Pro</h3>
+                    <div class="price">$19<span>/month</span></div>
+                    <ul>
+                        <li>Unlimited requests</li>
+                        <li>All model access</li>
+                        <li>Priority support</li>
+                        <li>Unlimited history</li>
+                        <li>Custom system prompts</li>
+                    </ul>
+                    <button
+                        class="btn btn-primary"
+                        style="width: 100%"
+                        onclick="showPayment('pro')"
+                    >
+                        Get Pro
+                    </button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Team</h3>
+                    <div class="price">$49<span>/month</span></div>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>5 team members</li>
+                        <li>Shared API keys</li>
+                        <li>Admin dashboard</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <button
+                        class="btn btn-secondary"
+                        style="width: 100%"
+                        onclick="showPayment('team')"
+                    >
+                        Get Team
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>OpenShell - Open Source AI Coding Agent</p>
+            <p style="margin-top: 10px">
+                <a href="mailto:support@openshell.dev">Support</a>
+            </p>
+        </footer>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your API key and dashboard.</p>
+
+                <button class="google-btn" onclick="handleGoogleSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path
+                            fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        />
+                        <path
+                            fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        />
+                        <path
+                            fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        />
+                        <path
+                            fill="#EA4335"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        />
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="divider"><span>or</span></div>
+
+                <form onsubmit="handleEmailLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            placeholder="you@example.com"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        style="width: 100%"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p>
+                        Don't have an account?
+                        <a onclick="switchToSignup()">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div id="signupModal" class="modal">
+            <div class="modal-content">
+                <h2>Create Account</h2>
+                <p>Get your free API key and start coding with AI.</p>
+
+                <button class="google-btn" onclick="handleGoogleSignIn()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path
+                            fill="#4285F4"
+                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        />
+                        <path
+                            fill="#34A853"
+                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        />
+                        <path
+                            fill="#FBBC05"
+                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        />
+                        <path
+                            fill="#EA4335"
+                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        />
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="divider"><span>or</span></div>
+
+                <form onsubmit="handleEmailSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input
+                            type="text"
+                            id="signupName"
+                            placeholder="John Doe"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            id="signupEmail"
+                            placeholder="you@example.com"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            id="signupPassword"
+                            placeholder="Create a password (min 8 chars)"
+                            minlength="8"
+                            required
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        style="width: 100%"
+                    >
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p>
+                        Already have an account?
+                        <a onclick="switchToLogin()">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verification Modal -->
+        <div id="verifyModal" class="modal">
+            <div class="modal-content">
+                <h2>Verify Your Email</h2>
+                <p>
+                    We've sent a 6-digit code to
+                    <span id="verifyEmail" style="color: #00d4ff"></span>
+                </p>
+
+                <div class="code-input">
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code1"
+                        oninput="handleCodeInput(this, 'code2')"
+                    />
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code2"
+                        oninput="handleCodeInput(this, 'code3')"
+                    />
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code3"
+                        oninput="handleCodeInput(this, 'code4')"
+                    />
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code4"
+                        oninput="handleCodeInput(this, 'code5')"
+                    />
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code5"
+                        oninput="handleCodeInput(this, 'code6')"
+                    />
+                    <input
+                        type="text"
+                        maxlength="1"
+                        id="code6"
+                        oninput="handleCodeInput(this, null)"
+                    />
+                </div>
+
+                <div class="timer" id="timer">
+                    Code expires in <span id="timerValue">5:00</span>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    style="width: 100%; margin-top: 20px"
+                    onclick="verifyCode()"
+                >
+                    Verify
+                </button>
+
+                <div class="form-footer">
+                    <p><a onclick="resendCode()">Resend code</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <h2>Complete Payment</h2>
+                <p id="paymentPlan">Pro Plan - $19/month</p>
+
+                <div class="payment-methods">
+                    <h3>Select Payment Method</h3>
+                    <p
+                        style="
+                            color: #a0a0a0;
+                            margin-bottom: 15px;
+                            font-size: 14px;
+                        "
+                    >
+                        Choose your preferred payment method below
+                    </p>
+
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <input type="radio" name="payment" value="cashapp" />
+                        <span class="icon">$</span>
+                        <div>
+                            <strong>Cash App</strong>
+                            <p
+                                style="
+                                    font-size: 12px;
+                                    color: #a0a0a0;
+                                    margin: 0;
+                                "
+                            >
+                                Send to $OpenShell - Instant verification
+                            </p>
+                        </div>
+                    </label>
+
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <input type="radio" name="payment" value="gpay" />
+                        <span class="icon">G</span>
+                        <div>
+                            <strong>Google Pay</strong>
+                            <p
+                                style="
+                                    font-size: 12px;
+                                    color: #a0a0a0;
+                                    margin: 0;
+                                "
+                            >
+                                Manual verification - 24hr activation
+                            </p>
+                        </div>
+                    </label>
+                </div>
+
+                <div
+                    id="cashappDetails"
+                    style="
+                        display: none;
+                        margin-top: 20px;
+                        padding: 25px;
+                        background: rgba(0, 212, 255, 0.1);
+                        border-radius: 12px;
+                        border: 1px solid #00d4ff;
+                    "
+                >
+                    <h4 style="color: #00d4ff; margin-bottom: 15px">
+                        Cash App Payment Instructions
+                    </h4>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 1:</strong> Open Cash App on your phone
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 2:</strong> Send payment to:
+                        <span
+                            style="
+                                color: #00d4ff;
+                                font-size: 18px;
+                                font-weight: bold;
+                            "
+                            >$OpenShell</span
+                        >
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 3:</strong> Amount:
+                        <span style="font-size: 18px; font-weight: bold"
+                            >$19.00</span
+                        >
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 4:</strong> Include your registered email
+                        in the note
+                    </p>
+                    <hr
+                        style="
+                            border: none;
+                            border-top: 1px solid rgba(255, 255, 255, 0.1);
+                            margin: 15px 0;
+                        "
+                    />
+                    <p style="font-size: 13px; color: #a0a0a0">
+                        After sending, click "I've Sent Payment" below. We'll
+                        verify within minutes.
+                    </p>
+                </div>
+
+                <div
+                    id="gpayDetails"
+                    style="
+                        display: none;
+                        margin-top: 20px;
+                        padding: 25px;
+                        background: rgba(0, 212, 255, 0.1);
+                        border-radius: 12px;
+                        border: 1px solid #00d4ff;
+                    "
+                >
+                    <h4 style="color: #00d4ff; margin-bottom: 15px">
+                        Google Pay Payment Instructions
+                    </h4>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 1:</strong> Open Google Pay on your phone
+                        or browser
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 2:</strong> Send payment to the email shown
+                        at checkout
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 3:</strong> Amount:
+                        <span style="font-size: 18px; font-weight: bold"
+                            >$19.00</span
+                        >
+                    </p>
+                    <p style="margin-bottom: 10px">
+                        <strong>Step 4:</strong> Include your registered email
+                        in the memo
+                    </p>
+                    <hr
+                        style="
+                            border: none;
+                            border-top: 1px solid rgba(255, 255, 255, 0.1);
+                            margin: 15px 0;
+                        "
+                    />
+                    <p style="font-size: 13px; color: #a0a0a0">
+                        After sending, click "I've Sent Payment" below. We'll
+                        verify within 24 hours.
+                    </p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    style="width: 100%; margin-top: 20px"
+                    onclick="completePayment()"
+                >
+                    I've Sent Payment
+                </button>
+
+                <div class="form-footer">
+                    <a onclick="closePayment()">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="container dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Welcome, <span id="userName">User</span></h1>
+                    <p style="color: #a0a0a0">
+                        Manage your API key and account
+                    </p>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">
+                    Sign Out
+                </button>
+            </div>
+
+            <div class="api-key-box">
+                <h3>Your API Key</h3>
+                <p style="color: #a0a0a0; font-size: 14px">
+                    Use this key to authenticate with OpenShell CLI
+                </p>
+                <p style="color: #ff9900; font-size: 12px; margin-top: 10px">
+                    Note: You can only have one API key. Copy it now!
+                </p>
+
+                <div class="api-key-display">
+                    <input type="text" id="apiKeyDisplay" readonly />
+                    <button class="btn btn-primary" onclick="copyApiKey()">
+                        Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="usage-stats">
+                <div class="stat-card">
+                    <div class="value" id="requestsUsed">0</div>
+                    <div class="label">Requests This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="tokensUsed">0</div>
+                    <div class="label">Tokens Used</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="planName">Free</div>
+                    <div class="label">Current Plan</div>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h3>Account Settings</h3>
+                <div class="account-info">
+                    <div class="account-info-item">
+                        <label>Email</label>
+                        <span id="accountEmail">user@example.com</span>
+                    </div>
+                    <div class="account-info-item">
+                        <label>Account Created</label>
+                        <span id="accountCreated">-</span>
+                    </div>
+                    <div class="account-info-item">
+                        <label>Sign-in Method</label>
+                        <span id="signInMethod">-</span>
+                    </div>
+                </div>
+                <button
+                    class="btn btn-danger"
+                    style="margin-top: 20px"
+                    onclick="deleteAccount()"
+                >
+                    Delete Account
+                </button>
+            </div>
+
+            <div class="payment-methods" style="margin-top: 30px">
+                <h3>Upgrade Your Plan</h3>
+                <p style="color: #a0a0a0; margin: 10px 0">
+                    Get unlimited requests and premium features
+                </p>
+                <button class="btn btn-primary" onclick="showPayment('pro')">
+                    Upgrade to Pro - $19/mo
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+
+        <script>
+            // Google Sign-In Configuration
+            // Note: Replace YOUR_CLIENT_ID with your actual Google OAuth Client ID
+            // Get it from: https://console.cloud.google.com/apis/credentials
+            let googleClientId =
+                "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+
+            // Temporary storage for signup process
+            let pendingSignup = null;
+            let verificationCode = null;
+            let timerInterval = null;
+
+            // Generate API Key
+            function generateApiKey() {
+                const prefix = "os_";
+                const chars =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let key = prefix;
+                for (let i = 0; i < 32; i++) {
+                    key += chars.charAt(
+                        Math.floor(Math.random() * chars.length),
+                    );
+                }
+                return key;
+            }
+
+            // Generate 6-digit verification code
+            function generateVerificationCode() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            // Simple email verification simulation
+            // In production, you would use a backend service like SendGrid, Mailgun, etc.
+            function simulateSendEmail(email, code) {
+                // For demo purposes, we show the code in a toast
+                // In production, this would send an actual email
+                console.log(`Sending code ${code} to ${email}`);
+
+                // Store in localStorage for demo
+                const emailCodes = JSON.parse(
+                    localStorage.getItem("openshell_email_codes") || "{}",
+                );
+                emailCodes[email] = {
+                    code: code,
+                    expires: Date.now() + 5 * 60 * 1000, // 5 minutes
+                };
+                localStorage.setItem(
+                    "openshell_email_codes",
+                    JSON.stringify(emailCodes),
+                );
+
+                // In a real implementation, you would make an API call to your backend
+                // which would then send the email via an email service
+                return true;
+            }
+
+            // Show Modal
+            function showLogin() {
+                closeAllModals();
+                document.getElementById("loginModal").classList.add("active");
+            }
+
+            function showSignup() {
+                closeAllModals();
+                document.getElementById("signupModal").classList.add("active");
+            }
+
+            function switchToLogin() {
+                showLogin();
+            }
+
+            function switchToSignup() {
+                showSignup();
+            }
+
+            function closeAllModals() {
+                document.querySelectorAll(".modal").forEach((modal) => {
+                    modal.classList.remove("active");
+                });
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            }
+
+            // Close modals when clicking outside
+            document.querySelectorAll(".modal").forEach((modal) => {
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal) {
+                        closeAllModals();
+                    }
+                });
+            });
+
+            // Handle Google Sign-In
+            function handleGoogleSignIn() {
+                // Initialize Google Identity Services
+                if (typeof google !== "undefined" && google.accounts) {
+                    google.accounts.id.initialize({
+                        client_id: googleClientId,
+                        callback: handleGoogleCredentialResponse,
+                    });
+                    google.accounts.id.prompt();
+                } else {
+                    // Fallback: Simulate Google Sign-In for demo
+                    // In production, Google's script would handle this
+                    simulateGoogleSignIn();
+                }
+            }
+
+            function handleGoogleCredentialResponse(response) {
+                // Decode the JWT token from Google
+                const payload = decodeJwtPayload(response.credential);
+
+                const email = payload.email;
+                const name = payload.name;
+
+                // Check if user exists
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
+                );
+
+                if (users[email]) {
+                    // User exists, log them in
+                    localStorage.setItem("openshell_current_user", email);
+                    closeAllModals();
+                    showDashboard(users[email]);
+                    showToast("Welcome back!");
+                } else {
+                    // Create new user with Google
+                    const apiKey = generateApiKey();
+                    users[email] = {
+                        name: name,
+                        email: email,
+                        apiKey: apiKey,
+                        plan: "free",
+                        requests: 0,
+                        tokens: 0,
+                        signInMethod: "google",
+                        createdAt: new Date().toISOString(),
+                    };
+                    localStorage.setItem(
+                        "openshell_users",
+                        JSON.stringify(users),
+                    );
+                    localStorage.setItem("openshell_current_user", email);
+
+                    closeAllModals();
+                    showDashboard(users[email]);
+                    showToast("Account created! Your API key is ready.");
+                }
+            }
+
+            function decodeJwtPayload(token) {
+                const base64Url = token.split(".")[1];
+                const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+                const jsonPayload = decodeURIComponent(
+                    atob(base64)
+                        .split("")
+                        .map(function (c) {
+                            return (
+                                "%" +
+                                ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                            );
+                        })
+                        .join(""),
+                );
+                return JSON.parse(jsonPayload);
+            }
+
+            function simulateGoogleSignIn() {
+                // For demo purposes when Google SDK isn't loaded
+                const email = prompt("Enter your Google email:");
+                if (!email) return;
+
+                const name = email.split("@")[0];
+                handleGoogleCredentialResponse({
+                    credential: btoa(JSON.stringify({ email, name })),
+                });
+            }
+
+            // Handle Email Signup
+            function handleEmailSignup(e) {
+                e.preventDefault();
+
+                const name = document.getElementById("signupName").value;
+                const email = document.getElementById("signupEmail").value;
+                const password =
+                    document.getElementById("signupPassword").value;
+
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
+                );
+
+                if (users[email]) {
+                    showToast(
+                        "Email already registered. Please sign in.",
+                        true,
+                    );
+                    return;
+                }
+
+                // Store pending signup
+                pendingSignup = {
+                    name: name,
+                    email: email,
+                    password: password,
+                };
+
+                // Generate and send verification code
+                verificationCode = generateVerificationCode();
+                simulateSendEmail(email, verificationCode);
+
+                // Show verification modal
+                document.getElementById("verifyEmail").textContent = email;
+                closeAllModals();
+                document.getElementById("verifyModal").classList.add("active");
+
+                // Start timer
+                startTimer();
+
+                // Clear code inputs
+                document
+                    .querySelectorAll(".code-input input")
+                    .forEach((input) => {
+                        input.value = "";
+                    });
+                document.getElementById("code1").focus();
+
+                showToast("Verification code sent to " + email);
+            }
+
+            // Handle Email Login
+            function handleEmailLogin(e) {
+                e.preventDefault();
+
+                const email = document.getElementById("loginEmail").value;
+                const password = document.getElementById("loginPassword").value;
+
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
+                );
+
+                if (!users[email]) {
+                    showToast("Account not found. Please sign up.", true);
+                    return;
+                }
+
+                if (users[email].password !== password) {
+                    showToast("Incorrect password. Please try again.", true);
+                    return;
+                }
+
+                localStorage.setItem("openshell_current_user", email);
+                closeAllModals();
+                showDashboard(users[email]);
+                showToast("Welcome back!");
+            }
+
+            // Verification code input handling
+            function handleCodeInput(currentInput, nextInputId) {
+                if (currentInput.value.length === 1 && nextInputId) {
+                    document.getElementById(nextInputId).focus();
+                }
+            }
+
+            // Start verification timer
+            function startTimer() {
+                let timeLeft = 300; // 5 minutes in seconds
+
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    document.getElementById("timerValue").textContent =
+                        `${minutes}:${seconds.toString().padStart(2, "0")}`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        document
+                            .getElementById("timer")
+                            .classList.add("expired");
+                        document.getElementById("timerValue").textContent =
+                            "EXPIRED";
+                    }
+                }, 1000);
+            }
+
+            // Verify code
+            function verifyCode() {
+                const code =
+                    document.getElementById("code1").value +
+                    document.getElementById("code2").value +
+                    document.getElementById("code3").value +
+                    document.getElementById("code4").value +
+                    document.getElementById("code5").value +
+                    document.getElementById("code6").value;
+
+                if (code.length !== 6) {
+                    showToast("Please enter the complete 6-digit code", true);
+                    return;
+                }
+
+                // Check stored code
+                const emailCodes = JSON.parse(
+                    localStorage.getItem("openshell_email_codes") || "{}",
+                );
+                const storedCode = emailCodes[pendingSignup.email];
+
+                if (!storedCode || storedCode.code !== code) {
+                    showToast("Invalid verification code", true);
+                    return;
+                }
+
+                if (Date.now() > storedCode.expires) {
+                    showToast(
+                        "Code has expired. Please request a new one.",
+                        true,
+                    );
+                    return;
+                }
+
+                // Create account
+                const apiKey = generateApiKey();
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
+                );
+                users[pendingSignup.email] = {
+                    name: pendingSignup.name,
+                    email: pendingSignup.email,
+                    password: pendingSignup.password,
+                    apiKey: apiKey,
+                    plan: "free",
+                    requests: 0,
+                    tokens: 0,
+                    signInMethod: "email",
+                    createdAt: new Date().toISOString(),
+                };
+
+                localStorage.setItem("openshell_users", JSON.stringify(users));
+                localStorage.setItem(
+                    "openshell_current_user",
+                    pendingSignup.email,
+                );
+
+                // Clean up
+                delete emailCodes[pendingSignup.email];
+                localStorage.setItem(
+                    "openshell_email_codes",
+                    JSON.stringify(emailCodes),
+                );
+                pendingSignup = null;
+
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+
+                closeAllModals();
+                showDashboard(
+                    users[localStorage.getItem("openshell_current_user")],
+                );
+                showToast("Account created! Your API key is ready.");
+            }
+
+            // Resend verification code
+            function resendCode() {
+                if (!pendingSignup) return;
+
+                verificationCode = generateVerificationCode();
+                simulateSendEmail(pendingSignup.email, verificationCode);
+
+                // Reset timer
+                startTimer();
+
+                // Clear inputs
+                document
+                    .querySelectorAll(".code-input input")
+                    .forEach((input) => {
+                        input.value = "";
+                    });
+                document.getElementById("code1").focus();
+
+                showToast("New verification code sent!");
+            }
+
+            // Show Dashboard
+            function showDashboard(user) {
+                document.getElementById("userName").textContent = user.name;
+                document.getElementById("apiKeyDisplay").value = user.apiKey;
+                document.getElementById("requestsUsed").textContent =
+                    user.requests || 0;
+                document.getElementById("tokensUsed").textContent =
+                    user.tokens || 0;
+                document.getElementById("planName").textContent = user.plan
+                    ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1)
+                    : "Free";
+                document.getElementById("accountEmail").textContent =
+                    user.email;
+                document.getElementById("accountCreated").textContent =
+                    new Date(user.createdAt).toLocaleDateString();
+                document.getElementById("signInMethod").textContent =
+                    user.signInMethod === "google"
+                        ? "Google"
+                        : "Email/Password";
+
+                document.getElementById("dashboard").classList.add("active");
+                document.getElementById("hero").style.display = "none";
+                document.getElementById("features").style.display = "none";
+                document.getElementById("pricing").style.display = "none";
+                document.querySelector("footer").style.display = "none";
+
+                // Update header button
+                document.getElementById("headerBtn").textContent = "Dashboard";
+                document.getElementById("headerBtn").onclick = () => {
+                    if (
+                        document
+                            .getElementById("dashboard")
+                            .classList.contains("active")
+                    ) {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                        showDashboard(user);
+                    }
+                };
+            }
+
+            // Logout
+            function logout() {
+                localStorage.removeItem("openshell_current_user");
+                location.reload();
+            }
+
+            // Delete Account
+            function deleteAccount() {
+                if (
+                    !confirm(
+                        "Are you sure you want to delete your account? This cannot be undone.",
+                    )
+                ) {
+                    return;
+                }
+
+                if (
+                    !confirm(
+                        "All your data including your API key will be permanently deleted. Continue?",
+                    )
+                ) {
+                    return;
+                }
+
+                const email = localStorage.getItem("openshell_current_user");
+                const users = JSON.parse(
+                    localStorage.getItem("openshell_users") || "{}",
+                );
+
+                delete users[email];
+                localStorage.setItem("openshell_users", JSON.stringify(users));
+                localStorage.removeItem("openshell_current_user");
+
+                showToast("Account deleted successfully");
+                setTimeout(() => location.reload(), 1000);
+            }
+
+            // Copy API Key
+            function copyApiKey() {
+                const apiKey = document.getElementById("apiKeyDisplay").value;
+                navigator.clipboard
+                    .writeText(apiKey)
+                    .then(() => {
+                        showToast("API key copied to clipboard!");
+                    })
+                    .catch(() => {
+                        // Fallback for older browsers
+                        const input = document.getElementById("apiKeyDisplay");
+                        input.select();
+                        document.execCommand("copy");
+                        showToast("API key copied to clipboard!");
+                    });
+            }
+
+            // Payment
+            let selectedPlan = "pro";
+
+            function showPayment(plan) {
+                selectedPlan = plan;
+                document.getElementById("paymentPlan").textContent =
+                    plan === "pro"
+                        ? "Pro Plan - $19/month"
+                        : "Team Plan - $49/month";
+                closeAllModals();
+                document.getElementById("paymentModal").classList.add("active");
+            }
+
+            function closePayment() {
+                closeAllModals();
+            }
+
+            function selectPayment(element) {
+                document.querySelectorAll(".payment-option").forEach((opt) => {
+                    opt.classList.remove("selected");
+                });
+                element.classList.add("selected");
+
+                const value = element.querySelector("input").value;
+                document.getElementById("cashappDetails").style.display =
+                    value === "cashapp" ? "block" : "none";
+                document.getElementById("gpayDetails").style.display =
+                    value === "gpay" ? "block" : "none";
+            }
+
+            function completePayment() {
+                const selected = document.querySelector(
+                    ".payment-option.selected",
+                );
+                if (!selected) {
+                    showToast("Please select a payment method", true);
+                    return;
+                }
+
+                showToast(
+                    "Thank you! We will verify your payment within 24 hours.",
+                );
+                closePayment();
+            }
+
+            // Toast Notification
+            function showToast(message, isError = false) {
+                const toast = document.getElementById("toast");
+                toast.textContent = message;
+                toast.className = "toast show" + (isError ? " error" : "");
+
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 3000);
+            }
+
+            // Check if user is logged in on page load
+            window.onload = function () {
+                const email = localStorage.getItem("openshell_current_user");
+                if (email) {
+                    const users = JSON.parse(
+                        localStorage.getItem("openshell_users") || "{}",
+                    );
+                    if (users[email]) {
+                        showDashboard(users[email]);
+                    }
+                }
+            };
+
+            // Google Sign-In callback (define globally)
+            window.handleGoogleCredentialResponse =
+                handleGoogleCredentialResponse;
+        </script>
+    </body>
+</html>

@@ -2162,8 +2162,9 @@
 
             // Check if user is logged in on page load
             window.onload = function () {
-                // Check for GitHub OAuth callback
-                handleGitHubCallback();
+                // Check for OAuth callback (GitHub or Google)
+                // GitHub is disabled, so only check for Google
+                handleGoogleCallback();
                 
                 const email = localStorage.getItem("openshell_current_user");
                 if (email) {

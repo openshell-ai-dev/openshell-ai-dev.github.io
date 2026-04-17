@@ -2180,17 +2180,41 @@ openshell\website\index.html
             socialLinksColumn.style.display = SITE_SETTINGS.discordEnabled ? 'block' : 'none';
           }
 
+          // Initialize settings
+          initializeSettings();
+
           // Show loader
           showSiteLoader();
 
           // Setup event listeners
           setupEventListeners();
 
-          // Check for existing session
-          await checkSession();
+          // Handle OAuth callback first before checking session
+            const hasOAuthCallback = window.location.hash.includes('access_token') ||
+                                       window.location.hash.includes('provider_token') ||
+                                       window.location.hash.includes('expires_at');
 
-          // Handle hash-based routing
-          handleHashChange();
+            if (hasOAuthCallback) {
+              // Wait for supabase to process the auth callback
+              let attempts = 0;
+              const checkAuthInterval = setInterval(async () => {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                  clearInterval(checkAuthInterval);
+                  // Clean up URL by removing hash
+                  history.replaceState(null, '', window.location.pathname + window.location.search);
+                  // Show dashboard after successful OAuth
+                  await handleAuthStateChange(session);
+                } else if (attempts++ > 50) { // Timeout after 5 seconds
+                  clearInterval(checkAuthInterval);
+                  handleSignOut();
+                }
+              }, 100);
+              return; // Skip normal initialization
+            }
+
+            // Handle hash-based routing
+            handleHashChange();
 
           // Listen for auth state changes
           supabaseClient.auth.onAuthStateChange((event, session) => {
@@ -2202,7 +2226,7 @@ openshell\website\index.html
             }
           });
 
-          // Hide loader after animation completes, then show home content
+          // Hide loader after animation completes, then show content
           setTimeout(() => {
             hideSiteLoader();
             // Small delay after loader hides, then show home content if not on a specific page
@@ -2217,7 +2241,7 @@ openshell\website\index.html
                 }, 100);
               }
             }, 100);
-          }, 2800);
+          }, SITE_SETTINGS.loaderDuration);
         });
 
         // ============================================
@@ -2303,6 +2327,11 @@ openshell\website\index.html
         }
 
         function handleHashChange() {
+          // Skip processing if URL contains OAuth callback data
+          if (window.location.hash.includes('access_token') || window.location.hash.includes('error')) {
+            return;
+          }
+
           const hash = window.location.hash.replace('#', '') || 'home';
           // Special handling for dashboard hash when user is authenticated
           if (hash === 'dashboard' && currentUser && currentPage !== 'dashboard') {
@@ -2402,8 +2431,7 @@ openshell\website\index.html
             // Update header button
             document.getElementById('headerBtn').textContent = 'Dashboard';
 
-            // Auto-redirect to dashboard after authentication (for OAuth returns)
-            // Clear currentPage to force navigation even if hash says dashboard
+                  // Auto-redirect to dashboard immediately after authentication
             setTimeout(() => {
               currentPage = '';
               navigateTo('dashboard');
@@ -2520,8 +2548,8 @@ openshell\website\index.html
             const { error } = await supabaseClient.auth.signInWithOAuth({
               provider: 'github',
               options: {
-                scopes: 'user:email',
-                redirectTo: window.location.origin + window.location.pathname + '#dashboard'
+                scopes: 'read:user,user:email',
+                redirectTo: window.location.origin + window.location.pathname
               }
             });
             if (error) throw error;
@@ -2535,12 +2563,12 @@ openshell\website\index.html
           try {
             showToast('Redirecting to Google...', false);
             const { error } = await supabaseClient.auth.signInWithOAuth({
-              provider: 'google',
-              options: {
-                scopes: 'openid email profile',
-                redirectTo: window.location.origin + window.location.pathname + '#dashboard'
-              }
-            });
+                  provider: 'google',
+                  options: {
+                    scopes: 'openid email profile',
+                    redirectTo: window.location.origin + window.location.pathname
+                  }
+                });
             if (error) throw error;
           } catch (error) {
             console.error('Google sign in error:', error);
@@ -2981,17 +3009,123 @@ openshell\website\index.html
         // ============================================
         // SETTINGS
         // ============================================
+        // ============================================
+        // SETTINGS
+        // ============================================
+        const defaultSettings = {
+          darkMode: true,
+          compactMode: false,
+          emailNotifications: true,
+          usageAlerts: true,
+          marketingEmails: false
+        };
+
+        function initializeSettings() {
+          // Load saved settings or use defaults
+          const saved = localStorage.getItem('openshell_settings');
+          const settings = saved ? JSON.parse(saved) : defaultSettings;
+
+          // Apply settings to UI
+          applySettings(settings);
+        }
+
+        function applySettings(settings) {
+          // Theme
+          const themeToggle = document.getElementById('themeToggle');
+          if (themeToggle) {
+            if (settings.darkMode) themeToggle.classList.add('active');
+            else themeToggle.classList.remove('active');
+          }
+          document.body.classList.toggle('light-mode', !settings.darkMode);
+
+          // Compact mode
+          const compactToggle = document.querySelector('[onclick*="compactMode"]');
+          if (compactToggle) {
+            if (settings.compactMode) compactToggle.classList.add('active');
+            else compactToggle.classList.remove('active');
+          }
+          document.body.classList.toggle('compact', settings.compactMode);
+
+          // Notification toggles
+          const emailToggle = document.querySelector('[onclick*="emailNotifications"]');
+          if (emailToggle) {
+            if (settings.emailNotifications) emailToggle.classList.add('active');
+            else emailToggle.classList.remove('active');
+          }
+
+          const usageToggle = document.querySelector('[onclick*="usageAlerts"]');
+          if (usageToggle) {
+            if (settings.usageAlerts) usageToggle.classList.add('active');
+            else usageToggle.classList.remove('active');
+          }
+
+          const marketingToggle = document.querySelector('[onclick*="marketingEmails"]');
+          if (marketingToggle) {
+            if (settings.marketingEmails) marketingToggle.classList.add('active');
+            else marketingToggle.classList.remove('active');
+          }
+        }
+
+        function saveSettings(settings) {
+          localStorage.setItem('openshell_settings', JSON.stringify(settings));
+        }
+
+        function getSettings() {
+          const saved = localStorage.getItem('openshell_settings');
+          return saved ? JSON.parse(saved) : defaultSettings;
+        }
+
         function toggleTheme(toggle) {
-            toggle.classList.toggle('active');
-            const isDark = toggle.classList.contains('active');
-            // Theme toggle logic would go here
-            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', false, true);
+          toggle.classList.toggle('active');
+          const isDark = toggle.classList.contains('active');
+          const settings = getSettings();
+          settings.darkMode = isDark;
+          saveSettings(settings);
+
+          document.body.classList.toggle('light-mode', !isDark);
+
+          if (isDark) {
+            document.documentElement.style.setProperty('--bg-dark', '#0a0a0a');
+            document.documentElement.style.setProperty('--bg-card', '#1a1a1a');
+            document.documentElement.style.setProperty('--text-primary', '#ffffff');
+            document.documentElement.style.setProperty('--text-secondary', '#a0a0a0');
+          } else {
+            document.documentElement.style.setProperty('--bg-dark', '#ffffff');
+            document.documentElement.style.setProperty('--bg-card', '#f5f5f5');
+            document.documentElement.style.setProperty('--text-primary', '#0a0a0a');
+            document.documentElement.style.setProperty('--text-secondary', '#666666');
+          }
+
+          showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', false, true);
         }
 
         function toggleSetting(toggle, settingName) {
-            toggle.classList.toggle('active');
-            const isEnabled = toggle.classList.contains('active');
-            showToast(`${settingName} ${isEnabled ? 'enabled' : 'disabled'}`, false, true);
+          toggle.classList.toggle('active');
+          const isEnabled = toggle.classList.contains('active');
+
+          const settings = getSettings();
+
+          // Map the setting names to actual settings keys
+          const settingMap = {
+            'compactMode': 'compactMode',
+            'emailNotifications': 'emailNotifications',
+            'usageAlerts': 'usageAlerts',
+            'marketingEmails': 'marketingEmails'
+          };
+
+          const key = settingMap[settingName];
+          if (key) {
+            settings[key] = isEnabled;
+            saveSettings(settings);
+          }
+
+          // Apply the setting
+          if (settingName === 'compactMode') {
+            document.body.classList.toggle('compact', isEnabled);
+          }
+
+          const displayName = settingName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+          showToast(`${displayName} ${isEnabled ? 'enabled' : 'disabled'}`, false, true);
         }
 
         // ============================================

@@ -1392,7 +1392,7 @@
             let githubClientSecret = "02ead069bcf2e13056cb6d8af98af49917461385";
             
             // Google Sign-In Configuration
-            let googleClientId = "82538118256-u2r81f1l4bn0s9cpl9jt4u1u7i5r0n8j.apps.googleusercontent.com";
+            let googleClientId = "562425398418-al9902tg637jqlvp0map6luk85qu2ag9.apps.googleusercontent.com";
             let googleProjectId = "openshell-493600";
             
             // Redirect URIs - must match OAuth app settings
@@ -1560,10 +1560,11 @@
                     // });
                     // const user = await response.json();
 
-                    // Demo: Create user with GitHub username from code
+                    // Demo: Create user with realistic GitHub username
+                    const randomNum = Math.random().toString(36).substr(2, 9);
                     const demoGitHubUser = {
-                        login: "github_user_" + Math.random().toString(36).substr(2, 9),
-                        name: "GitHub User",
+                        login: "developer_" + randomNum,
+                        name: "Developer " + randomNum.substring(0, 4),
                         avatar_url: "https://avatars.githubusercontent.com/u/1?v=4",
                     };
 
@@ -1604,10 +1605,11 @@
                     // const user = await response.json();
 
                     // Demo: Create user with Google
+                    const randomNum = Math.random().toString(36).substr(2, 9);
                     const demoGoogleUser = {
-                        email: "user_" + Math.random().toString(36).substr(2, 9) + "@google.local",
-                        name: "Google User",
-                        id: Math.random().toString(36).substr(2, 9),
+                        email: "user_" + randomNum + "@gmail.com",
+                        name: "Google User " + randomNum.substring(0, 4),
+                        id: randomNum,
                     };
 
                     loginWithGoogle(demoGoogleUser);
@@ -1891,7 +1893,22 @@
             // Logout
             function logout() {
                 localStorage.removeItem("openshell_current_user");
-                location.reload();
+                
+                // Hide dashboard and show main page
+                document.getElementById("dashboard").classList.remove("active");
+                document.getElementById("hero").style.display = "block";
+                document.getElementById("features").style.display = "grid";
+                document.getElementById("pricing").style.display = "block";
+                document.querySelector("footer").style.display = "block";
+                
+                // Reset header button
+                document.getElementById("headerBtn").textContent = "Get Started";
+                document.getElementById("headerBtn").onclick = () => showAuth('signin');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                
+                showToast("Logged out successfully");
             }
 
             // Delete Account
@@ -1921,8 +1938,21 @@
                 localStorage.setItem("openshell_users", JSON.stringify(users));
                 localStorage.removeItem("openshell_current_user");
 
+                // Hide dashboard and show main page
+                document.getElementById("dashboard").classList.remove("active");
+                document.getElementById("hero").style.display = "block";
+                document.getElementById("features").style.display = "grid";
+                document.getElementById("pricing").style.display = "block";
+                document.querySelector("footer").style.display = "block";
+                
+                // Reset header button
+                document.getElementById("headerBtn").textContent = "Get Started";
+                document.getElementById("headerBtn").onclick = () => showAuth('signin');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                
                 showToast("Account deleted successfully");
-                setTimeout(() => location.reload(), 1000);
             }
 
             // Copy API Key

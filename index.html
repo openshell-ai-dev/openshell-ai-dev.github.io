@@ -2203,10 +2203,14 @@ openshell\website\index.html
                   clearInterval(checkAuthInterval);
                   // Clean up URL by removing hash
                   history.replaceState(null, '', window.location.pathname + window.location.search);
+                  // Hide loader before showing dashboard
+                  hideSiteLoader();
                   // Show dashboard after successful OAuth
                   await handleAuthStateChange(session);
                 } else if (attempts++ > 50) { // Timeout after 5 seconds
                   clearInterval(checkAuthInterval);
+                  // Hide loader before handling sign out
+                  hideSiteLoader();
                   handleSignOut();
                 }
               }, 100);

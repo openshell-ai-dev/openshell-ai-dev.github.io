@@ -19,7 +19,6 @@
             background: #0a0a0a;
             color: #ffffff;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .container {
@@ -30,7 +29,6 @@
 
         /* Header */
         header {
-            padding: 20px 0;
             position: fixed;
             top: 0;
             left: 0;
@@ -39,6 +37,7 @@
             backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
         }
 
         header .container {
@@ -81,6 +80,7 @@
             transition: all 0.3s;
             border: none;
             font-size: 14px;
+            font-family: inherit;
         }
 
         .btn-primary {
@@ -194,9 +194,12 @@
 
         .pricing-cards {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
             margin-top: 40px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .pricing-card {
@@ -264,23 +267,22 @@
             font-weight: 600;
         }
 
-        .pricing-card-cons {
-            margin-top: 20px;
-            padding-top: 20px;
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
         }
 
-        .pricing-card-cons h4 {
-            font-size: 12px;
+        footer p {
             color: #666;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 14px;
         }
 
-        .pricing-card-cons ul li::before {
-            content: '✕';
-            color: #666;
+        footer a {
+            color: #7C3AED;
+            text-decoration: none;
         }
 
         /* Modal */
@@ -296,6 +298,7 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal.active {
@@ -308,8 +311,27 @@
             border-radius: 16px;
             padding: 40px;
             max-width: 450px;
-            width: 90%;
+            width: 100%;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: white;
         }
 
         .modal-content h2 {
@@ -322,43 +344,65 @@
             margin-bottom: 25px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        /* Auth Tabs */
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: #a0a0a0;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-family: inherit;
             font-size: 14px;
         }
 
-        .form-group input {
-            width: 100%;
+        .auth-tab.active {
+            color: #7C3AED;
+            border-bottom-color: #7C3AED;
+        }
+
+        /* OAuth Buttons */
+        .oauth-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .oauth-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
             font-size: 14px;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #7C3AED;
+        .oauth-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
-        .form-footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .form-footer a {
-            color: #7C3AED;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
+        /* Divider */
         .divider {
             position: relative;
             text-align: center;
@@ -383,39 +427,37 @@
             font-size: 13px;
         }
 
-        .github-btn,
-        .google-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+        /* Form */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
             font-size: 14px;
+            font-family: inherit;
         }
 
-        .github-btn:hover,
-        .google-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
+        .form-group input:focus {
+            outline: none;
+            border-color: #7C3AED;
         }
 
-        .github-btn:active,
-        .google-btn:active {
-            transform: scale(0.98);
+        .form-footer {
+            text-align: center;
+            margin-top: 15px;
         }
 
-        .github-btn img,
-        .google-btn img {
-            width: 20px;
-            height: 20px;
+        .form-footer a {
+            color: #7C3AED;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
         }
 
         /* Dashboard */
@@ -443,10 +485,6 @@
             margin-bottom: 30px;
         }
 
-        .api-key-box:hover {
-            border-color: rgba(124, 58, 237, 0.3);
-        }
-
         .api-key-display {
             display: flex;
             gap: 10px;
@@ -464,10 +502,6 @@
             font-size: 14px;
         }
 
-        .api-key-display button {
-            white-space: nowrap;
-        }
-
         .usage-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -481,11 +515,6 @@
             border-radius: 12px;
             padding: 25px;
             text-align: center;
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            border-color: #7C3AED;
         }
 
         .stat-card .value {
@@ -495,7 +524,6 @@
             background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .stat-card .label {
@@ -509,10 +537,6 @@
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 30px;
-        }
-
-        .account-section:hover {
-            border-color: rgba(124, 58, 237, 0.3);
         }
 
         .account-section h3 {
@@ -531,10 +555,6 @@
             border-radius: 8px;
         }
 
-        .account-info-item:hover {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
         .account-info-item label {
             display: block;
             color: #666;
@@ -549,48 +569,15 @@
             font-size: 14px;
         }
 
-        .payment-methods {
+        .upgrade-section {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             padding: 25px;
         }
 
-        .payment-methods:hover {
-            border-color: rgba(124, 58, 237, 0.3);
-        }
-
-        .payment-methods h3 {
+        .upgrade-section h3 {
             margin-bottom: 10px;
-        }
-
-        .payment-option {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .payment-option:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .payment-option.selected {
-            border-color: #7C3AED;
-            background: rgba(124, 58, 237, 0.1);
-        }
-
-        .payment-option input[type="radio"] {
-            accent-color: #7C3AED;
-        }
-
-        .payment-option .icon {
-            font-size: 24px;
         }
 
         /* Toast */
@@ -616,43 +603,7 @@
 
         .toast.error {
             border-color: #DC2626;
-            background: rgba(220, 38, 38, 0.1);
-        }
-
-        /* Close button for modal */
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #a0a0a0;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            line-height: 1;
-        }
-
-        .modal-close:hover {
-            color: white;
-        }
-
-        /* Footer */
-        footer {
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 80px;
-        }
-
-        footer p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        footer a {
-            color: #7C3AED;
-            text-decoration: none;
+            background: rgba(220, 38, 38, 0.2);
         }
 
         /* Support Page */
@@ -712,46 +663,23 @@
                 align-items: center;
             }
 
-            .dashboard-header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-
             nav {
                 gap: 15px;
             }
-
-            nav a {
-                display: none;
-            }
-        }
-
-        /* Loading spinner */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #7C3AED;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="container">
-        <div class="logo">OpenShell</div>
-        <nav>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <button class="btn btn-primary" id="headerBtn" onclick="showLogin()">Get Started</button>
-        </nav>
+    <header>
+        <div class="container">
+            <div class="logo">OpenShell</div>
+            <nav>
+                <a href="#features" id="navFeatures">Features</a>
+                <a href="#pricing" id="navPricing">Pricing</a>
+                <button class="btn btn-primary" id="headerBtn">Get Started</button>
+            </nav>
+        </div>
     </header>
 
     <!-- Hero Section -->
@@ -761,7 +689,7 @@
             OpenShell is your intelligent coding companion. Read, write, edit files and execute commands with natural language. Works with any AI provider.
         </p>
         <div class="hero-buttons">
-            <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">View Plans</button>
+            <button class="btn btn-primary" id="heroViewPlans">View Plans</button>
         </div>
     </section>
 
@@ -816,16 +744,9 @@
                     <li>7-day history</li>
                     <li>Single API key</li>
                 </ul>
-                <div class="pricing-card-cons">
-                    <h4>Not Included</h4>
-                    <ul>
-                        <li>Custom system prompts</li>
-                        <li>Advanced analytics</li>
-                        <li>Priority support</li>
-                        <li>Multiple API keys</li>
-                    </ul>
-                </div>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="showSignup()">Get Started Free</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" id="freePlanBtn">
+                    Get Started Free
+                </button>
             </div>
 
             <div class="pricing-card popular">
@@ -841,16 +762,9 @@
                     <li>Advanced analytics</li>
                     <li>Early access to new features</li>
                 </ul>
-                <div class="pricing-card-cons">
-                    <h4>Not Included</h4>
-                    <ul>
-                        <li>Team features</li>
-                        <li>Admin dashboard</li>
-                        <li>Multiple team members</li>
-                        <li>Dedicated support channel</li>
-                    </ul>
-                </div>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="handleUpgrade('pro')">Upgrade to Pro</button>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="proPlanBtn">
+                    Upgrade to Pro
+                </button>
             </div>
 
             <div class="pricing-card">
@@ -860,13 +774,15 @@
                 <ul>
                     <li>Everything in Pro</li>
                     <li>Up to 10 team members</li>
-                    <li>Shared API keys & keys rotation</li>
+                    <li>Shared API keys & rotation</li>
                     <li>Admin dashboard</li>
                     <li>Custom integrations</li>
                     <li>Dedicated support channel</li>
                     <li>Usage reports & billing</li>
                 </ul>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handleUpgrade('team')">Get Team Plan</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" id="teamPlanBtn">
+                    Get Team Plan
+                </button>
             </div>
         </div>
     </section>
@@ -874,17 +790,17 @@
     <!-- Footer -->
     <footer id="mainFooter">
         <p>&copy; 2024 OpenShell. All rights reserved.</p>
-        <p style="margin-top: 10px;"><a href="#" onclick="toggleSupportPage()">Contact Support</a></p>
+        <p style="margin-top: 10px;"><a href="#" id="supportLink">Contact Support</a></p>
     </footer>
 
     <!-- Support Page -->
     <div id="supportPage">
-        <div class="container" style="max-width: 700px;">
-            <button class="btn btn-secondary" onclick="toggleSupportPage()" style="margin-bottom: 30px;">← Back to Home</button>
+        <div class="container">
+            <button class="btn btn-secondary" id="backFromSupport" style="margin-bottom: 30px;">← Back to Home</button>
             <h1 style="margin-bottom: 20px;">Contact Support</h1>
             <p style="color: #a0a0a0; margin-bottom: 30px;">Having trouble? Fill out the form below and we'll get back to you as soon as possible.</p>
 
-            <form class="support-form" onsubmit="submitSupportForm(event)">
+            <form class="support-form" id="supportForm">
                 <div class="form-group">
                     <label for="supportEmail">Email Address</label>
                     <input type="email" id="supportEmail" placeholder="your@email.com" required>
@@ -909,7 +825,7 @@
                 <h1>Welcome, <span id="userName">User</span></h1>
                 <p style="color: #a0a0a0">Manage your API key and account</p>
             </div>
-            <button class="btn btn-secondary" onclick="logout()">Sign Out</button>
+            <button class="btn btn-secondary" id="logoutBtn">Sign Out</button>
         </div>
 
         <div class="api-key-box">
@@ -917,8 +833,8 @@
             <p style="color: #a0a0a0; font-size: 14px">Use this key to authenticate with OpenShell CLI</p>
             <p style="color: #ff9900; font-size: 12px; margin-top: 10px">Note: You can only have one API key. Copy it now!</p>
             <div class="api-key-display">
-                <input type="text" id="apiKeyDisplay" readonly />
-                <button class="btn btn-primary" onclick="copyApiKey()">Copy</button>
+                <input type="text" id="apiKeyDisplay" readonly>
+                <button class="btn btn-primary" id="copyApiKeyBtn">Copy</button>
             </div>
         </div>
 
@@ -953,42 +869,38 @@
                     <span id="signInMethod">-</span>
                 </div>
             </div>
-            <button class="btn btn-danger" style="margin-top: 20px" onclick="deleteAccount()">Delete Account</button>
+            <button class="btn btn-danger" style="margin-top: 20px" id="deleteAccountBtn">Delete Account</button>
         </div>
 
-        <div class="payment-methods" style="margin-top: 30px">
+        <div class="upgrade-section">
             <h3>Upgrade Your Plan</h3>
             <p style="color: #a0a0a0; margin: 10px 0">Get unlimited requests and premium features</p>
-            <button class="btn btn-primary" onclick="handleUpgrade('pro')">Upgrade to Pro - $4.99/mo</button>
+            <button class="btn btn-primary" id="upgradeBtn">Upgrade to Pro - $4.99/mo</button>
         </div>
     </div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeAllModals()">&times;</button>
-            <h2 id="authTitle">Sign In or Create Account</h2>
-            <p id="authSubtitle">Choose how to get started with OpenShell.</p>
+            <button class="modal-close" id="closeAuthModal">&times;</button>
+            <h2 id="authTitle">Sign In</h2>
+            <p id="authSubtitle">Welcome back to OpenShell.</p>
 
-            <!-- Mode Selection Tabs -->
-            <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px;">
-                <button id="signInTab" style="flex: 1; padding: 10px; background: transparent; border: none; color: #7C3AED; font-weight: 600; cursor: pointer; border-bottom: 2px solid #7C3AED; transition: all 0.3s;" onclick="switchAuthMode('signin')">
-                    Sign In
-                </button>
-                <button id="signUpTab" style="flex: 1; padding: 10px; background: transparent; border: none; color: #a0a0a0; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s;" onclick="switchAuthMode('signup')">
-                    Create Account
-                </button>
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="signInTabBtn">Sign In</button>
+                <button class="auth-tab" id="signUpTabBtn">Create Account</button>
             </div>
 
-            <!-- OAuth Buttons Row -->
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="github-btn" id="githubSignInBtn" onclick="signInWithGitHub()">
+            <!-- OAuth Buttons -->
+            <div class="oauth-buttons">
+                <button class="oauth-btn" id="githubSignInBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                     </svg>
-                    <span id="githubBtnText">GitHub</span>
+                    <span>GitHub</span>
                 </button>
-                <button class="google-btn" id="googleSignInBtn" onclick="signInWithGoogle()">
+                <button class="oauth-btn" id="googleSignInBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <rect width="24" height="24" rx="2" fill="white"/>
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -996,49 +908,46 @@
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                     </svg>
-                    <span id="googleBtnText">Google</span>
+                    <span>Google</span>
                 </button>
             </div>
 
-            <div style="position: relative; margin: 20px 0;">
-                <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
-                <div style="position: relative; text-align: center; background: #1a1a1a; padding: 0 10px; width: fit-content; margin: 0 auto;">
-                    <span style="color: #a0a0a0; font-size: 13px;" id="dividerText">or continue with email</span>
-                </div>
+            <div class="divider">
+                <span id="dividerText">or continue with email</span>
             </div>
 
-            <!-- Sign In Fields -->
-            <div id="signInFields">
+            <!-- Sign In Form -->
+            <div id="signInForm">
                 <div class="form-group">
-                    <input type="email" id="loginEmail" placeholder="Email address" />
+                    <input type="email" id="loginEmail" placeholder="Email address">
                 </div>
                 <div class="form-group">
-                    <input type="password" id="loginPassword" placeholder="Password" />
+                    <input type="password" id="loginPassword" placeholder="Password">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="handleEmailLogin()">
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" id="emailLoginBtn">
                     Sign In with Email
                 </button>
                 <div class="form-footer">
-                    <a href="#" onclick="switchAuthMode('signup')">Don't have an account? Sign up</a>
+                    <a href="#" id="switchToSignUp">Don't have an account? Sign up</a>
                 </div>
             </div>
 
-            <!-- Sign Up Fields -->
-            <div id="signUpFields" style="display: none;">
+            <!-- Sign Up Form -->
+            <div id="signUpForm" style="display: none;">
                 <div class="form-group">
-                    <input type="text" id="signupName" placeholder="Full name" />
+                    <input type="text" id="signupName" placeholder="Full name">
                 </div>
                 <div class="form-group">
-                    <input type="email" id="signupEmail" placeholder="Email address" />
+                    <input type="email" id="signupEmail" placeholder="Email address">
                 </div>
                 <div class="form-group">
-                    <input type="password" id="signupPassword" placeholder="Password (min 6 characters)" />
+                    <input type="password" id="signupPassword" placeholder="Password (min 6 characters)">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="handleEmailSignup()">
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" id="emailSignupBtn">
                     Create Account with Email
                 </button>
                 <div class="form-footer">
-                    <a href="#" onclick="switchAuthMode('signin')">Already have an account? Sign in</a>
+                    <a href="#" id="switchToSignIn">Already have an account? Sign in</a>
                 </div>
             </div>
         </div>
@@ -1047,36 +956,16 @@
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closePayment()">&times;</button>
+            <button class="modal-close" id="closePaymentModal">&times;</button>
             <h2>Upgrade Your Plan</h2>
             <p style="color: #a0a0a0; margin-bottom: 25px;">Choose your payment method</p>
-
-            <div style="margin-bottom: 20px;">
-                <div class="payment-option selected" onclick="selectPayment('card')">
-                    <input type="radio" name="payment" value="card" checked>
-                    <span class="icon">💳</span>
-                    <div>
-                        <strong>Credit Card</strong>
-                        <p style="color: #a0a0a0; font-size: 12px; margin: 0;">Visa, Mastercard, Amex</p>
-                    </div>
-                </div>
-                <div class="payment-option" onclick="selectPayment('paypal')">
-                    <input type="radio" name="payment" value="paypal">
-                    <span class="icon">🅿️</span>
-                    <div>
-                        <strong>PayPal</strong>
-                        <p style="color: #a0a0a0; font-size: 12px; margin: 0;">Fast and secure</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn btn-primary" style="width: 100%;" onclick="completePayment()">
+            <button class="btn btn-primary" style="width: 100%;" id="completePaymentBtn">
                 Complete Purchase
             </button>
         </div>
     </div>
 
-    <!-- Toast Notification -->
+    <!-- Toast -->
     <div id="toast" class="toast"></div>
 
     <!-- Supabase SDK -->
@@ -1090,34 +979,230 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_BzixpXZdMOoyd9lvejatPQ_xV6BHsQW';
 
         // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================
         // GLOBAL STATE
         // ============================================
         let currentUser = null;
+        let authMode = 'signin';
+        let elements = {};
 
         // ============================================
         // INITIALIZATION
         // ============================================
-        // Check for existing session on page load
         document.addEventListener('DOMContentLoaded', async () => {
+          // Initialize DOM elements AFTER page is loaded
+          elements = {
+            // Header
+            headerBtn: document.getElementById('headerBtn'),
+
+            // Hero
+            hero: document.getElementById('hero'),
+            heroViewPlans: document.getElementById('heroViewPlans'),
+
+            // Sections
+            features: document.getElementById('features'),
+            pricing: document.getElementById('pricing'),
+            mainFooter: document.getElementById('mainFooter'),
+
+            // Dashboard
+            dashboard: document.getElementById('dashboard'),
+            userName: document.getElementById('userName'),
+            apiKeyDisplay: document.getElementById('apiKeyDisplay'),
+            requestsUsed: document.getElementById('requestsUsed'),
+            tokensUsed: document.getElementById('tokensUsed'),
+            planName: document.getElementById('planName'),
+            accountEmail: document.getElementById('accountEmail'),
+            accountCreated: document.getElementById('accountCreated'),
+            signInMethod: document.getElementById('signInMethod'),
+
+            // Auth Modal
+            authModal: document.getElementById('authModal'),
+            authTitle: document.getElementById('authTitle'),
+            authSubtitle: document.getElementById('authSubtitle'),
+            signInTabBtn: document.getElementById('signInTabBtn'),
+            signUpTabBtn: document.getElementById('signUpTabBtn'),
+            signInForm: document.getElementById('signInForm'),
+            signUpForm: document.getElementById('signUpForm'),
+            dividerText: document.getElementById('dividerText'),
+
+            // Auth Buttons
+            githubSignInBtn: document.getElementById('githubSignInBtn'),
+            googleSignInBtn: document.getElementById('googleSignInBtn'),
+            emailLoginBtn: document.getElementById('emailLoginBtn'),
+            emailSignupBtn: document.getElementById('emailSignupBtn'),
+
+            // Auth Inputs
+            loginEmail: document.getElementById('loginEmail'),
+            loginPassword: document.getElementById('loginPassword'),
+            signupName: document.getElementById('signupName'),
+            signupEmail: document.getElementById('signupEmail'),
+            signupPassword: document.getElementById('signupPassword'),
+
+            // Payment
+            paymentModal: document.getElementById('paymentModal'),
+
+            // Support
+            supportPage: document.getElementById('supportPage'),
+            supportForm: document.getElementById('supportForm'),
+
+            // Toast
+            toast: document.getElementById('toast')
+            };
+
+            console.log('✅ DOM loaded, elements initialized:', Object.keys(elements).length + ' elements');
+            console.log('✅ Setting up event listeners...');
+
+            // Check for existing session
             await checkSession();
 
             // Listen for auth state changes
             supabase.auth.onAuthStateChange((event, session) => {
-                console.log('Auth state changed:', event);
-                if (event === 'SIGNED_IN') {
-                    handleAuthStateChange(session);
-                } else if (event === 'SIGNED_OUT') {
-                    handleSignOut();
-                }
+            console.log('Auth state changed:', event);
+            if (event === 'SIGNED_IN') {
+            handleAuthStateChange(session);
+            } else if (event === 'SIGNED_OUT') {
+            handleSignOut();
+            }
             });
-        });
 
-        // Check if user is already logged in
+          	// Setup all event listeners
+          	setupEventListeners();
+
+          	// Check for existing session
+          	await checkSession();
+
+	// Listen for auth state changes
+	  supabaseClient.auth.onAuthStateChange((event, session) => {
+          		console.log('Auth state changed:', event);
+          		if (event === 'SIGNED_IN') {
+          			handleAuthStateChange(session);
+          		} else if (event === 'SIGNED_OUT') {
+          			handleSignOut();
+          		}
+          	});
+          });
+
+          // ============================================
+          // EVENT LISTENERS SETUP
+          // ============================================
+          function setupEventListeners() {
+          	console.log('📌 Setting up header button...');
+
+          	// Header button
+          	elements.headerBtn.addEventListener('click', async () => {
+          		console.log('🔘 Header button clicked, currentUser:', currentUser ? 'logged in' : 'not logged in');
+		if (currentUser) {
+		      // Fetch fresh user data
+		      const { data: profile } = await supabaseClient
+          				.from('users')
+          				.select('*')
+          				.eq('id', currentUser.id)
+          				.single();
+          			if (profile) showDashboard(profile);
+          		} else {
+          			showLogin();
+          		}
+          	});
+
+            // Hero View Plans
+            elements.heroViewPlans.addEventListener('click', () => {
+                elements.pricing.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Pricing buttons
+            document.getElementById('freePlanBtn').addEventListener('click', showSignup);
+            document.getElementById('proPlanBtn').addEventListener('click', () => {
+            if (!currentUser) {
+            showLogin();
+            return;
+            }
+            showPayment('pro');
+            });
+            document.getElementById('teamPlanBtn').addEventListener('click', () => {
+            if (!currentUser) {
+            showLogin();
+            return;
+            }
+            showPayment('team');
+            });
+
+            	// Auth modal close
+            	console.log('📌 Setting up auth modal close button...');
+            	document.getElementById('closeAuthModal').addEventListener('click', closeAuthModal);
+            elements.authModal.addEventListener('click', (e) => {
+                if (e.target === elements.authModal) closeAuthModal();
+            });
+
+            	// Auth tabs
+            	console.log('📌 Setting up auth tabs...');
+            	elements.signInTabBtn.addEventListener('click', () => {
+            		console.log('🔘 Sign In tab clicked');
+            		switchAuthMode('signin');
+            	});
+            	elements.signUpTabBtn.addEventListener('click', () => {
+            		console.log('🔘 Sign Up tab clicked');
+            		switchAuthMode('signup');
+            	});
+            document.getElementById('switchToSignUp').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchAuthMode('signup');
+            });
+            document.getElementById('switchToSignIn').addEventListener('click', (e) => {
+                e.preventDefault();
+                switchAuthMode('signin');
+            });
+
+            	// OAuth buttons
+            	console.log('📌 Setting up OAuth buttons...');
+            	elements.githubSignInBtn.addEventListener('click', () => {
+            		console.log('🔘 GitHub button clicked');
+            		signInWithGitHub();
+            	});
+            	elements.googleSignInBtn.addEventListener('click', () => {
+            		console.log('🔘 Google button clicked');
+            		signInWithGoogle();
+            	});
+
+            	// Email auth
+            	console.log('📌 Setting up email auth buttons...');
+            	elements.emailLoginBtn.addEventListener('click', () => {
+            		console.log('🔘 Email login button clicked');
+            		handleEmailLogin();
+            	});
+            	elements.emailSignupBtn.addEventListener('click', () => {
+            		console.log('🔘 Email signup button clicked');
+            		handleEmailSignup();
+            	});
+
+            // Dashboard buttons
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            document.getElementById('copyApiKeyBtn').addEventListener('click', copyApiKey);
+            document.getElementById('deleteAccountBtn').addEventListener('click', deleteAccount);
+            document.getElementById('upgradeBtn').addEventListener('click', () => showPayment('pro'));
+
+            // Payment modal
+            document.getElementById('closePaymentModal').addEventListener('click', closePaymentModal);
+            document.getElementById('completePaymentBtn').addEventListener('click', completePayment);
+            elements.paymentModal.addEventListener('click', (e) => {
+                if (e.target === elements.paymentModal) closePaymentModal();
+            });
+
+            // Support
+            document.getElementById('supportLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleSupportPage();
+            });
+            document.getElementById('backFromSupport').addEventListener('click', toggleSupportPage);
+            elements.supportForm.addEventListener('submit', submitSupportForm);
+        }
+
+        // ============================================
+        // SESSION MANAGEMENT
+        // ============================================
         async function checkSession() {
-            const { data: { session }, error } = await supabase.auth.getSession();
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
 
             if (error) {
                 console.error('Session check error:', error);
@@ -1129,13 +1214,10 @@
             }
         }
 
-        // Handle auth state changes
         async function handleAuthStateChange(session) {
             if (!session) return;
 
             currentUser = session.user;
-
-            // Get or create user profile in our users table
             const userProfile = await getOrCreateUserProfile(currentUser);
 
             if (userProfile) {
@@ -1143,17 +1225,16 @@
             }
         }
 
-        // Handle sign out
         function handleSignOut() {
             currentUser = null;
-            document.getElementById('dashboard').classList.remove('active');
-            document.getElementById('hero').style.display = 'block';
-            document.getElementById('features').style.display = 'grid';
-            document.getElementById('pricing').style.display = 'block';
-            document.getElementById('mainFooter').style.display = 'block';
 
-            document.getElementById('headerBtn').textContent = 'Get Started';
-            document.getElementById('headerBtn').onclick = () => showLogin();
+            elements.dashboard.classList.remove('active');
+            elements.hero.style.display = 'block';
+            elements.features.style.display = 'grid';
+            elements.pricing.style.display = 'block';
+            elements.mainFooter.style.display = 'block';
+
+            elements.headerBtn.textContent = 'Get Started';
         }
 
         // ============================================
@@ -1161,8 +1242,8 @@
         // ============================================
         async function getOrCreateUserProfile(authUser) {
             try {
-                // First, try to get existing profile
-                const { data: existingProfile, error: fetchError } = await supabase
+                // Try to get existing profile
+                const { data: existingProfile, error: fetchError } = await supabaseClient
                     .from('users')
                     .select('*')
                     .eq('id', authUser.id)
@@ -1172,7 +1253,7 @@
                     return existingProfile;
                 }
 
-                // If no profile exists, create one
+                // Create new profile
                 const metadata = authUser.user_metadata || {};
                 const newProfile = {
                     id: authUser.id,
@@ -1187,7 +1268,7 @@
                     created_at: new Date().toISOString()
                 };
 
-                const { data: createdProfile, error: insertError } = await supabase
+                const { data: createdProfile, error: insertError } = await supabaseClient
                     .from('users')
                     .insert(newProfile)
                     .select()
@@ -1216,77 +1297,60 @@
         }
 
         // ============================================
-        // AUTHENTICATION FUNCTIONS
+        // AUTH FUNCTIONS
         // ============================================
-
-        // Show auth modal
-        function showAuth(mode = 'signin') {
-            switchAuthMode(mode);
-            document.getElementById('authModal').classList.add('active');
-        }
-
         function showLogin() {
-            showAuth('signin');
+        	console.log('📱 Opening login modal...');
+        	switchAuthMode('signin');
+        	elements.authModal.classList.add('active');
+        	console.log('✅ Login modal opened');
         }
 
         function showSignup() {
-            showAuth('signup');
+        	console.log('📱 Opening signup modal...');
+        	switchAuthMode('signup');
+        	elements.authModal.classList.add('active');
+        	console.log('✅ Signup modal opened');
         }
 
-        // Switch between sign in and sign up modes
         function switchAuthMode(mode) {
-            const signInTab = document.getElementById('signInTab');
-            const signUpTab = document.getElementById('signUpTab');
-            const signInFields = document.getElementById('signInFields');
-            const signUpFields = document.getElementById('signUpFields');
-            const authTitle = document.getElementById('authTitle');
-            const authSubtitle = document.getElementById('authSubtitle');
-
-            if (mode === 'signin') {
-                signInTab.style.color = '#7C3AED';
-                signInTab.style.borderBottomColor = '#7C3AED';
-                signUpTab.style.color = '#a0a0a0';
-                signUpTab.style.borderBottomColor = 'transparent';
-                signInFields.style.display = 'block';
-                signUpFields.style.display = 'none';
-                authTitle.textContent = 'Sign In';
-                authSubtitle.textContent = 'Welcome back to OpenShell.';
-            } else {
-                signInTab.style.color = '#a0a0a0';
-                signInTab.style.borderBottomColor = 'transparent';
-                signUpTab.style.color = '#7C3AED';
-                signUpTab.style.borderBottomColor = '#7C3AED';
-                signInFields.style.display = 'none';
-                signUpFields.style.display = 'block';
-                authTitle.textContent = 'Create Account';
-                authSubtitle.textContent = 'Get started with OpenShell today.';
-            }
+        	console.log('🔄 Switching auth mode to:', mode);
+        	authMode = mode;
+        	if (mode === 'signin') {
+        		elements.signInTabBtn.classList.add('active');
+        		elements.signUpTabBtn.classList.remove('active');
+        		elements.signInForm.style.display = 'block';
+        		elements.signUpForm.style.display = 'none';
+        		elements.authTitle.textContent = 'Sign In';
+        		elements.authSubtitle.textContent = 'Welcome back to OpenShell.';
+        		elements.dividerText.textContent = 'or continue with email';
+        	} else {
+        		elements.signInTabBtn.classList.remove('active');
+        		elements.signUpTabBtn.classList.add('active');
+        		elements.signInForm.style.display = 'none';
+        		elements.signUpForm.style.display = 'block';
+        		elements.authTitle.textContent = 'Create Account';
+        		elements.authSubtitle.textContent = 'Get started with OpenShell today.';
+        		elements.dividerText.textContent = 'or create with email';
+        	}
+        	console.log('✅ Auth mode switched successfully');
         }
 
-        function switchToLogin() {
-            switchAuthMode('signin');
+        function closeAuthModal() {
+        	console.log('❌ Closing auth modal');
+        	elements.authModal.classList.remove('active');
         }
 
-        function switchToSignup() {
-            switchAuthMode('signup');
-        }
 
-        // Close all modals
-        function closeAllModals() {
-            document.getElementById('authModal').classList.remove('active');
-            document.getElementById('paymentModal').classList.remove('active');
-        }
 
         // ============================================
-        // OAUTH SIGN IN METHODS
+        // OAUTH SIGN IN
         // ============================================
-
-        // Sign in with GitHub
         async function signInWithGitHub() {
             try {
                 showToast('Redirecting to GitHub...', false);
 
-                const { data, error } = await supabase.auth.signInWithOAuth({
+                const { error } = await supabaseClient.auth.signInWithPassword({
                     provider: 'github',
                     options: {
                         scopes: 'user:email',
@@ -1304,12 +1368,11 @@
             }
         }
 
-        // Sign in with Google
         async function signInWithGoogle() {
             try {
                 showToast('Redirecting to Google...', false);
 
-                const { data, error } = await supabase.auth.signInWithOAuth({
+                const { error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
                         scopes: 'openid email profile',
@@ -1328,14 +1391,46 @@
         }
 
         // ============================================
-        // EMAIL/PASSWORD AUTH
+        // EMAIL AUTH
         // ============================================
+        async function handleEmailLogin() {
+            const email = elements.loginEmail.value.trim();
+            const password = elements.loginPassword.value;
 
-        // Handle email signup
+            if (!email || !password) {
+                showToast('Please fill in all fields', true);
+                return;
+            }
+
+            try {
+                showToast('Signing in...', false);
+
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    console.error('Login error:', error);
+                    showToast(error.message, true);
+                    return;
+                }
+
+                elements.loginEmail.value = '';
+                elements.loginPassword.value = '';
+                closeAuthModal();
+                showToast('Welcome back!');
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Failed to sign in', true);
+            }
+        }
+
         async function handleEmailSignup() {
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
+            const name = elements.signupName.value.trim();
+            const email = elements.signupEmail.value.trim();
+            const password = elements.signupPassword.value;
 
             if (!name || !email || !password) {
                 showToast('Please fill in all fields', true);
@@ -1362,71 +1457,25 @@
 
                 if (error) {
                     console.error('Signup error:', error);
-                    if (error.message.includes('already registered')) {
-                        showToast('Email already registered. Please sign in.', true);
-                        switchAuthMode('signin');
-                    } else {
-                        showToast(error.message, true);
-                    }
+                    showToast(error.message, true);
                     return;
                 }
 
-                // Clear form
-                document.getElementById('signupName').value = '';
-                document.getElementById('signupEmail').value = '';
-                document.getElementById('signupPassword').value = '';
+                elements.signupName.value = '';
+                elements.signupEmail.value = '';
+                elements.signupPassword.value = '';
 
-                // Check if email confirmation is required
                 if (data.user && !data.session) {
-                    showToast('Account created! Please check your email to confirm your account.');
-                    closeAllModals();
+                    closeAuthModal();
+                    showToast('Account created! Please check your email to confirm.');
                 } else {
-                    closeAllModals();
+                    closeAuthModal();
                     showToast('Account created successfully!');
                 }
+
             } catch (error) {
                 console.error('Signup error:', error);
                 showToast('Failed to create account', true);
-            }
-        }
-
-        // Handle email login
-        async function handleEmailLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!email || !password) {
-                showToast('Please fill in all fields', true);
-                return;
-            }
-
-            try {
-                showToast('Signing in...', false);
-
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (error) {
-                    console.error('Login error:', error);
-                    if (error.message.includes('Invalid login credentials')) {
-                        showToast('Invalid email or password', true);
-                    } else {
-                        showToast(error.message, true);
-                    }
-                    return;
-                }
-
-                // Clear form
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPassword').value = '';
-
-                closeAllModals();
-                showToast('Welcome back!');
-            } catch (error) {
-                console.error('Login error:', error);
-                showToast('Failed to sign in', true);
             }
         }
 
@@ -1435,7 +1484,7 @@
         // ============================================
         async function logout() {
             try {
-                const { error } = await supabase.auth.signOut();
+                const { error } = await supabaseClient.auth.signOut();
 
                 if (error) {
                     console.error('Logout error:', error);
@@ -1445,6 +1494,7 @@
 
                 handleSignOut();
                 showToast('Logged out successfully');
+
             } catch (error) {
                 console.error('Logout error:', error);
                 showToast('Failed to sign out', true);
@@ -1452,31 +1502,39 @@
         }
 
         // ============================================
-        // DASHBOARD FUNCTIONS
+        // DASHBOARD
         // ============================================
-        function showDashboard(user) {
-            document.getElementById('userName').textContent = user.name || 'User';
-            document.getElementById('apiKeyDisplay').value = user.api_key;
-            document.getElementById('requestsUsed').textContent = user.requests || 0;
-            document.getElementById('tokensUsed').textContent = user.tokens || 0;
-            document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
-            document.getElementById('accountEmail').textContent = user.email;
-            document.getElementById('accountCreated').textContent = new Date(user.created_at).toLocaleDateString();
-            document.getElementById('signInMethod').textContent = user.sign_in_method === 'google' ? 'Google' : user.sign_in_method === 'github' ? 'GitHub' : 'Email/Password';
+        async function showDashboard(user) {
+        if (!user) {
+        if (!currentUser) return;
+        // Fetch user profile
+        const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+        if (!profile) return;
+        user = profile;
+        }
 
-            document.getElementById('dashboard').classList.add('active');
-            document.getElementById('hero').style.display = 'none';
-            document.getElementById('features').style.display = 'none';
-            document.getElementById('pricing').style.display = 'none';
-            document.getElementById('mainFooter').style.display = 'none';
+        elements.userName.textContent = user.name || 'User';
+        elements.apiKeyDisplay.value = user.api_key;
+        elements.requestsUsed.textContent = user.requests || 0;
+        elements.tokensUsed.textContent = user.tokens || 0;
+        elements.planName.textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
+        elements.accountEmail.textContent = user.email;
+        elements.accountCreated.textContent = new Date(user.created_at).toLocaleDateString();
+        elements.signInMethod.textContent = user.sign_in_method === 'google' ? 'Google' : user.sign_in_method === 'github' ? 'GitHub' : 'Email/Password';
 
-            // Update header button
-            document.getElementById('headerBtn').textContent = 'Dashboard';
-            document.getElementById('headerBtn').onclick = () => {
-                if (document.getElementById('dashboard').classList.contains('active')) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
+        elements.dashboard.classList.add('active');
+        elements.hero.style.display = 'none';
+        elements.features.style.display = 'none';
+        elements.pricing.style.display = 'none';
+        elements.mainFooter.style.display = 'none';
+
+        elements.headerBtn.textContent = 'Dashboard';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ============================================
@@ -1493,43 +1551,10 @@
         }
 
         function copyApiKey() {
-            const apiKey = document.getElementById('apiKeyDisplay').value;
+            const apiKey = elements.apiKeyDisplay.value;
             navigator.clipboard.writeText(apiKey)
-                .then(() => {
-                    showToast('API key copied to clipboard!');
-                })
-                .catch(() => {
-                    showToast('Failed to copy API key', true);
-                });
-        }
-
-        async function regenerateApiKey() {
-            if (!currentUser) return;
-
-            if (!confirm('Are you sure you want to regenerate your API key? Your old key will stop working immediately.')) {
-                return;
-            }
-
-            try {
-                const newKey = generateApiKey();
-
-                const { error } = await supabase
-                    .from('users')
-                    .update({ api_key: newKey })
-                    .eq('id', currentUser.id);
-
-                if (error) {
-                    console.error('Error regenerating API key:', error);
-                    showToast('Failed to regenerate API key', true);
-                    return;
-                }
-
-                document.getElementById('apiKeyDisplay').value = newKey;
-                showToast('API key regenerated successfully!');
-            } catch (error) {
-                console.error('Error regenerating API key:', error);
-                showToast('Failed to regenerate API key', true);
-            }
+                .then(() => showToast('API key copied to clipboard!'))
+                .catch(() => showToast('Failed to copy API key', true));
         }
 
         // ============================================
@@ -1547,8 +1572,8 @@
             try {
                 showToast('Deleting account...', false);
 
-                // Delete user data from users table
-                const { error: profileError } = await supabase
+                // Delete user data
+                const { error: profileError } = await supabaseClient
                     .from('users')
                     .delete()
                     .eq('id', currentUser.id);
@@ -1557,12 +1582,12 @@
                     console.error('Error deleting profile:', profileError);
                 }
 
-                // Delete auth user (requires server-side function with service role)
-                // For now, just sign out the user
-                await supabase.auth.signOut();
+                // Sign out
+                  await supabaseClient.auth.signOut();
 
                 handleSignOut();
                 showToast('Account deleted successfully');
+
             } catch (error) {
                 console.error('Delete account error:', error);
                 showToast('Failed to delete account', true);
@@ -1570,54 +1595,32 @@
         }
 
         // ============================================
-        // PAYMENT & UPGRADE
+        // PAYMENT
         // ============================================
-        let selectedPlan = null;
-
-        async function handleUpgrade(plan) {
-            if (!currentUser) {
-                showLogin();
-                return;
-            }
-
-            selectedPlan = plan;
-            showPayment(plan);
-        }
+        let selectedPlan = 'pro';
 
         function showPayment(plan) {
             selectedPlan = plan;
-            document.getElementById('paymentModal').classList.add('active');
+            elements.paymentModal.classList.add('active');
         }
 
-        function closePayment() {
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-
-        function selectPayment(method) {
-            document.querySelectorAll('.payment-option').forEach(el => {
-                el.classList.remove('selected');
-            });
-            event.currentTarget.classList.add('selected');
-            event.currentTarget.querySelector('input[type="radio"]').checked = true;
+        function closePaymentModal() {
+            elements.paymentModal.classList.remove('active');
         }
 
         async function completePayment() {
-            // This would integrate with Stripe or another payment processor
-            // For now, just update the plan in Supabase
-            if (!currentUser || !selectedPlan) {
-                showToast('Please select a plan', true);
+            if (!currentUser) {
+                showToast('Please sign in first', true);
+                closePaymentModal();
+                showLogin();
                 return;
             }
 
             try {
                 showToast('Processing payment...', false);
 
-                // In production, you would:
-                // 1. Call Stripe checkout
-                // 2. Handle webhook to update plan after successful payment
-
-                // For demo purposes, just update the plan
-                const { error } = await supabase
+                // Update plan (in production, this would be done via Stripe webhook)
+                const { error } = await supabaseClient
                     .from('users')
                     .update({ plan: selectedPlan })
                     .eq('id', currentUser.id);
@@ -1628,15 +1631,16 @@
                     return;
                 }
 
-                closePayment();
+                closePaymentModal();
 
-                // Refresh user profile
+                // Refresh profile
                 const userProfile = await getOrCreateUserProfile(currentUser);
                 if (userProfile) {
                     showDashboard(userProfile);
                 }
 
                 showToast(`Successfully upgraded to ${selectedPlan} plan!`);
+
             } catch (error) {
                 console.error('Payment error:', error);
                 showToast('Payment failed. Please try again.', true);
@@ -1644,66 +1648,28 @@
         }
 
         // ============================================
-        // USAGE TRACKING
-        // ============================================
-        async function incrementUsage(requestsDelta = 1, tokensDelta = 0) {
-            if (!currentUser) return;
-
-            try {
-                // Get current values
-                const { data: user, error: fetchError } = await supabase
-                    .from('users')
-                    .select('requests, tokens')
-                    .eq('id', currentUser.id)
-                    .single();
-
-                if (fetchError) throw fetchError;
-
-                // Update with new values
-                const { error: updateError } = await supabase
-                    .from('users')
-                    .update({
-                        requests: (user.requests || 0) + requestsDelta,
-                        tokens: (user.tokens || 0) + tokensDelta
-                    })
-                    .eq('id', currentUser.id);
-
-                if (updateError) throw updateError;
-
-            } catch (error) {
-                console.error('Error updating usage:', error);
-            }
-        }
-
-        // ============================================
-        // SUPPORT FUNCTIONS
+        // SUPPORT
         // ============================================
         function toggleSupportPage() {
-            const supportPage = document.getElementById('supportPage');
-            const mainFooter = document.getElementById('mainFooter');
-            const hero = document.getElementById('hero');
-            const features = document.getElementById('features');
-            const pricing = document.getElementById('pricing');
-            const dashboard = document.getElementById('dashboard');
+            const isHidden = elements.supportPage.style.display === 'none' || !elements.supportPage.style.display;
 
-            if (supportPage.classList.contains('active')) {
-                supportPage.classList.remove('active');
-                mainFooter.style.display = 'block';
-
-                if (currentUser) {
-                    dashboard.classList.add('active');
-                } else {
-                    hero.style.display = 'block';
-                    features.style.display = 'grid';
-                    pricing.style.display = 'block';
-                }
+            if (isHidden) {
+                elements.supportPage.style.display = 'block';
+                elements.hero.style.display = 'none';
+                elements.features.style.display = 'none';
+                elements.pricing.style.display = 'none';
+                elements.mainFooter.style.display = 'none';
+                elements.dashboard.classList.remove('active');
             } else {
-                supportPage.classList.add('active');
-                mainFooter.style.display = 'none';
-                hero.style.display = 'none';
-                features.style.display = 'none';
-                pricing.style.display = 'none';
-                dashboard.classList.remove('active');
+                elements.supportPage.style.display = 'none';
+                if (currentUser) {
+                    elements.dashboard.classList.add('active');
+                } else {
+                    elements.hero.style.display = 'block';
+                    elements.features.style.display = 'grid';
+                    elements.pricing.style.display = 'block';
+                    elements.mainFooter.style.display = 'block';
+                }
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1722,7 +1688,6 @@
             }
 
             try {
-                // Insert support request into Supabase
                 const { error } = await supabase
                     .from('support_requests')
                     .insert({
@@ -1739,17 +1704,16 @@
                     return;
                 }
 
-                // Clear form
                 document.getElementById('supportEmail').value = '';
                 document.getElementById('supportSubject').value = '';
                 document.getElementById('supportMessage').value = '';
 
                 showToast('Support request submitted! We\'ll get back to you soon.');
 
-                // Go back to main page
                 setTimeout(() => {
                     toggleSupportPage();
                 }, 1500);
+
             } catch (error) {
                 console.error('Support form error:', error);
                 showToast('Failed to submit support request', true);
@@ -1757,22 +1721,24 @@
         }
 
         // ============================================
-        // UTILITY FUNCTIONS
+        // TOAST
         // ============================================
         function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show' + (isError ? ' error' : '');
+            elements.toast.textContent = message;
+            elements.toast.className = 'toast show' + (isError ? ' error' : '');
 
             setTimeout(() => {
-                toast.classList.remove('show');
+                elements.toast.classList.remove('show');
             }, 3000);
         }
 
-        // Keyboard shortcuts
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                closeAllModals();
+                closeAuthModal();
+                closePaymentModal();
             }
         });
     </script>

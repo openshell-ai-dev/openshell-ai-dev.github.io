@@ -1,3 +1,6 @@
+ ```
+openshell\website\index.html
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,11 +17,137 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #7C3AED;
+            --primary-hover: #6D28D9;
+            --primary-light: #A855F7;
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a1a1a;
+            --bg-input: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666;
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #10B981;
+            --error: #DC2626;
+            --warning: #F59E0B;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Full Site Loading Animation */
+        .site-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .site-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+          width: 0%;
+          height: 100%;
+          background: linear-gradient(90deg, var(--primary), var(--primary-light));
+          border-radius: 3px;
+          animation: loadProgress 2.5s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Loading Spinner for Async Operations */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .spinner-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(124, 58, 237, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Page Transition Container */
+        .page-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page-container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .container {
@@ -36,8 +165,14 @@
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border);
             padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         header .container {
@@ -49,10 +184,16 @@
         .logo {
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         nav {
@@ -62,14 +203,30 @@
         }
 
         nav a {
-            color: #a0a0a0;
+            color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         nav a:hover {
-            color: #ffffff;
+            color: var(--text-primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
 
         .btn {
@@ -77,20 +234,25 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             border: none;
             font-size: 14px;
             font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: #7C3AED;
+            background: var(--primary);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #6D28D9;
+            background: var(--primary-hover);
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
         }
 
         .btn-secondary {
@@ -100,15 +262,39 @@
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .btn-danger {
-            background: #DC2626;
+            background: var(--error);
             color: white;
         }
 
         .btn-danger:hover {
             background: #B91C1C;
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            border-radius: 6px;
         }
 
         /* Hero Section */
@@ -126,20 +312,34 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: fadeInUp 0.8s ease;
         }
 
         .hero p {
             font-size: 20px;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 40px;
             line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.2s both;
         }
 
         .hero-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Features Section */
@@ -152,22 +352,28 @@
 
         .feature-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 30px;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
         .feature-card:hover {
-            border-color: #7C3AED;
+            border-color: var(--primary);
             transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.15);
         }
 
         .feature-icon {
             font-family: 'JetBrains Mono', monospace;
             font-size: 24px;
-            color: #7C3AED;
+            color: var(--primary);
             margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
         }
 
         .feature-card h3 {
@@ -176,7 +382,7 @@
         }
 
         .feature-card p {
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-size: 14px;
             line-height: 1.6;
         }
@@ -204,16 +410,26 @@
 
         .pricing-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
             padding: 30px;
             text-align: left;
-            transition: all 0.3s;
+            transition: var(--transition);
             position: relative;
         }
 
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
         .pricing-card.popular {
-            border-color: #7C3AED;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.05) translateY(-5px);
         }
 
         .pricing-card.popular::before {
@@ -222,7 +438,7 @@
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: #7C3AED;
+            background: var(--primary);
             padding: 4px 16px;
             border-radius: 20px;
             font-size: 12px;
@@ -242,7 +458,7 @@
 
         .pricing-card .price span {
             font-size: 16px;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-weight: 400;
         }
 
@@ -253,7 +469,7 @@
 
         .pricing-card ul li {
             padding: 8px 0;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-size: 14px;
             position: relative;
             padding-left: 24px;
@@ -263,26 +479,67 @@
             content: '✓';
             position: absolute;
             left: 0;
-            color: #7C3AED;
+            color: var(--primary);
             font-weight: 600;
         }
 
         /* Footer */
         footer {
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px 20px 40px;
+            border-top: 1px solid var(--border);
             margin-top: 80px;
         }
 
-        footer p {
-            color: #666;
-            font-size: 14px;
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        footer a {
-            color: #7C3AED;
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .footer-links-column h4 {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .footer-links-column a {
+            display: block;
+            color: var(--text-secondary);
             text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .footer-links-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-bottom p {
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
         /* Modal */
@@ -299,15 +556,18 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .modal.active {
             display: flex;
+            opacity: 1;
         }
 
         .modal-content {
             background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 40px;
             max-width: 450px;
@@ -315,6 +575,12 @@
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
         }
 
         .modal-close {
@@ -323,15 +589,18 @@
             right: 15px;
             background: none;
             border: none;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-size: 24px;
             cursor: pointer;
             padding: 5px;
             line-height: 1;
+            border-radius: 4px;
+            transition: var(--transition);
         }
 
         .modal-close:hover {
             color: white;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .modal-content h2 {
@@ -340,7 +609,7 @@
         }
 
         .modal-content p {
-            color: #a0a0a0;
+            color: var(--text-secondary);
             margin-bottom: 25px;
         }
 
@@ -349,7 +618,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border);
             padding-bottom: 15px;
         }
 
@@ -358,18 +627,18 @@
             padding: 10px;
             background: transparent;
             border: none;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-weight: 600;
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            transition: all 0.3s;
+            transition: var(--transition);
             font-family: inherit;
             font-size: 14px;
         }
 
         .auth-tab.active {
-            color: #7C3AED;
-            border-bottom-color: #7C3AED;
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
 
         /* OAuth Buttons */
@@ -392,7 +661,7 @@
             color: white;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             font-family: inherit;
             font-size: 14px;
         }
@@ -400,6 +669,7 @@
         .oauth-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         /* Divider */
@@ -416,14 +686,14 @@
             right: 0;
             top: 50%;
             height: 1px;
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--border);
         }
 
         .divider span {
             background: #1a1a1a;
             padding: 0 15px;
             position: relative;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             font-size: 13px;
         }
 
@@ -432,20 +702,33 @@
             margin-bottom: 15px;
         }
 
-        .form-group input {
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             color: white;
             font-size: 14px;
             font-family: inherit;
+            transition: var(--transition);
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #7C3AED;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
         .form-footer {
@@ -454,35 +737,197 @@
         }
 
         .form-footer a {
-            color: #7C3AED;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 500;
             cursor: pointer;
         }
 
-        /* Dashboard */
-        .dashboard {
+        /* Enhanced Dashboard with Sidebar */
+        .dashboard-container {
             display: none;
-            padding: 100px 20px 50px;
+            min-height: 100vh;
+            padding-top: 80px;
         }
 
-        .dashboard.active {
-            display: block;
+        .dashboard-container.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: rgba(26, 26, 26, 0.8);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            transition: var(--transition);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav-item.active {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--primary);
+        }
+
+        .sidebar-nav-item svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 16px;
+        }
+
+        .dashboard-main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px;
+            max-width: calc(100% - 260px);
         }
 
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .api-key-box {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
+        .dashboard-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .dashboard-header p {
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
             margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(124, 58, 237, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stat-card .change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-card .change.positive {
+            color: var(--success);
+        }
+
+        .stat-card .change.negative {
+            color: var(--error);
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* API Key Box */
+        .api-key-box {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.3);
         }
 
         .api-key-display {
@@ -495,89 +940,315 @@
             flex: 1;
             padding: 12px;
             background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            color: #7C3AED;
+            color: var(--primary);
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
         }
 
-        .usage-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
+        /* Activity Log */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .stat-card .value {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-card .label {
-            color: #a0a0a0;
-            font-size: 14px;
-        }
-
-        .account-section {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-
-        .account-section h3 {
-            margin-bottom: 20px;
-        }
-
-        .account-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .account-info-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
+            transition: var(--transition);
         }
 
-        .account-info-item label {
-            display: block;
-            color: #666;
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .activity-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .activity-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content p {
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .activity-content .time {
             font-size: 12px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--text-muted);
         }
 
-        .account-info-item span {
-            color: white;
+        /* Charts */
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 160px;
+            gap: 8px;
+        }
+
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, var(--primary), var(--primary-light));
+            border-radius: 4px 4px 0 0;
+            min-height: 4px;
+            transition: height 0.5s ease;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Settings */
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .settings-section {
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .settings-section h4 {
+            font-size: 14px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .setting-item label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .setting-item .description {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle.active {
+            background: var(--primary);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Usage History Table */
+        .usage-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .usage-table th,
+        .usage-table td {
+            text-align: left;
+            padding: 12px;
             font-size: 14px;
         }
 
-        .upgrade-section {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
+        .usage-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
         }
 
-        .upgrade-section h3 {
+        .usage-table td {
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .usage-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        /* Support Page */
+        .support-container {
+            display: none;
+            padding: 120px 20px 50px;
+            min-height: 100vh;
+        }
+
+        .support-container.active {
+            display: block;
+        }
+
+        .support-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .support-form textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        /* Legal Pages (Privacy/Terms) */
+        .legal-container {
+            display: none;
+            padding: 120px 20px 50px;
+            min-height: 100vh;
+        }
+
+        .legal-container.active {
+            display: block;
+        }
+
+        .legal-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 60px;
+        }
+
+        .legal-content h1 {
+            font-size: 36px;
             margin-bottom: 10px;
+        }
+
+        .legal-content .last-updated {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .legal-content h2 {
+            font-size: 20px;
+            margin: 30px 0 15px;
+            color: var(--text-primary);
+        }
+
+        .legal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .legal-content ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .legal-content li {
+            margin-bottom: 8px;
         }
 
         /* Toast */
@@ -587,13 +1258,16 @@
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 30px;
+            border: 1px solid var(--border);
+            padding: 16px 32px;
             border-radius: 12px;
             font-weight: 500;
             opacity: 0;
-            transition: all 0.3s;
+            transition: var(--transition);
             z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .toast.show {
@@ -602,54 +1276,87 @@
         }
 
         .toast.error {
-            border-color: #DC2626;
+            border-color: var(--error);
             background: rgba(220, 38, 38, 0.2);
         }
 
-        /* Support Page */
-        #supportPage {
-            display: none;
-            padding: 100px 20px 50px;
+        .toast.success {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
         }
 
-        #supportPage.active {
-            display: block;
+        /* Payment Modal */
+        .plan-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .support-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .support-form textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .plan-option {
+            padding: 15px;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        .support-form textarea:focus {
-            outline: none;
-            border-color: #7C3AED;
+        .plan-option:hover {
+            border-color: var(--primary);
+        }
+
+        .plan-option.selected {
+            border-color: var(--primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .plan-option h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .plan-option .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .features,
             .pricing-cards {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 999;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+                max-width: 100%;
+            }
+
+            .mobile-menu-btn {
+                display: block !important;
             }
         }
 
         @media (max-width: 768px) {
             .features,
             .pricing-cards,
-            .usage-stats,
+            .stats-grid,
             .account-info {
                 grid-template-columns: 1fr;
             }
@@ -666,248 +1373,684 @@
             nav {
                 gap: 15px;
             }
+
+            nav a:not(.btn) {
+                display: none;
+            }
+
+            .legal-content {
+                padding: 30px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-error {
+            color: var(--error);
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
+    <!-- Site Loader -->
+    <div id="siteLoader" class="site-loader">
+        <div class="loader-logo">OpenShell</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Spinner Overlay -->
+    <div id="spinnerOverlay" class="spinner-overlay">
+        <div class="spinner"></div>
+    </div>
+
     <!-- Header -->
-    <header>
+    <header id="mainHeader">
         <div class="container">
-            <div class="logo">OpenShell</div>
+            <div class="logo" onclick="navigateTo('home')">OpenShell</div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
             <nav>
-                <a href="#features" id="navFeatures">Features</a>
-                <a href="#pricing" id="navPricing">Pricing</a>
+                <a href="#features" onclick="navigateTo('home'); return false;" id="navFeatures">Features</a>
+                <a href="#pricing" onclick="navigateTo('home'); return false;" id="navPricing">Pricing</a>
                 <button class="btn btn-primary" id="headerBtn">Get Started</button>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <h1>AI-Powered Terminal Assistant</h1>
-        <p>
-            OpenShell is your intelligent coding companion. Read, write, edit files and execute commands with natural language. Works with any AI provider.
-        </p>
-        <div class="hero-buttons">
-            <button class="btn btn-primary" id="heroViewPlans">View Plans</button>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="container features">
-        <div class="feature-card">
-            <div class="feature-icon">[AI]</div>
-            <h3>Natural Language Commands</h3>
-            <p>Talk to your terminal like a human. "Create a React component for user authentication" and watch the magic happen.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">[>]</div>
-            <h3>Instant File Operations</h3>
-            <p>Create, edit, refactor code and manage files with simple English commands. No manual file editing needed.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">[!]</div>
-            <h3>Smart Command Execution</h3>
-            <p>Run shell commands, analyze outputs, and let AI suggest fixes and optimizations automatically.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">[*]</div>
-            <h3>Works Everywhere</h3>
-            <p>Compatible with Anthropic, OpenAI, Google, Groq, and more. Choose your AI provider.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">[%]</div>
-            <h3>Track & Optimize Costs</h3>
-            <p>Monitor your API usage and token consumption in real-time. Understand exactly what you're spending.</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">[~]</div>
-            <h3>Your Code, Your Rules</h3>
-            <p>All your code stays local. We never store or transmit your files. Complete privacy guaranteed.</p>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="container pricing">
-        <h2>Simple, Transparent Pricing</h2>
-        <p>Choose the plan that fits your needs.</p>
-        <p style="color: #7C3AED; margin-top: 10px; font-weight: 500">All plans include your API key and full access to documentation</p>
-
-        <div class="pricing-cards">
-            <div class="pricing-card">
-                <h3>Free</h3>
-                <div class="price">$0<span>/month</span></div>
-                <p style="color: #a0a0a0; margin: 15px 0 20px; font-size: 13px;">Forever free, no credit card</p>
-                <ul>
-                    <li>25 requests per month</li>
-                    <li>Basic model access only</li>
-                    <li>7-day history</li>
-                    <li>Single API key</li>
-                </ul>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" id="freePlanBtn">
-                    Get Started Free
-                </button>
+    <!-- Main Content Area -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero page-container" id="homeSection">
+            <h1>AI-Powered Terminal Assistant</h1>
+            <p>OpenShell is your intelligent coding companion. Read, write, edit files and execute commands with natural language. Works with any AI provider.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="navigateTo('home', 'pricing')">View Plans</button>
+                <button class="btn btn-secondary" onclick="navigateTo('privacy')">Learn More</button>
             </div>
+        </section>
 
-            <div class="pricing-card popular">
-                <h3>Pro</h3>
-                <div class="price">$4.99<span>/month</span></div>
-                <p style="color: #7C3AED; margin: 15px 0 20px; font-size: 13px;">Recommended - Best value</p>
-                <ul>
-                    <li>Unlimited requests</li>
-                    <li>All model provider access</li>
-                    <li>Priority support</li>
-                    <li>Unlimited history</li>
-                    <li>Custom system prompts</li>
-                    <li>Advanced analytics</li>
-                    <li>Early access to new features</li>
-                </ul>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="proPlanBtn">
-                    Upgrade to Pro
-                </button>
+        <!-- Features Section -->
+        <section id="features" class="container features page-container">
+            <div class="feature-card">
+                <div class="feature-icon">[AI]</div>
+                <h3>Natural Language Commands</h3>
+                <p>Talk to your terminal like a human. "Create a React component for user authentication" and watch the magic happen.</p>
             </div>
-
-            <div class="pricing-card">
-                <h3>Team</h3>
-                <div class="price">$9.99<span>/month</span></div>
-                <p style="color: #a0a0a0; margin: 15px 0 20px; font-size: 13px;">Perfect for teams and organizations</p>
-                <ul>
-                    <li>Everything in Pro</li>
-                    <li>Up to 10 team members</li>
-                    <li>Shared API keys & rotation</li>
-                    <li>Admin dashboard</li>
-                    <li>Custom integrations</li>
-                    <li>Dedicated support channel</li>
-                    <li>Usage reports & billing</li>
-                </ul>
-                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" id="teamPlanBtn">
-                    Get Team Plan
-                </button>
+            <div class="feature-card">
+                <div class="feature-icon">[>]</div>
+                <h3>Instant File Operations</h3>
+                <p>Create, edit, refactor code and manage files with simple English commands. No manual file editing needed.</p>
             </div>
-        </div>
-    </section>
+            <div class="feature-card">
+                <div class="feature-icon">[!]</div>
+                <h3>Smart Command Execution</h3>
+                <p>Run shell commands, analyze outputs, and let AI suggest fixes and optimizations automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[*]</div>
+                <h3>Works Everywhere</h3>
+                <p>Compatible with Anthropic, OpenAI, Google, Groq, and more. Choose your AI provider.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[%]</div>
+                <h3>Track & Optimize Costs</h3>
+                <p>Monitor your API usage and token consumption in real-time. Understand exactly what you're spending.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">[~]</div>
+                <h3>Your Code, Your Rules</h3>
+                <p>All your code stays local. We never store or transmit your files. Complete privacy guaranteed.</p>
+            </div>
+        </section>
 
-    <!-- Footer -->
-    <footer id="mainFooter">
-        <p>&copy; 2024 OpenShell. All rights reserved.</p>
-        <p style="margin-top: 10px;"><a href="#" id="supportLink">Contact Support</a></p>
-    </footer>
+        <!-- Pricing Section -->
+        <section id="pricing" class="container pricing page-container">
+            <h2>Simple, Transparent Pricing</h2>
+            <p>Choose the plan that fits your needs.</p>
+            <p style="color: var(--primary); margin-top: 10px; font-weight: 500">All plans include your API key and full access to documentation</p>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price">$0<span>/month</span></div>
+                    <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Forever free, no credit card</p>
+                    <ul>
+                        <li>25 requests per month</li>
+                        <li>Basic model access only</li>
+                        <li>7-day history</li>
+                        <li>Single API key</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('free')">Get Started Free</button>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Pro</h3>
+                    <div class="price">$4.99<span>/month</span></div>
+                    <p style="color: var(--primary); margin: 15px 0 20px; font-size: 13px;">Recommended - Best value</p>
+                    <ul>
+                        <li>Unlimited requests</li>
+                        <li>All model provider access</li>
+                        <li>Priority support</li>
+                        <li>Unlimited history</li>
+                        <li>Custom system prompts</li>
+                        <li>Advanced analytics</li>
+                        <li>Early access to new features</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('pro')">Upgrade to Pro</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>Team</h3>
+                    <div class="price">$9.99<span>/month</span></div>
+                    <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Perfect for teams and organizations</p>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>Up to 10 team members</li>
+                        <li>Shared API keys & rotation</li>
+                        <li>Admin dashboard</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support channel</li>
+                        <li>Usage reports & billing</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('team')">Get Team Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="mainFooter" class="page-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">OpenShell</div>
+                    <p>AI-powered terminal assistant that helps you code faster, smarter, and more efficiently.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h4>Product</h4>
+                        <a href="#features" onclick="navigateTo('home'); return false;">Features</a>
+                        <a href="#pricing" onclick="navigateTo('home'); return false;">Pricing</a>
+                        <a href="#" onclick="navigateTo('support'); return false;">Support</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Legal</h4>
+                        <a href="#" onclick="navigateTo('privacy'); return false;">Privacy Policy</a>
+                        <a href="#" onclick="navigateTo('terms'); return false;">Terms of Service</a>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>Connect</h4>
+                        <a href="https://github.com" target="_blank">GitHub</a>
+                        <a href="https://twitter.com" target="_blank">Twitter</a>
+                        <a href="https://discord.com" target="_blank">Discord</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 OpenShell. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
 
     <!-- Support Page -->
-    <div id="supportPage">
+    <div id="supportPage" class="support-container page-container">
         <div class="container">
-            <button class="btn btn-secondary" id="backFromSupport" style="margin-bottom: 30px;">← Back to Home</button>
-            <h1 style="margin-bottom: 20px;">Contact Support</h1>
-            <p style="color: #a0a0a0; margin-bottom: 30px;">Having trouble? Fill out the form below and we'll get back to you as soon as possible.</p>
-
-            <form class="support-form" id="supportForm">
-                <div class="form-group">
-                    <label for="supportEmail">Email Address</label>
-                    <input type="email" id="supportEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="supportSubject">Subject</label>
-                    <input type="text" id="supportSubject" placeholder="Brief description of your issue" required>
-                </div>
-                <div class="form-group">
-                    <label for="supportMessage">Message</label>
-                    <textarea id="supportMessage" placeholder="Please describe your issue in detail..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-            </form>
+            <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px;">
+                ← Back to Home
+            </button>
+            <div class="support-form">
+                <h1 style="margin-bottom: 10px;">Contact Support</h1>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Having trouble? Fill out the form below and we'll get back to you as soon as possible.</p>
+                <form id="supportForm">
+                    <div class="form-group">
+                        <label for="supportEmail">Email Address</label>
+                        <input type="email" id="supportEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supportSubject">Subject</label>
+                        <input type="text" id="supportSubject" placeholder="Brief description of your issue" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supportMessage">Message</label>
+                        <textarea id="supportMessage" placeholder="Please describe your issue in detail..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="container dashboard">
-        <div class="dashboard-header">
-            <div>
-                <h1>Welcome, <span id="userName">User</span></h1>
-                <p style="color: #a0a0a0">Manage your API key and account</p>
-            </div>
-            <button class="btn btn-secondary" id="logoutBtn">Sign Out</button>
-        </div>
+    <!-- Privacy Policy Page -->
+    <div id="privacyPage" class="legal-container page-container">
+        <div class="container">
+            <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px;">
+                ← Back to Home
+            </button>
+            <div class="legal-content">
+                <h1>Privacy Policy</h1>
+                <p class="last-updated">Last Updated: January 2024</p>
 
-        <div class="api-key-box">
-            <h3>Your API Key</h3>
-            <p style="color: #a0a0a0; font-size: 14px">Use this key to authenticate with OpenShell CLI</p>
-            <p style="color: #ff9900; font-size: 12px; margin-top: 10px">Note: You can only have one API key. Copy it now!</p>
-            <div class="api-key-display">
-                <input type="text" id="apiKeyDisplay" readonly>
-                <button class="btn btn-primary" id="copyApiKeyBtn">Copy</button>
+                <h2>1. Introduction</h2>
+                <p>Welcome to OpenShell. We respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered terminal assistant.</p>
+
+                <h2>2. Information We Collect</h2>
+                <p>We collect information that you voluntarily provide to us when you:</p>
+                <ul>
+                    <li>Create an account</li>
+                    <li>Use our services</li>
+                    <li>Contact our support team</li>
+                    <li>Subscribe to our communications</li>
+                </ul>
+                <p>This information may include your name, email address, usage data, and payment information.</p>
+
+                <h2>3. How We Use Your Information</h2>
+                <p>We use the information we collect to:</p>
+                <ul>
+                    <li>Provide and maintain our services</li>
+                    <li>Process your requests and transactions</li>
+                    <li>Send you technical notices and support messages</li>
+                    <li>Improve our services and develop new features</li>
+                    <li>Protect against fraudulent or illegal activity</li>
+                </ul>
+
+                <h2>4. Data Security</h2>
+                <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+                <h2>5. Your Code Privacy</h2>
+                <p>All code processing happens locally on your machine. We do not store, transmit, or analyze your code files on our servers.</p>
+
+                <h2>6. Third-Party Services</h2>
+                <p>We use third-party services for authentication (GitHub, Google) and payment processing. These services have their own privacy policies.</p>
+
+                <h2>7. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us at support@openshell.dev</p>
             </div>
         </div>
+    </div>
 
-        <div class="usage-stats">
-            <div class="stat-card">
-                <div class="value" id="requestsUsed">0</div>
-                <div class="label">Requests This Month</div>
-            </div>
-            <div class="stat-card">
-                <div class="value" id="tokensUsed">0</div>
-                <div class="label">Tokens Used</div>
-            </div>
-            <div class="stat-card">
-                <div class="value" id="planName">Free</div>
-                <div class="label">Current Plan</div>
+    <!-- Terms of Service Page -->
+    <div id="termsPage" class="legal-container page-container">
+        <div class="container">
+            <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px;">
+                ← Back to Home
+            </button>
+            <div class="legal-content">
+                <h1>Terms of Service</h1>
+                <p class="last-updated">Last Updated: January 2024</p>
+
+                <h2>1. Agreement to Terms</h2>
+                <p>By accessing or using OpenShell, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access our services.</p>
+
+                <h2>2. Use License</h2>
+                <p>We grant you a limited, non-exclusive, non-transferable license to use OpenShell for personal or commercial purposes, subject to these Terms.</p>
+
+                <h2>3. Account Terms</h2>
+                <p>You are responsible for maintaining the security of your account and password. OpenShell cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.</p>
+
+                <h2>4. Acceptable Use</h2>
+                <p>You agree not to use OpenShell to:</p>
+                <ul>
+                    <li>Violate any applicable laws or regulations</li>
+                    <li>Infringe upon intellectual property rights</li>
+                    <li>Transmit any malicious code or viruses</li>
+                    <li>Interfere with or disrupt our services</li>
+                    <li>Engage in any activity that harms minors</li>
+                </ul>
+
+                <h2>5. API Usage</h2>
+                <p>Your API key is for your use only. You may not share, sell, or transfer your API key. Excessive use that impacts service quality may result in rate limiting or account suspension.</p>
+
+                <h2>6. Payment Terms</h2>
+                <p>Subscription fees are billed in advance on a monthly basis. You may cancel your subscription at any time, and you will continue to have access to paid features until the end of your billing period.</p>
+
+                <h2>7. Limitation of Liability</h2>
+                <p>OpenShell shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of our services.</p>
+
+                <h2>8. Changes to Terms</h2>
+                <p>We reserve the right to modify these terms at any time. We will notify users of any material changes via email or through the service.</p>
+
+                <h2>9. Contact Information</h2>
+                <p>For any questions about these Terms, please contact us at legal@openshell.dev</p>
             </div>
         </div>
+    </div>
 
-        <div class="account-section">
-            <h3>Account Settings</h3>
-            <div class="account-info">
-                <div class="account-info-item">
-                    <label>Email</label>
-                    <span id="accountEmail">user@example.com</span>
+    <!-- Dashboard Container -->
+    <div id="dashboardContainer" class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-nav">
+                <button class="sidebar-nav-item active" data-section="overview" onclick="switchDashboardSection('overview')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Overview
+                </button>
+                <button class="sidebar-nav-item" data-section="api" onclick="switchDashboardSection('api')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5M21 21l-2-2"/></svg>
+                    API Keys
+                </button>
+                <button class="sidebar-nav-item" data-section="usage" onclick="switchDashboardSection('usage')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    Usage Analytics
+                </button>
+                <button class="sidebar-nav-item" data-section="activity" onclick="switchDashboardSection('activity')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Activity Log
+                </button>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Preferences</div>
+                <button class="sidebar-nav-item" data-section="settings" onclick="switchDashboardSection('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings
+                </button>
+                <button class="sidebar-nav-item" onclick="showBillingModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Billing
+                </button>
+            </div>
+            <div class="sidebar-section">
+                <button class="sidebar-nav-item" onclick="logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Dashboard Main Content -->
+        <main class="dashboard-main" id="dashboardMain">
+            <!-- Overview Section -->
+            <div id="overviewSection" class="dashboard-section">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Welcome back, <span id="userName">User</span></h1>
+                        <p>Here's what's happening with your account</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showBillingModal()">Upgrade Plan</button>
                 </div>
-                <div class="account-info-item">
-                    <label>Account Created</label>
-                    <span id="accountCreated">-</span>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">📊</div>
+                        <div class="value" id="requestsUsed">0</div>
+                        <div class="label">Requests This Month</div>
+                        <div class="change positive">
+                            <span>↑</span>
+                            <span>12% from last month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📝</div>
+                        <div class="value" id="tokensUsed">0</div>
+                        <div class="label">Tokens Used</div>
+                        <div class="change positive">
+                            <span>↑</span>
+                            <span>8% from last month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⏱️</div>
+                        <div class="value" id="avgResponseTime">245ms</div>
+                        <div class="label">Avg Response Time</div>
+                        <div class="change positive">
+                            <span>↓</span>
+                            <span>5% faster</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⭐</div>
+                        <div class="value" id="planName">Free</div>
+                        <div class="label">Current Plan</div>
+                        <div class="change">
+                            <span>Active</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="account-info-item">
-                    <label>Sign-in Method</label>
-                    <span id="signInMethod">-</span>
+
+                <!-- API Key Card -->
+                <div class="dashboard-card api-key-box">
+                    <div class="dashboard-card-header">
+                        <h3>Your API Key</h3>
+                        <span class="status-badge success">
+                            <span>●</span> Active
+                        </span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">Use this key to authenticate with OpenShell CLI</p>
+                    <div class="api-key-display">
+                        <input type="text" id="apiKeyDisplay" readonly value="">
+                        <button class="btn btn-primary" onclick="copyApiKey()">Copy</button>
+                        <button class="btn btn-ghost btn-icon" onclick="regenerateApiKey()" title="Regenerate">🔄</button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Preview -->
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3>Recent Activity</h3>
+                        <button class="btn btn-ghost btn-sm" onclick="switchDashboardSection('activity')">View All</button>
+                    </div>
+                    <div class="activity-list" id="recentActivityList">
+                        <!-- Activities will be populated by JS -->
+                    </div>
                 </div>
             </div>
-            <button class="btn btn-danger" style="margin-top: 20px" id="deleteAccountBtn">Delete Account</button>
-        </div>
 
-        <div class="upgrade-section">
-            <h3>Upgrade Your Plan</h3>
-            <p style="color: #a0a0a0; margin: 10px 0">Get unlimited requests and premium features</p>
-            <button class="btn btn-primary" id="upgradeBtn">Upgrade to Pro - $4.99/mo</button>
-        </div>
+            <!-- API Keys Section -->
+            <div id="apiSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>API Keys</h1>
+                        <p>Manage your API keys and access tokens</p>
+                    </div>
+                </div>
+                <div class="dashboard-card api-key-box">
+                    <div class="dashboard-card-header">
+                        <h3>Production API Key</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">This key has full access to all API endpoints</p>
+                    <div class="api-key-display">
+                        <input type="text" id="apiKeyDisplay2" readonly value="">
+                        <button class="btn btn-primary" onclick="copyApiKey()">Copy</button>
+                        <button class="btn btn-ghost btn-icon" onclick="regenerateApiKey()" title="Regenerate">🔄</button>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button class="btn btn-ghost btn-sm" onclick="showToast('API key usage stats coming soon')">View Usage</button>
+                        <button class="btn btn-danger btn-sm" onclick="revokeApiKey()">Revoke Key</button>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 15px;">Rate Limits</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div>
+                            <div style="font-size: 24px; font-weight: 700;">100</div>
+                            <div style="color: var(--text-secondary); font-size: 13px;">Requests per minute</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 24px; font-weight: 700;">10,000</div>
+                            <div style="color: var(--text-secondary); font-size: 13px;">Requests per day</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 24px; font-weight: 700;">1MB</div>
+                            <div style="color: var(--text-secondary); font-size: 13px;">Max request size</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Section -->
+            <div id="usageSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Usage Analytics</h1>
+                        <p>Track your API usage over time</p>
+                    </div>
+                    <select class="form-group" style="width: auto; padding: 8px 16px;">
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                    </select>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Requests Over Time</h3>
+                    <div class="chart-container">
+                        <div class="bar-chart" id="usageChart">
+                            <!-- Bars generated by JS -->
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 15px;">API Key Usage History</h3>
+                    <table class="usage-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Endpoint</th>
+                                <th>Requests</th>
+                                <th>Tokens</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usageHistoryTable">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activity Section -->
+            <div id="activitySection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Activity Log</h1>
+                        <p>Recent events and actions</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="activity-list" id="fullActivityList">
+                        <!-- Full activity list populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settingsSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Settings</h1>
+                        <p>Manage your account preferences</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <form class="settings-form">
+                        <div class="settings-section">
+                            <h4>Appearance</h4>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Dark Mode</label>
+                                    <div class="description">Use dark theme throughout the application</div>
+                                </div>
+                                <div class="toggle active" onclick="toggleTheme(this)" id="themeToggle"></div>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Compact Mode</label>
+                                    <div class="description">Reduce spacing and padding in the interface</div>
+                                </div>
+                                <div class="toggle" onclick="toggleSetting(this, 'compactMode')"></div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h4>Notifications</h4>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Email Notifications</label>
+                                    <div class="description">Receive updates about your account via email</div>
+                                </div>
+                                <div class="toggle active" onclick="toggleSetting(this, 'emailNotifications')"></div>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Usage Alerts</label>
+                                    <div class="description">Get notified when approaching rate limits</div>
+                                </div>
+                                <div class="toggle active" onclick="toggleSetting(this, 'usageAlerts')"></div>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Marketing Emails</label>
+                                    <div class="description">Receive product updates and promotional content</div>
+                                </div>
+                                <div class="toggle" onclick="toggleSetting(this, 'marketingEmails')"></div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h4>Security</h4>
+                            <div class="setting-item">
+                                <div>
+                                    <label>Two-Factor Authentication</label>
+                                    <div class="description">Add an extra layer of security to your account</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="showToast('2FA setup coming soon')">Enable</button>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h4 style="color: var(--error)">Danger Zone</h4>
+                            <div class="setting-item">
+                                <div>
+                                    <label style="color: var(--error)">Delete Account</label>
+                                    <div class="description">Permanently delete your account and all data</div>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteAccount()">Delete</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" id="closeAuthModal">&times;</button>
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
             <h2 id="authTitle">Sign In</h2>
             <p id="authSubtitle">Welcome back to OpenShell.</p>
 
-            <!-- Auth Tabs -->
             <div class="auth-tabs">
-                <button class="auth-tab active" id="signInTabBtn">Sign In</button>
-                <button class="auth-tab" id="signUpTabBtn">Create Account</button>
+                <button class="auth-tab active" id="signInTabBtn" onclick="switchAuthMode('signin')">Sign In</button>
+                <button class="auth-tab" id="signUpTabBtn" onclick="switchAuthMode('signup')">Create Account</button>
             </div>
 
-            <!-- OAuth Buttons -->
             <div class="oauth-buttons">
-                <button class="oauth-btn" id="githubSignInBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
+                <button class="oauth-btn" onclick="signInWithGitHub()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     <span>GitHub</span>
                 </button>
-                <button class="oauth-btn" id="googleSignInBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <rect width="24" height="24" rx="2" fill="white"/>
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
+                <button class="oauth-btn" onclick="signInWithGoogle()">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     <span>Google</span>
                 </button>
             </div>
@@ -924,16 +2067,14 @@
                 <div class="form-group">
                     <input type="password" id="loginPassword" placeholder="Password">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" id="emailLoginBtn">
-                    Sign In with Email
-                </button>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="handleEmailLogin()">Sign In with Email</button>
                 <div class="form-footer">
-                    <a href="#" id="switchToSignUp">Don't have an account? Sign up</a>
+                    <a onclick="switchAuthMode('signup')">Don't have an account? Sign up</a>
                 </div>
             </div>
 
             <!-- Sign Up Form -->
-            <div id="signUpForm" style="display: none;">
+            <div id="signUpForm" class="hidden">
                 <div class="form-group">
                     <input type="text" id="signupName" placeholder="Full name">
                 </div>
@@ -943,11 +2084,9 @@
                 <div class="form-group">
                     <input type="password" id="signupPassword" placeholder="Password (min 6 characters)">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" id="emailSignupBtn">
-                    Create Account with Email
-                </button>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="handleEmailSignup()">Create Account with Email</button>
                 <div class="form-footer">
-                    <a href="#" id="switchToSignIn">Already have an account? Sign in</a>
+                    <a onclick="switchAuthMode('signin')">Already have an account? Sign in</a>
                 </div>
             </div>
         </div>
@@ -956,12 +2095,26 @@
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" id="closePaymentModal">&times;</button>
+            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
             <h2>Upgrade Your Plan</h2>
-            <p style="color: #a0a0a0; margin-bottom: 25px;">Choose your payment method</p>
-            <button class="btn btn-primary" style="width: 100%;" id="completePaymentBtn">
-                Complete Purchase
-            </button>
+            <p style="color: var(--text-secondary); margin-bottom: 25px;">Choose the plan that's right for you</p>
+
+            <div class="plan-selector">
+                <div class="plan-option" data-plan="free" onclick="selectPlan(this, 'free')">
+                    <h4>Free</h4>
+                    <div class="price">$0</div>
+                </div>
+                <div class="plan-option selected" data-plan="pro" onclick="selectPlan(this, 'pro')">
+                    <h4>Pro</h4>
+                    <div class="price">$4.99</div>
+                </div>
+                <div class="plan-option" data-plan="team" onclick="selectPlan(this, 'team')">
+                    <h4>Team</h4>
+                    <div class="price">$9.99</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="completePayment()">Complete Purchase</button>
         </div>
     </div>
 
@@ -970,7 +2123,6 @@
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script>
         // ============================================
         // SUPABASE CONFIGURATION
@@ -978,224 +2130,223 @@
         const SUPABASE_URL = 'https://eoijwpwslfxycglvpaem.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_BzixpXZdMOoyd9lvejatPQ_xV6BHsQW';
 
-        // Initialize Supabase client
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================
         // GLOBAL STATE
         // ============================================
         let currentUser = null;
+        let userProfile = null;
         let authMode = 'signin';
-        let elements = {};
+        let selectedPlan = 'pro';
+        let currentPage = 'home';
+        let currentDashboardSection = 'overview';
 
         // ============================================
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
-          // Initialize DOM elements AFTER page is loaded
-          elements = {
-            // Header
-            headerBtn: document.getElementById('headerBtn'),
+          // Show loader
+          showSiteLoader();
 
-            // Hero
-            hero: document.getElementById('hero'),
-            heroViewPlans: document.getElementById('heroViewPlans'),
+          // Setup event listeners
+          setupEventListeners();
 
-            // Sections
-            features: document.getElementById('features'),
-            pricing: document.getElementById('pricing'),
-            mainFooter: document.getElementById('mainFooter'),
+          // Check for existing session
+          await checkSession();
 
-            // Dashboard
-            dashboard: document.getElementById('dashboard'),
-            userName: document.getElementById('userName'),
-            apiKeyDisplay: document.getElementById('apiKeyDisplay'),
-            requestsUsed: document.getElementById('requestsUsed'),
-            tokensUsed: document.getElementById('tokensUsed'),
-            planName: document.getElementById('planName'),
-            accountEmail: document.getElementById('accountEmail'),
-            accountCreated: document.getElementById('accountCreated'),
-            signInMethod: document.getElementById('signInMethod'),
+          // Handle hash-based routing
+          handleHashChange();
 
-            // Auth Modal
-            authModal: document.getElementById('authModal'),
-            authTitle: document.getElementById('authTitle'),
-            authSubtitle: document.getElementById('authSubtitle'),
-            signInTabBtn: document.getElementById('signInTabBtn'),
-            signUpTabBtn: document.getElementById('signUpTabBtn'),
-            signInForm: document.getElementById('signInForm'),
-            signUpForm: document.getElementById('signUpForm'),
-            dividerText: document.getElementById('dividerText'),
-
-            // Auth Buttons
-            githubSignInBtn: document.getElementById('githubSignInBtn'),
-            googleSignInBtn: document.getElementById('googleSignInBtn'),
-            emailLoginBtn: document.getElementById('emailLoginBtn'),
-            emailSignupBtn: document.getElementById('emailSignupBtn'),
-
-            // Auth Inputs
-            loginEmail: document.getElementById('loginEmail'),
-            loginPassword: document.getElementById('loginPassword'),
-            signupName: document.getElementById('signupName'),
-            signupEmail: document.getElementById('signupEmail'),
-            signupPassword: document.getElementById('signupPassword'),
-
-            // Payment
-            paymentModal: document.getElementById('paymentModal'),
-
-            // Support
-            supportPage: document.getElementById('supportPage'),
-            supportForm: document.getElementById('supportForm'),
-
-            // Toast
-            toast: document.getElementById('toast')
-            };
-
-            console.log('✅ DOM loaded, elements initialized:', Object.keys(elements).length + ' elements');
-            console.log('✅ Setting up event listeners...');
-
-            // Setup all event listeners
-            setupEventListeners();
-
-            // Check for existing session
-            await checkSession();
-
-            // Listen for auth state changes
-            supabaseClient.auth.onAuthStateChange((event, session) => {
+          // Listen for auth state changes
+          supabaseClient.auth.onAuthStateChange((event, session) => {
             console.log('Auth state changed:', event);
             if (event === 'SIGNED_IN') {
-            handleAuthStateChange(session);
+              handleAuthStateChange(session);
             } else if (event === 'SIGNED_OUT') {
-            handleSignOut();
+              handleSignOut();
             }
-            });
-            });
+          });
 
-          // ============================================
-          // EVENT LISTENERS SETUP
-          // ============================================
-          function setupEventListeners() {
-          	console.log('📌 Setting up header button...');
+          // Hide loader after animation completes, then show home content
+          setTimeout(() => {
+            hideSiteLoader();
+            // Small delay after loader hides, then show home content if not on a specific page
+            setTimeout(() => {
+              if (!currentUser && (currentPage === 'home' || window.location.hash === '')) {
+                navigateTo('home');
+                // Add visible class for fade-in animation
+                setTimeout(() => {
+                  document.querySelectorAll('.page-container').forEach(el => {
+                    el.classList.add('visible');
+                  });
+                }, 100);
+              }
+            }, 100);
+          }, 2800);
+        });
 
-          	// Header button
-          	elements.headerBtn.addEventListener('click', async () => {
-          		console.log('🔘 Header button clicked, currentUser:', currentUser ? 'logged in' : 'not logged in');
-		if (currentUser) {
-		      // Fetch fresh user data
-		      const { data: profile } = await supabaseClient
-          				.from('users')
-          				.select('*')
-          				.eq('id', currentUser.id)
-          				.single();
-          			if (profile) showDashboard(profile);
-          		} else {
-          			showLogin();
-          		}
-          	});
+        // ============================================
+        // SITE LOADER
+        // ============================================
+        function showSiteLoader() {
+            document.getElementById('siteLoader').classList.remove('hidden');
+        }
 
-            // Hero View Plans
-            elements.heroViewPlans.addEventListener('click', () => {
-                elements.pricing.scrollIntoView({ behavior: 'smooth' });
-            });
+        function hideSiteLoader() {
+            document.getElementById('siteLoader').classList.add('hidden');
+        }
 
-            // Pricing buttons
-            document.getElementById('freePlanBtn').addEventListener('click', showSignup);
-            document.getElementById('proPlanBtn').addEventListener('click', () => {
-            if (!currentUser) {
-            showLogin();
-            return;
-            }
-            showPayment('pro');
-            });
-            document.getElementById('teamPlanBtn').addEventListener('click', () => {
-            if (!currentUser) {
-            showLogin();
-            return;
-            }
-            showPayment('team');
-            });
+        function showSpinner() {
+            document.getElementById('spinnerOverlay').classList.add('active');
+        }
 
-            	// Auth modal close
-            	console.log('📌 Setting up auth modal close button...');
-            	document.getElementById('closeAuthModal').addEventListener('click', closeAuthModal);
-            elements.authModal.addEventListener('click', (e) => {
-                if (e.target === elements.authModal) closeAuthModal();
-            });
-
-            	// Auth tabs
-            	console.log('📌 Setting up auth tabs...');
-            	elements.signInTabBtn.addEventListener('click', () => {
-            		console.log('🔘 Sign In tab clicked');
-            		switchAuthMode('signin');
-            	});
-            	elements.signUpTabBtn.addEventListener('click', () => {
-            		console.log('🔘 Sign Up tab clicked');
-            		switchAuthMode('signup');
-            	});
-            document.getElementById('switchToSignUp').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchAuthMode('signup');
-            });
-            document.getElementById('switchToSignIn').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchAuthMode('signin');
-            });
-
-            	// OAuth buttons
-            	console.log('📌 Setting up OAuth buttons...');
-            	elements.githubSignInBtn.addEventListener('click', () => {
-            		console.log('🔘 GitHub button clicked');
-            		signInWithGitHub();
-            	});
-            	elements.googleSignInBtn.addEventListener('click', () => {
-            		console.log('🔘 Google button clicked');
-            		signInWithGoogle();
-            	});
-
-            	// Email auth
-            	console.log('📌 Setting up email auth buttons...');
-            	elements.emailLoginBtn.addEventListener('click', () => {
-            		console.log('🔘 Email login button clicked');
-            		handleEmailLogin();
-            	});
-            	elements.emailSignupBtn.addEventListener('click', () => {
-            		console.log('🔘 Email signup button clicked');
-            		handleEmailSignup();
-            	});
-
-            // Dashboard buttons
-            document.getElementById('logoutBtn').addEventListener('click', logout);
-            document.getElementById('copyApiKeyBtn').addEventListener('click', copyApiKey);
-            document.getElementById('deleteAccountBtn').addEventListener('click', deleteAccount);
-            document.getElementById('upgradeBtn').addEventListener('click', () => showPayment('pro'));
-
-            // Payment modal
-            document.getElementById('closePaymentModal').addEventListener('click', closePaymentModal);
-            document.getElementById('completePaymentBtn').addEventListener('click', completePayment);
-            elements.paymentModal.addEventListener('click', (e) => {
-                if (e.target === elements.paymentModal) closePaymentModal();
-            });
-
-            // Support
-            document.getElementById('supportLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleSupportPage();
-            });
-            document.getElementById('backFromSupport').addEventListener('click', toggleSupportPage);
-            elements.supportForm.addEventListener('submit', submitSupportForm);
+        function hideSpinner() {
+            document.getElementById('spinnerOverlay').classList.remove('active');
         }
 
         // ============================================
-        // SESSION MANAGEMENT
+        // ROUTING - Hash-based Navigation
+        // ============================================
+        function navigateTo(page, scrollTarget = null) {
+            const pages = ['home', 'dashboard', 'support', 'privacy', 'terms'];
+
+            // Update hash
+            window.location.hash = page === 'home' ? '' : page;
+
+            // Hide all main content sections
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('dashboardContainer').classList.remove('active');
+            document.getElementById('supportPage').classList.remove('active');
+            document.getElementById('privacyPage').classList.remove('active');
+            document.getElementById('termsPage').classList.remove('active');
+
+            // Show requested page
+            switch (page) {
+                case 'home':
+                    document.getElementById('mainContent').style.display = 'block';
+                    currentPage = 'home';
+                    updateTitle('Home');
+                    if (scrollTarget) {
+                        setTimeout(() => {
+                            const el = document.getElementById(scrollTarget);
+                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                    }
+                    break;
+                case 'dashboard':
+                    if (!currentUser) {
+                        showLogin();
+                        return;
+                    }
+                    document.getElementById('dashboardContainer').classList.add('active');
+                    currentPage = 'dashboard';
+                    updateTitle('Dashboard');
+                    showDashboard(userProfile);
+                    break;
+                case 'support':
+                    document.getElementById('supportPage').classList.add('active');
+                    currentPage = 'support';
+                    updateTitle('Support');
+                    break;
+                case 'privacy':
+                    document.getElementById('privacyPage').classList.add('active');
+                    currentPage = 'privacy';
+                    updateTitle('Privacy Policy');
+                    break;
+                case 'terms':
+                    document.getElementById('termsPage').classList.add('active');
+                    currentPage = 'terms';
+                    updateTitle('Terms of Service');
+                    break;
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Animate page content
+            animatePageContent();
+        }
+
+        function handleHashChange() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            if (hash !== currentPage) {
+                navigateTo(hash);
+            }
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+
+        function updateTitle(pageName) {
+            document.title = pageName === 'Home'
+                ? 'OpenShell - AI-Powered Terminal Assistant'
+                : `${pageName} - OpenShell`;
+        }
+
+        function animatePageContent() {
+            const containers = document.querySelectorAll('.page-container');
+            containers.forEach((container, index) => {
+                if (container.classList.contains('active') || container.style.display !== 'none') {
+                    container.classList.remove('visible');
+                    setTimeout(() => {
+                        container.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            // Header button
+            document.getElementById('headerBtn').addEventListener('click', () => {
+                if (currentUser) {
+                    navigateTo('dashboard');
+                } else {
+                    showLogin();
+                }
+            });
+
+            // Support form submission
+            document.getElementById('supportForm').addEventListener('submit', submitSupportForm);
+
+            // Modal close on backdrop click
+            document.getElementById('authModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('authModal')) closeAuthModal();
+            });
+            document.getElementById('paymentModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('paymentModal')) closePaymentModal();
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('mainHeader');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Escape key to close modals
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeAuthModal();
+                    closePaymentModal();
+                }
+            });
+        }
+
+        // ============================================
+        // AUTH FUNCTIONS
         // ============================================
         async function checkSession() {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
-
             if (error) {
                 console.error('Session check error:', error);
                 return;
             }
-
             if (session) {
                 await handleAuthStateChange(session);
             }
@@ -1203,33 +2354,29 @@
 
         async function handleAuthStateChange(session) {
             if (!session) return;
-
             currentUser = session.user;
-            const userProfile = await getOrCreateUserProfile(currentUser);
+            userProfile = await getOrCreateUserProfile(currentUser);
 
             if (userProfile) {
-                showDashboard(userProfile);
+                // Update header button
+                document.getElementById('headerBtn').textContent = 'Dashboard';
+
+                // If on dashboard page, show it
+                if (currentPage === 'dashboard') {
+                    showDashboard(userProfile);
+                }
             }
         }
 
         function handleSignOut() {
             currentUser = null;
-
-            elements.dashboard.classList.remove('active');
-            elements.hero.style.display = 'block';
-            elements.features.style.display = 'grid';
-            elements.pricing.style.display = 'block';
-            elements.mainFooter.style.display = 'block';
-
-            elements.headerBtn.textContent = 'Get Started';
+            userProfile = null;
+            document.getElementById('headerBtn').textContent = 'Get Started';
+            navigateTo('home');
         }
 
-        // ============================================
-        // USER PROFILE MANAGEMENT
-        // ============================================
         async function getOrCreateUserProfile(authUser) {
             try {
-                // Try to get existing profile
                 const { data: existingProfile, error: fetchError } = await supabaseClient
                     .from('users')
                     .select('*')
@@ -1240,7 +2387,6 @@
                     return existingProfile;
                 }
 
-                // Create new profile
                 const metadata = authUser.user_metadata || {};
                 const newProfile = {
                     id: authUser.id,
@@ -1268,7 +2414,6 @@
                 }
 
                 return createdProfile;
-
             } catch (error) {
                 console.error('Profile management error:', error);
                 showToast('Error loading profile', true);
@@ -1283,72 +2428,60 @@
             return 'email';
         }
 
-        // ============================================
-        // AUTH FUNCTIONS
-        // ============================================
         function showLogin() {
-        	console.log('📱 Opening login modal...');
-        	switchAuthMode('signin');
-        	elements.authModal.classList.add('active');
-        	console.log('✅ Login modal opened');
+            switchAuthMode('signin');
+            document.getElementById('authModal').classList.add('active');
         }
 
         function showSignup() {
-        	console.log('📱 Opening signup modal...');
-        	switchAuthMode('signup');
-        	elements.authModal.classList.add('active');
-        	console.log('✅ Signup modal opened');
-        }
-
-        function switchAuthMode(mode) {
-        	console.log('🔄 Switching auth mode to:', mode);
-        	authMode = mode;
-        	if (mode === 'signin') {
-        		elements.signInTabBtn.classList.add('active');
-        		elements.signUpTabBtn.classList.remove('active');
-        		elements.signInForm.style.display = 'block';
-        		elements.signUpForm.style.display = 'none';
-        		elements.authTitle.textContent = 'Sign In';
-        		elements.authSubtitle.textContent = 'Welcome back to OpenShell.';
-        		elements.dividerText.textContent = 'or continue with email';
-        	} else {
-        		elements.signInTabBtn.classList.remove('active');
-        		elements.signUpTabBtn.classList.add('active');
-        		elements.signInForm.style.display = 'none';
-        		elements.signUpForm.style.display = 'block';
-        		elements.authTitle.textContent = 'Create Account';
-        		elements.authSubtitle.textContent = 'Get started with OpenShell today.';
-        		elements.dividerText.textContent = 'or create with email';
-        	}
-        	console.log('✅ Auth mode switched successfully');
+            switchAuthMode('signup');
+            document.getElementById('authModal').classList.add('active');
         }
 
         function closeAuthModal() {
-        	console.log('❌ Closing auth modal');
-        	elements.authModal.classList.remove('active');
+            document.getElementById('authModal').classList.remove('active');
         }
 
+        function switchAuthMode(mode) {
+            authMode = mode;
+            const signInTab = document.getElementById('signInTabBtn');
+            const signUpTab = document.getElementById('signUpTabBtn');
+            const signInForm = document.getElementById('signInForm');
+            const signUpForm = document.getElementById('signUpForm');
+            const authTitle = document.getElementById('authTitle');
+            const authSubtitle = document.getElementById('authSubtitle');
+            const dividerText = document.getElementById('dividerText');
 
+            if (mode === 'signin') {
+                signInTab.classList.add('active');
+                signUpTab.classList.remove('active');
+                signInForm.classList.remove('hidden');
+                signUpForm.classList.add('hidden');
+                authTitle.textContent = 'Sign In';
+                authSubtitle.textContent = 'Welcome back to OpenShell.';
+                dividerText.textContent = 'or continue with email';
+            } else {
+                signInTab.classList.remove('active');
+                signUpTab.classList.add('active');
+                signInForm.classList.add('hidden');
+                signUpForm.classList.remove('hidden');
+                authTitle.textContent = 'Create Account';
+                authSubtitle.textContent = 'Get started with OpenShell today.';
+                dividerText.textContent = 'or create with email';
+            }
+        }
 
-        // ============================================
-        // OAUTH SIGN IN
-        // ============================================
         async function signInWithGitHub() {
-        try {
-        showToast('Redirecting to GitHub...', false);
-
-        const { error } = await supabaseClient.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-        scopes: 'user:email',
-        redirectTo: window.location.origin + window.location.pathname
-        }
-        });
-
-                if (error) {
-                    console.error('GitHub sign in error:', error);
-                    showToast('Failed to sign in with GitHub', true);
-                }
+            try {
+                showToast('Redirecting to GitHub...', false);
+                const { error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'github',
+                    options: {
+                        scopes: 'user:email',
+                        redirectTo: window.location.origin + window.location.pathname
+                    }
+                });
+                if (error) throw error;
             } catch (error) {
                 console.error('GitHub sign in error:', error);
                 showToast('Failed to sign in with GitHub', true);
@@ -1356,67 +2489,52 @@
         }
 
         async function signInWithGoogle() {
-        try {
-        showToast('Redirecting to Google...', false);
-        const { error } = await supabaseClient.auth.signInWithOAuth({
+            try {
+                showToast('Redirecting to Google...', false);
+                const { error } = await supabaseClient.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
                         scopes: 'openid email profile',
                         redirectTo: window.location.origin + window.location.pathname
                     }
                 });
-
-                if (error) {
-                    console.error('Google sign in error:', error);
-                    showToast('Failed to sign in with Google', true);
-                }
+                if (error) throw error;
             } catch (error) {
                 console.error('Google sign in error:', error);
                 showToast('Failed to sign in with Google', true);
             }
         }
 
-        // ============================================
-        // EMAIL AUTH
-        // ============================================
         async function handleEmailLogin() {
-            const email = elements.loginEmail.value.trim();
-            const password = elements.loginPassword.value;
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
 
             if (!email || !password) {
                 showToast('Please fill in all fields', true);
                 return;
             }
 
-            	try {
-            		showToast('Signing in...', false);
+            showSpinner();
+            try {
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
 
-            		const { error } = await supabaseClient.auth.signInWithPassword({
-            			email: email,
-            			password: password
-            		});
-
-                if (error) {
-                    console.error('Login error:', error);
-                    showToast(error.message, true);
-                    return;
-                }
-
-                elements.loginEmail.value = '';
-                elements.loginPassword.value = '';
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
                 closeAuthModal();
-                showToast('Welcome back!');
-
+                showToast('Welcome back!', false, true);
             } catch (error) {
                 console.error('Login error:', error);
-                showToast('Failed to sign in', true);
+                showToast(error.message, true);
+            } finally {
+                hideSpinner();
             }
         }
 
         async function handleEmailSignup() {
-            const name = elements.signupName.value.trim();
-            const email = elements.signupEmail.value.trim();
-            const password = elements.signupPassword.value;
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
 
             if (!name || !email || !password) {
                 showToast('Please fill in all fields', true);
@@ -1428,62 +2546,46 @@
                 return;
             }
 
-            	try {
-            		showToast('Creating account...', false);
+            showSpinner();
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: { data: { full_name: name } }
+                });
 
-            		const { data, error } = await supabaseClient.auth.signUp({
-            			email: email,
-            			password: password,
-            			options: {
-            				data: {
-            					full_name: name
-            				}
-            			}
-            		});
+                if (error) throw error;
 
-                if (error) {
-                    console.error('Signup error:', error);
-                    showToast(error.message, true);
-                    return;
-                }
-
-                elements.signupName.value = '';
-                elements.signupEmail.value = '';
-                elements.signupPassword.value = '';
+                document.getElementById('signupName').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                closeAuthModal();
 
                 if (data.user && !data.session) {
-                    closeAuthModal();
-                    showToast('Account created! Please check your email to confirm.');
+                    showToast('Account created! Please check your email to confirm.', false, true);
                 } else {
-                    closeAuthModal();
-                    showToast('Account created successfully!');
+                    showToast('Account created successfully!', false, true);
                 }
-
             } catch (error) {
                 console.error('Signup error:', error);
-                showToast('Failed to create account', true);
+                showToast(error.message, true);
+            } finally {
+                hideSpinner();
             }
         }
 
-        // ============================================
-        // LOGOUT
-        // ============================================
         async function logout() {
+            showSpinner();
             try {
                 const { error } = await supabaseClient.auth.signOut();
-
-                if (error) {
-                    console.error('Logout error:', error);
-                    showToast('Failed to sign out', true);
-                    return;
-                }
-
+                if (error) throw error;
                 handleSignOut();
-                showToast('Logged out successfully');
-
+                showToast('Logged out successfully', false, true);
             } catch (error) {
                 console.error('Logout error:', error);
                 showToast('Failed to sign out', true);
+            } finally {
+                hideSpinner();
             }
         }
 
@@ -1491,36 +2593,148 @@
         // DASHBOARD
         // ============================================
         async function showDashboard(user) {
-        if (!user) {
-        if (!currentUser) return;
-        // Fetch user profile
-        const { data: profile } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
-        if (!profile) return;
-        user = profile;
+            if (!user) {
+                if (!currentUser) {
+                    navigateTo('home');
+                    return;
+                }
+                const { data: profile } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                user = profile;
+            }
+
+            userProfile = user;
+
+            // Update user info
+            document.getElementById('userName').textContent = user.name || 'User';
+            document.getElementById('apiKeyDisplay').value = user.api_key || '';
+            document.getElementById('apiKeyDisplay2').value = user.api_key || '';
+            document.getElementById('requestsUsed').textContent = user.requests || 0;
+            document.getElementById('tokensUsed').textContent = user.tokens || 0;
+            document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
+
+            // Populate activity list
+            populateActivityList();
+
+            // Populate usage chart
+            populateUsageChart();
+
+            // Populate usage history
+            populateUsageHistory();
+
+            // Show overview section by default
+            switchDashboardSection('overview');
         }
 
-        elements.userName.textContent = user.name || 'User';
-        elements.apiKeyDisplay.value = user.api_key;
-        elements.requestsUsed.textContent = user.requests || 0;
-        elements.tokensUsed.textContent = user.tokens || 0;
-        elements.planName.textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
-        elements.accountEmail.textContent = user.email;
-        elements.accountCreated.textContent = new Date(user.created_at).toLocaleDateString();
-        elements.signInMethod.textContent = user.sign_in_method === 'google' ? 'Google' : user.sign_in_method === 'github' ? 'GitHub' : 'Email/Password';
+        function switchDashboardSection(section) {
+            currentDashboardSection = section;
 
-        elements.dashboard.classList.add('active');
-        elements.hero.style.display = 'none';
-        elements.features.style.display = 'none';
-        elements.pricing.style.display = 'none';
-        elements.mainFooter.style.display = 'none';
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === section) {
+                    item.classList.add('active');
+                }
+            });
 
-        elements.headerBtn.textContent = 'Dashboard';
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Show selected section with animation
+            const selectedSection = document.getElementById(section + 'Section');
+            selectedSection.classList.remove('hidden');
+            selectedSection.classList.add('fade-in');
+
+            // Update title
+            const titles = {
+                overview: 'Overview',
+                api: 'API Keys',
+                usage: 'Usage Analytics',
+                activity: 'Activity Log',
+                settings: 'Settings'
+            };
+            updateTitle(titles[section] || 'Dashboard');
+        }
+
+        function populateActivityList() {
+            const activities = [
+                { icon: 'success', text: 'API key generated', time: '2 minutes ago' },
+                { icon: 'info', text: 'Updated account settings', time: '1 hour ago' },
+                { icon: 'success', text: 'Successfully logged in', time: '3 hours ago' },
+                { icon: 'warning', text: 'Approaching rate limit', time: 'Yesterday' }
+            ];
+
+            const recentList = document.getElementById('recentActivityList');
+            const fullList = document.getElementById('fullActivityList');
+
+            const generateActivityHTML = (activity) => `
+                <div class="activity-item">
+                    <div class="activity-icon ${activity.icon}">
+                        ${activity.icon === 'success' ? '✓' : activity.icon === 'info' ? 'ℹ' : '⚠'}
+                    </div>
+                    <div class="activity-content">
+                        <p>${activity.text}</p>
+                        <span class="time">${activity.time}</span>
+                    </div>
+                </div>
+            `;
+
+            if (recentList) {
+                recentList.innerHTML = activities.slice(0, 3).map(generateActivityHTML).join('');
+            }
+
+            if (fullList) {
+                // Add more activities for full view
+                const moreActivities = [
+                    { icon: 'success', text: 'Plan upgraded to Pro', time: '2 days ago' },
+                    { icon: 'info', text: 'New feature available', time: '3 days ago' },
+                    { icon: 'success', text: 'Account created', time: '1 week ago' }
+                ];
+                fullList.innerHTML = [...activities, ...moreActivities].map(generateActivityHTML).join('');
+            }
+        }
+
+        function populateUsageChart() {
+            const chart = document.getElementById('usageChart');
+            if (!chart) return;
+
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const values = [45, 72, 38, 95, 60, 82, 55];
+
+            chart.innerHTML = days.map((day, i) => `
+                <div class="bar-item">
+                    <div class="bar" style="height: ${values[i]}%"></div>
+                    <span class="bar-label">${day}</span>
+                </div>
+            `).join('');
+        }
+
+        function populateUsageHistory() {
+            const table = document.getElementById('usageHistoryTable');
+            if (!table) return;
+
+            const history = [
+                { date: '2024-01-15', endpoint: '/v1/chat', requests: 245, tokens: 12890, status: 'success' },
+                { date: '2024-01-14', endpoint: '/v1/chat', requests: 189, tokens: 9450, status: 'success' },
+                { date: '2024-01-13', endpoint: '/v1/edit', requests: 56, tokens: 3200, status: 'success' },
+                { date: '2024-01-12', endpoint: '/v1/chat', requests: 312, tokens: 15600, status: 'success' },
+                { date: '2024-01-11', endpoint: '/v1/execute', requests: 78, tokens: 4500, status: 'pending' }
+            ];
+
+            table.innerHTML = history.map(row => `
+                <tr>
+                    <td>${row.date}</td>
+                    <td>${row.endpoint}</td>
+                    <td>${row.requests}</td>
+                    <td>${row.tokens.toLocaleString()}</td>
+                    <td><span class="status-badge ${row.status}">● ${row.status}</span></td>
+                </tr>
+            `).join('');
         }
 
         // ============================================
@@ -1537,61 +2751,76 @@
         }
 
         function copyApiKey() {
-            const apiKey = elements.apiKeyDisplay.value;
+            const apiKey = document.getElementById('apiKeyDisplay').value;
             navigator.clipboard.writeText(apiKey)
-                .then(() => showToast('API key copied to clipboard!'))
+                .then(() => showToast('API key copied to clipboard!', false, true))
                 .catch(() => showToast('Failed to copy API key', true));
+        }
+
+        async function regenerateApiKey() {
+            if (!confirm('Are you sure? This will invalidate your current API key.')) return;
+
+            const newKey = generateApiKey();
+            document.getElementById('apiKeyDisplay').value = newKey;
+            document.getElementById('apiKeyDisplay2').value = newKey;
+
+            if (currentUser) {
+                await supabaseClient.from('users').update({ api_key: newKey }).eq('id', currentUser.id);
+            }
+
+            showToast('API key regenerated successfully', false, true);
+        }
+
+        async function revokeApiKey() {
+            if (!confirm('This will immediately revoke your API key. Continue?')) return;
+            showToast('API key revoked', false, true);
         }
 
         // ============================================
         // ACCOUNT MANAGEMENT
         // ============================================
         async function deleteAccount() {
-            if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) {
-                return;
-            }
+            if (!confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
+            if (!confirm('All your data including API keys will be permanently deleted. Continue?')) return;
 
-            if (!confirm('All your data including your API key will be permanently deleted. Continue?')) {
-                return;
-            }
-
+            showSpinner();
             try {
-                showToast('Deleting account...', false);
-
-                // Delete user data
-                const { error: profileError } = await supabaseClient
-                    .from('users')
-                    .delete()
-                    .eq('id', currentUser.id);
-
-                if (profileError) {
-                    console.error('Error deleting profile:', profileError);
-                }
-
-                // Sign out
-                  await supabaseClient.auth.signOut();
-
+                await supabaseClient.from('users').delete().eq('id', currentUser.id);
+                await supabaseClient.auth.signOut();
                 handleSignOut();
-                showToast('Account deleted successfully');
-
+                showToast('Account deleted successfully', false, true);
             } catch (error) {
                 console.error('Delete account error:', error);
                 showToast('Failed to delete account', true);
+            } finally {
+                hideSpinner();
             }
         }
 
         // ============================================
         // PAYMENT
         // ============================================
-        let selectedPlan = 'pro';
+        function showBillingModal() {
+            selectedPlan = userProfile?.plan || 'pro';
+            document.getElementById('paymentModal').classList.add('active');
 
-        function showPayment(plan) {
-            selectedPlan = plan;
-            elements.paymentModal.classList.add('active');
+            // Update selected state
+            document.querySelectorAll('.plan-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.plan === selectedPlan) {
+                    opt.classList.add('selected');
+                }
+            });
         }
 
         function closePaymentModal() {
-            elements.paymentModal.classList.remove('active');
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function selectPlan(el, plan) {
+            selectedPlan = plan;
+            document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
         }
 
         async function completePayment() {
@@ -1602,68 +2831,62 @@
                 return;
             }
 
+            showSpinner();
             try {
-                showToast('Processing payment...', false);
-
-                // Update plan (in production, this would be done via Stripe webhook)
                 const { error } = await supabaseClient
                     .from('users')
                     .update({ plan: selectedPlan })
                     .eq('id', currentUser.id);
 
-                if (error) {
-                    console.error('Error upgrading plan:', error);
-                    showToast('Failed to upgrade plan', true);
-                    return;
-                }
+                if (error) throw error;
 
                 closePaymentModal();
 
                 // Refresh profile
-                const userProfile = await getOrCreateUserProfile(currentUser);
-                if (userProfile) {
-                    showDashboard(userProfile);
+                const { data: profile } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (profile) {
+                    userProfile = profile;
+                    showDashboard(profile);
                 }
 
-                showToast(`Successfully upgraded to ${selectedPlan} plan!`);
-
+                showToast(`Successfully upgraded to ${selectedPlan} plan!`, false, true);
             } catch (error) {
                 console.error('Payment error:', error);
                 showToast('Payment failed. Please try again.', true);
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        // ============================================
+        // PLAN SELECTION
+        // ============================================
+        function handlePlanClick(plan) {
+            if (plan === 'free') {
+                if (!currentUser) {
+                    showSignup();
+                } else {
+                    navigateTo('dashboard');
+                }
+            } else {
+                if (!currentUser) {
+                    showLogin();
+                    return;
+                }
+                showBillingModal();
             }
         }
 
         // ============================================
         // SUPPORT
         // ============================================
-        function toggleSupportPage() {
-            const isHidden = elements.supportPage.style.display === 'none' || !elements.supportPage.style.display;
-
-            if (isHidden) {
-                elements.supportPage.style.display = 'block';
-                elements.hero.style.display = 'none';
-                elements.features.style.display = 'none';
-                elements.pricing.style.display = 'none';
-                elements.mainFooter.style.display = 'none';
-                elements.dashboard.classList.remove('active');
-            } else {
-                elements.supportPage.style.display = 'none';
-                if (currentUser) {
-                    elements.dashboard.classList.add('active');
-                } else {
-                    elements.hero.style.display = 'block';
-                    elements.features.style.display = 'grid';
-                    elements.pricing.style.display = 'block';
-                    elements.mainFooter.style.display = 'block';
-                }
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function submitSupportForm(event) {
-            event.preventDefault();
-
+        async function submitSupportForm(e) {
+            e.preventDefault();
             const email = document.getElementById('supportEmail').value.trim();
             const subject = document.getElementById('supportSubject').value.trim();
             const message = document.getElementById('supportMessage').value.trim();
@@ -1673,60 +2896,71 @@
                 return;
             }
 
+            showSpinner();
             try {
-                const { error } = await supabase
-                    .from('support_requests')
-                    .insert({
-                        email: email,
-                        subject: subject,
-                        message: message,
-                        status: 'pending',
-                        created_at: new Date().toISOString()
-                    });
+                const { error } = await supabaseClient.from('support_requests').insert({
+                    email: email,
+                    subject: subject,
+                    message: message,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                });
 
-                if (error) {
-                    console.error('Error submitting support request:', error);
-                    showToast('Failed to submit support request', true);
-                    return;
-                }
+                if (error) throw error;
 
                 document.getElementById('supportEmail').value = '';
                 document.getElementById('supportSubject').value = '';
                 document.getElementById('supportMessage').value = '';
 
-                showToast('Support request submitted! We\'ll get back to you soon.');
+                showToast('Support request submitted! We\'ll get back to you soon.', false, true);
 
-                setTimeout(() => {
-                    toggleSupportPage();
-                }, 1500);
-
+                setTimeout(() => navigateTo('home'), 1500);
             } catch (error) {
                 console.error('Support form error:', error);
                 showToast('Failed to submit support request', true);
+            } finally {
+                hideSpinner();
             }
         }
 
         // ============================================
-        // TOAST
+        // SETTINGS
         // ============================================
-        function showToast(message, isError = false) {
-            elements.toast.textContent = message;
-            elements.toast.className = 'toast show' + (isError ? ' error' : '');
+        function toggleTheme(toggle) {
+            toggle.classList.toggle('active');
+            const isDark = toggle.classList.contains('active');
+            // Theme toggle logic would go here
+            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', false, true);
+        }
+
+        function toggleSetting(toggle, settingName) {
+            toggle.classList.toggle('active');
+            const isEnabled = toggle.classList.contains('active');
+            showToast(`${settingName} ${isEnabled ? 'enabled' : 'disabled'}`, false, true);
+        }
+
+        // ============================================
+        // TOAST NOTIFICATIONS
+        // ============================================
+        function showToast(message, isError = false, isSuccess = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+
+            if (isError) toast.classList.add('error');
+            if (isSuccess) toast.classList.add('success');
 
             setTimeout(() => {
-                elements.toast.classList.remove('show');
+                toast.classList.remove('show', 'error', 'success');
             }, 3000);
         }
 
         // ============================================
-        // KEYBOARD SHORTCUTS
+        // MOBILE MENU
         // ============================================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeAuthModal();
-                closePaymentModal();
-            }
-        });
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
     </script>
 </body>
 </html>

@@ -1029,106 +1029,95 @@
             </div>
         </section>
 
-        <!-- Login Modal -->
-        <div id="loginModal" class="modal">
+        <!-- Unified Auth Modal -->
+        <div id="authModal" class="modal">
             <div class="modal-content">
-                <h2>Welcome Back</h2>
-                <p>Sign in to access your API key and dashboard.</p>
+                <h2 id="authTitle">Sign In or Create Account</h2>
+                <p id="authSubtitle">Choose how to get started with OpenShell.</p>
 
+                <!-- Mode Selection Tabs -->
+                <div style="display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px;">
+                    <button 
+                        id="signInTab" 
+                        style="flex: 1; padding: 10px; background: transparent; border: none; color: #7C3AED; font-weight: 600; cursor: pointer; border-bottom: 2px solid #7C3AED; transition: all 0.3s;"
+                        onclick="switchAuthMode('signin')"
+                    >
+                        Sign In
+                    </button>
+                    <button 
+                        id="signUpTab" 
+                        style="flex: 1; padding: 10px; background: transparent; border: none; color: #a0a0a0; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s;"
+                        onclick="switchAuthMode('signup')"
+                    >
+                        Create Account
+                    </button>
+                </div>
+
+                <!-- GitHub Button (same for both) -->
                 <button class="github-btn" onclick="handleGitHubSignIn()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                     </svg>
-                    Sign In with GitHub
+                    <span id="githubBtnText">Sign In with GitHub</span>
                 </button>
 
                 <div style="position: relative; margin: 20px 0;">
                     <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
                     <div style="position: relative; text-align: center; background: #1a1a1a; padding: 0 10px; width: fit-content; margin: 0 auto;">
-                        <span style="color: #a0a0a0; font-size: 13px;">or continue with email</span>
+                        <span style="color: #a0a0a0; font-size: 13px;" id="dividerText">or continue with email</span>
                     </div>
                 </div>
 
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Email address"
-                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
-                />
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Password"
-                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
-                />
-                <button
-                    class="btn btn-primary"
-                    style="width: 100%; margin-bottom: 15px;"
-                    onclick="handleEmailLogin()"
-                >
-                    Sign In with Email
-                </button>
-
-                <div class="form-footer">
-                    <p>
-                        Don't have an account?
-                        <a onclick="switchToSignup()">Sign up</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Signup Modal -->
-        <div id="signupModal" class="modal">
-            <div class="modal-content">
-                <h2>Create Account</h2>
-                <p>Get your free API key and start coding with AI.</p>
-
-                <button class="github-btn" onclick="handleGitHubSignIn()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v 3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    Sign Up with GitHub
-                </button>
-
-                <div style="position: relative; margin: 20px 0;">
-                    <div style="position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(255, 255, 255, 0.1);"></div>
-                    <div style="position: relative; text-align: center; background: #1a1a1a; padding: 0 10px; width: fit-content; margin: 0 auto;">
-                        <span style="color: #a0a0a0; font-size: 13px;">or create with email</span>
-                    </div>
+                <!-- Sign In Fields -->
+                <div id="signInFields">
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Email address"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                    />
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Password"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                    />
+                    <button
+                        class="btn btn-primary"
+                        style="width: 100%; margin-bottom: 15px;"
+                        onclick="handleEmailLogin()"
+                    >
+                        Sign In with Email
+                    </button>
                 </div>
 
-                <input
-                    type="text"
-                    id="signupName"
-                    placeholder="Full name"
-                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
-                />
-                <input
-                    type="email"
-                    id="signupEmail"
-                    placeholder="Email address"
-                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
-                />
-                <input
-                    type="password"
-                    id="signupPassword"
-                    placeholder="Password"
-                    style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
-                />
-                <button
-                    class="btn btn-primary"
-                    style="width: 100%; margin-bottom: 15px;"
-                    onclick="handleEmailSignup()"
-                >
-                    Create Account with Email
-                </button>
-
-                <div class="form-footer">
-                    <p>
-                        Already have an account?
-                        <a onclick="switchToLogin()">Sign in</a>
-                    </p>
+                <!-- Sign Up Fields -->
+                <div id="signUpFields" style="display: none;">
+                    <input
+                        type="text"
+                        id="signupName"
+                        placeholder="Full name"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                    />
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        placeholder="Email address"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                    />
+                    <input
+                        type="password"
+                        id="signupPassword"
+                        placeholder="Password"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: white; font-family: inherit;"
+                    />
+                    <button
+                        class="btn btn-primary"
+                        style="width: 100%; margin-bottom: 15px;"
+                        onclick="handleEmailSignup()"
+                    >
+                        Create Account with Email
+                    </button>
                 </div>
             </div>
         </div>
@@ -1401,23 +1390,67 @@
                 return key;
             }
 
+            // Current auth mode
+            let currentAuthMode = 'signin';
+
             // Show Modal
+            function showAuth(mode = 'signin') {
+                currentAuthMode = mode;
+                switchAuthMode(mode);
+                document.getElementById("authModal").classList.add("active");
+            }
+
             function showLogin() {
-                closeAllModals();
-                document.getElementById("loginModal").classList.add("active");
+                showAuth('signin');
             }
 
             function showSignup() {
-                closeAllModals();
-                document.getElementById("signupModal").classList.add("active");
+                showAuth('signup');
+            }
+
+            // Switch between Sign In and Create Account modes
+            function switchAuthMode(mode) {
+                currentAuthMode = mode;
+                const signInTab = document.getElementById("signInTab");
+                const signUpTab = document.getElementById("signUpTab");
+                const signInFields = document.getElementById("signInFields");
+                const signUpFields = document.getElementById("signUpFields");
+                const authTitle = document.getElementById("authTitle");
+                const authSubtitle = document.getElementById("authSubtitle");
+                const githubBtnText = document.getElementById("githubBtnText");
+                const dividerText = document.getElementById("dividerText");
+
+                if (mode === 'signin') {
+                    signInTab.style.color = '#7C3AED';
+                    signInTab.style.borderBottomColor = '#7C3AED';
+                    signUpTab.style.color = '#a0a0a0';
+                    signUpTab.style.borderBottomColor = 'transparent';
+                    signInFields.style.display = 'block';
+                    signUpFields.style.display = 'none';
+                    authTitle.textContent = 'Welcome Back';
+                    authSubtitle.textContent = 'Sign in to access your API key and dashboard.';
+                    githubBtnText.textContent = 'Sign In with GitHub';
+                    dividerText.textContent = 'or continue with email';
+                } else {
+                    signInTab.style.color = '#a0a0a0';
+                    signInTab.style.borderBottomColor = 'transparent';
+                    signUpTab.style.color = '#7C3AED';
+                    signUpTab.style.borderBottomColor = '#7C3AED';
+                    signInFields.style.display = 'none';
+                    signUpFields.style.display = 'block';
+                    authTitle.textContent = 'Create Account';
+                    authSubtitle.textContent = 'Get your free API key and start coding with AI.';
+                    githubBtnText.textContent = 'Sign Up with GitHub';
+                    dividerText.textContent = 'or create with email';
+                }
             }
 
             function switchToLogin() {
-                showLogin();
+                switchAuthMode('signin');
             }
 
             function switchToSignup() {
-                showSignup();
+                switchAuthMode('signup');
             }
 
             function closeAllModals() {
@@ -1440,6 +1473,7 @@
                 // Redirect to GitHub OAuth
                 const scope = "user:email";
                 const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(githubRedirectUri)}&scope=${scope}`;
+                // Use window.location.href for proper redirect
                 window.location.href = githubAuthUrl;
             }
 
@@ -1604,6 +1638,7 @@
 
                 if (users[email]) {
                     showToast("Email already registered. Please sign in instead.", true);
+                    switchAuthMode('signin');
                     return;
                 }
 
@@ -1649,6 +1684,7 @@
 
                 if (!users[email]) {
                     showToast("Email not found. Please create an account.", true);
+                    switchAuthMode('signup');
                     return;
                 }
 

@@ -1823,42 +1823,21 @@ openshell\website\index.html
     <!-- Support Page -->
     <div id="supportPage" class="support-container page-container">
     <div class="container">
-    <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Back to Home
-    </button>
-    <div class="support-form">
-    <h1 style="margin-bottom: 10px;">Contact Support</h1>
-    <p style="color: var(--text-secondary); margin-bottom: 24px;">Send a message and our team will get back to you as soon as possible.</p>
-
-    <!-- Not logged in state -->
-    <div id="supportLoginPrompt" style="text-align: center; padding: 40px; display: none;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-muted); margin-bottom: 16px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <p style="color: var(--text-secondary); margin-bottom: 20px;">Sign in to access support chat</p>
-        <button class="btn btn-primary" onclick="showLogin()">Sign In to Chat</button>
-    </div>
-
-    <!-- Logged in: embedded chat panel -->
-    <div id="supportChatPanel" style="display: none; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; height: 520px;">
-        <div style="background: var(--primary); padding: 16px 20px; display: flex; align-items: center; gap: 12px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: white;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            <span style="color: white; font-weight: 600; font-size: 15px;">Support Chat</span>
-            <span id="supportChatStatus" style="margin-left: auto; font-size: 12px; color: rgba(255,255,255,0.75);">● Online</span>
-        </div>
-        <div id="supportMessages" style="flex: 1; overflow-y: auto; padding: 20px; background: var(--bg-dark); display: flex; flex-direction: column; gap: 12px; min-height: 0;">
-            <!-- messages injected here -->
-        </div>
-        <div style="padding: 16px; background: var(--bg-card); border-top: 1px solid var(--border); display: flex; gap: 10px;">
-            <input type="text" id="supportChatInput" placeholder="Type your message..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px 15px; color: white; font-family: inherit; font-size: 14px;" onkeypress="if(event.key==='Enter') sendSupportMessage()">
-            <button class="btn btn-primary" onclick="sendSupportMessage()">Send</button>
+        <div style="text-align:center; padding:80px 20px;">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--primary); margin-bottom:20px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <h1 style="margin-bottom:12px;">Need Help?</h1>
+            <p style="color:var(--text-secondary); font-size:16px; max-width:400px; margin:0 auto 30px;">Support is available directly in your dashboard. Sign in to chat with the OpenShell team.</p>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="currentUser ? (navigateTo('dashboard'), setTimeout(()=>switchDashboardSection('supportChat'),100)) : showLogin()">
+                    Open Support Chat
+                </button>
+                <button class="btn btn-secondary" onclick="navigateTo('home')">Back to Home</button>
+            </div>
         </div>
     </div>
-
-    </div>
-    </div>
     </div>
 
-    <!-- Privacy Policy Page -->
+        <!-- Privacy Policy Page -->
     <div id="privacyPage" class="legal-container page-container">
         <div class="container">
             <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
@@ -1973,6 +1952,14 @@ openshell\website\index.html
                 <button class="sidebar-nav-item" data-section="activity" onclick="switchDashboardSection('activity')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     Activity Log
+                </button>
+            </div>
+            <!-- Regular user support — hidden for TheNoSkillDev -->
+            <div class="sidebar-section" id="userSupportSidebarSection">
+                <div class="sidebar-section-title">Help</div>
+                <button class="sidebar-nav-item" data-section="supportChat" onclick="switchDashboardSection('supportChat')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Support Chat
                 </button>
             </div>
             <div class="sidebar-section">
@@ -2285,6 +2272,76 @@ openshell\website\index.html
                         <div id="adminInboxReplyArea" style="padding: 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: var(--bg-card);">
                             <input type="text" id="adminInboxReplyInput" placeholder="Reply to user..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px 15px; color: white; font-family: inherit; font-size: 14px;" onkeypress="if(event.key==='Enter') sendAdminInboxReply()">
                             <button class="btn btn-primary" onclick="sendAdminInboxReply()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── USER SUPPORT CHAT SECTION ─── -->
+            <div id="supportChatSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Support Chat</h1>
+                        <p>Chat directly with the OpenShell support team</p>
+                    </div>
+                </div>
+                <div class="dashboard-card" style="padding:0; overflow:hidden; display:flex; flex-direction:column; height:560px;">
+                    <!-- Chat messages -->
+                    <div id="userSupportMessages" style="flex:1; overflow-y:auto; padding:24px; background:var(--bg-dark); display:flex; flex-direction:column; gap:12px;">
+                        <div id="userSupportEmpty" style="text-align:center; margin-top:60px; color:var(--text-muted); font-size:14px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                            No messages yet — say hello to get started!
+                        </div>
+                    </div>
+                    <!-- Input bar -->
+                    <div style="padding:16px; background:var(--bg-card); border-top:1px solid var(--border); display:flex; gap:10px; align-items:center;">
+                        <input type="text" id="userSupportInput" placeholder="Type your message and press Enter or Send..." style="flex:1; background:var(--bg-input); border:1px solid var(--border); border-radius:8px; padding:12px 16px; color:white; font-family:inherit; font-size:14px; outline:none;" onkeypress="if(event.key==='Enter') sendUserSupportMessage()" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+                        <button class="btn btn-primary" onclick="sendUserSupportMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── ADMIN SUPPORT INBOX SECTION (TheNoSkillDev only) ─── -->
+            <div id="adminInboxSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Support Inbox</h1>
+                        <p>All user conversations — respond, manage, and close tickets</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="loadAdminInboxChats()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        Refresh
+                    </button>
+                </div>
+                <div class="dashboard-card" style="padding:0; overflow:hidden; display:flex; height:580px;">
+                    <!-- Left: conversation list -->
+                    <div style="width:260px; min-width:260px; border-right:1px solid var(--border); display:flex; flex-direction:column;">
+                        <div style="padding:14px 16px; border-bottom:1px solid var(--border); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted);">Conversations</div>
+                        <div id="adminInboxList" style="flex:1; overflow-y:auto; padding:8px; display:flex; flex-direction:column; gap:4px;">
+                            <p style="color:var(--text-muted); font-size:13px; padding:12px; text-align:center;">No conversations yet</p>
+                        </div>
+                    </div>
+                    <!-- Right: active thread -->
+                    <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
+                        <!-- Thread header -->
+                        <div style="padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; background:var(--bg-card);">
+                            <div style="flex:1;">
+                                <div id="adminInboxActiveName" style="font-weight:600; font-size:15px; color:var(--text-muted);">Select a conversation</div>
+                                <div id="adminInboxActiveInfo" style="font-size:12px; color:var(--text-muted); margin-top:2px;"></div>
+                            </div>
+                            <button id="adminDeleteBtn" onclick="deleteAdminTicket()" class="btn btn-danger btn-sm" style="display:none;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                                Delete Ticket
+                            </button>
+                        </div>
+                        <!-- Messages -->
+                        <div id="adminInboxMessages" style="flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:10px; background:var(--bg-dark);">
+                            <p id="adminInboxPlaceholder" style="color:var(--text-muted); text-align:center; margin-top:80px; font-size:14px;">Select a conversation to view messages</p>
+                        </div>
+                        <!-- Reply bar -->
+                        <div style="padding:16px; border-top:1px solid var(--border); display:flex; gap:10px; background:var(--bg-card);">
+                            <input type="text" id="adminInboxReplyInput" placeholder="Select a conversation first..." disabled style="flex:1; background:var(--bg-input); border:1px solid var(--border); border-radius:8px; padding:12px 16px; color:white; font-family:inherit; font-size:14px; outline:none; opacity:0.5;" onkeypress="if(event.key==='Enter') sendAdminInboxReply()" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+                            <button class="btn btn-primary" onclick="sendAdminInboxReply()" id="adminReplyBtn" disabled style="opacity:0.5;">Send</button>
                         </div>
                     </div>
                 </div>
@@ -3029,18 +3086,19 @@ openshell\website\index.html
               await populateUsageHistory(user.id);
               // Setup real-time subscriptions
               setupDashboardSubscriptions(user.id);
-              // Show/hide admin sidebar based on username
+              // Show/hide sections based on who's logged in
               const uname = user.name || '';
+              const isOwner = (uname === 'TheNoSkillDev');
               const adminSidebar = document.getElementById('adminSidebarSection');
-              if (adminSidebar) adminSidebar.style.display = (uname === 'TheNoSkillDev') ? 'block' : 'none';
+              const userSupportSidebar = document.getElementById('userSupportSidebarSection');
+              if (adminSidebar) adminSidebar.style.display = isOwner ? 'block' : 'none';
+              if (userSupportSidebar) userSupportSidebar.style.display = isOwner ? 'none' : 'block';
 
               // Show overview section by default
               switchDashboardSection('overview');
 
-              // If admin, pre-load inbox in background so badge updates
-              if (uname === 'TheNoSkillDev') {
-                setTimeout(() => loadAdminInboxChats(true), 1000);
-              }
+              // If admin, pre-load inbox badge in background
+              if (isOwner) setTimeout(() => loadAdminInboxChats(), 1500);
             }
             // Global subscription references for cleanup
             let activitySubscription = null;
@@ -3262,14 +3320,14 @@ openshell\website\index.html
                 usage: 'Usage Analytics',
                 activity: 'Activity Log',
                 settings: 'Settings',
-                adminInbox: 'Support Inbox'
+                adminInbox: 'Support Inbox',
+                supportChat: 'Support Chat'
             };
             updateTitle(titles[section] || 'Dashboard');
 
-            // Load admin inbox data when switching to it
-            if (section === 'adminInbox') {
-                loadAdminInboxChats();
-            }
+            // Section-specific init
+            if (section === 'adminInbox') loadAdminInboxChats();
+            if (section === 'supportChat') initUserSupportChat();
         }
 
         async function populateActivityList(userId = null) {
@@ -3743,30 +3801,33 @@ openshell\website\index.html
         }
 
         // ============================================
-        // SUPPORT PAGE — Embedded Chat
+        // SUPPORT SYSTEM
         // ============================================
-        function initSupportPage() {
-            const panel = document.getElementById('supportChatPanel');
-            const prompt = document.getElementById('supportLoginPrompt');
-            if (!panel || !prompt) return;
 
-            if (!currentUser) {
-                panel.style.display = 'none';
-                prompt.style.display = 'block';
-                return;
-            }
-            // Logged in — show panel, hide prompt
-            prompt.style.display = 'none';
-            panel.style.display = 'flex';
-            loadSupportMessages();
-            setupSupportSubscription();
-        }
+        // Shared state
+        let supportSubscription = null;
+        let adminInboxActiveUser = null;
+        let adminInboxSub = null;
+        let userIP = 'unknown';
 
-        async function loadSupportMessages() {
-            const container = document.getElementById('supportMessages');
-            if (!container) return;
+        // Fetch user IP silently
+        (async () => {
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                userIP = (await r.json()).ip;
+            } catch { userIP = 'unknown'; }
+        })();
+
+        // ── USER SUPPORT CHAT ──────────────────────────────────
+        async function initUserSupportChat() {
+            const msgs = document.getElementById('userSupportMessages');
+            const empty = document.getElementById('userSupportEmpty');
+            if (!msgs) return;
+            // Clear old content except the empty placeholder
+            Array.from(msgs.children).forEach(c => { if (c.id !== 'userSupportEmpty') c.remove(); });
+            if (empty) empty.style.display = 'block';
+
             const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
-            container.innerHTML = '<p style="color:var(--text-muted);text-align:center;font-size:13px;">Loading...</p>';
             try {
                 const { data, error } = await supabaseClient
                     .from('support_chats')
@@ -3774,39 +3835,59 @@ openshell\website\index.html
                     .eq('username', username)
                     .order('created_at', { ascending: true });
                 if (error) throw error;
-                container.innerHTML = '';
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;font-size:13px;margin-top:40px;">No messages yet. Send one below to get started!</p>';
-                } else {
-                    data.forEach(msg => appendSupportMessage(msg.message, msg.is_admin, new Date(msg.created_at)));
+                if (data && data.length > 0) {
+                    if (empty) empty.style.display = 'none';
+                    data.forEach(m => appendUserMessage(m.message, m.is_admin, new Date(m.created_at), m.id));
                 }
-            } catch(e) {
-                container.innerHTML = '<p style="color:var(--error);text-align:center;font-size:13px;">Failed to load messages</p>';
-            }
+            } catch(e) { console.error('Failed to load support messages:', e); }
+
+            // Real-time subscription
+            if (supportSubscription) { try { supportSubscription.unsubscribe(); } catch{} }
+            supportSubscription = supabaseClient
+                .channel('user_support_' + username)
+                .on('postgres_changes', {
+                    event: 'INSERT', schema: 'public', table: 'support_chats',
+                    filter: 'username=eq.' + username
+                }, payload => {
+                    if (payload.new.is_admin) {
+                        const e2 = document.getElementById('userSupportEmpty');
+                        if (e2) e2.style.display = 'none';
+                        appendUserMessage(payload.new.message, true, new Date(payload.new.created_at), payload.new.id);
+                    }
+                })
+                .subscribe();
         }
 
-        function appendSupportMessage(text, isAdmin, timestamp) {
-            const container = document.getElementById('supportMessages');
+        function appendUserMessage(text, isAdmin, timestamp, id) {
+            const container = document.getElementById('userSupportMessages');
             if (!container) return;
-            const div = document.createElement('div');
-            div.style.cssText = `display:flex; flex-direction:column; max-width:75%; ${isAdmin ? 'align-self:flex-start;' : 'align-self:flex-end;'}`;
-            div.innerHTML = `
-                <div style="padding:10px 14px; border-radius:12px; font-size:14px; word-wrap:break-word; ${isAdmin ? 'background:var(--bg-input); color:var(--text-primary); border-bottom-left-radius:4px;' : 'background:var(--primary); color:white; border-bottom-right-radius:4px;'}">${escapeHtml(text)}</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:3px; ${isAdmin ? 'text-align:left;' : 'text-align:right;'}">${isAdmin ? 'Support · ' : ''}${timestamp.toLocaleTimeString()}</div>
-            `;
-            container.appendChild(div);
+            if (id && document.getElementById('um_' + id)) return; // dedupe
+            const wrap = document.createElement('div');
+            if (id) wrap.id = 'um_' + id;
+            wrap.style.cssText = 'display:flex; flex-direction:column; max-width:72%;' + (isAdmin ? 'align-self:flex-start;' : 'align-self:flex-end;');
+            wrap.innerHTML =
+                '<div style="padding:10px 15px; border-radius:12px; font-size:14px; line-height:1.5; word-wrap:break-word;' +
+                (isAdmin
+                    ? 'background:rgba(255,255,255,0.08); color:var(--text-primary); border-bottom-left-radius:4px;'
+                    : 'background:var(--primary); color:white; border-bottom-right-radius:4px;') +
+                '">' + escapeHtml(text) + '</div>' +
+                '<div style="font-size:11px; color:var(--text-muted); margin-top:4px;' + (isAdmin ? '' : 'text-align:right;') + '">' +
+                (isAdmin ? 'Support · ' : '') + timestamp.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</div>';
+            container.appendChild(wrap);
             container.scrollTop = container.scrollHeight;
         }
 
-        async function sendSupportMessage() {
-            const input = document.getElementById('supportChatInput');
-            if (!input) return;
+        async function sendUserSupportMessage() {
+            const input = document.getElementById('userSupportInput');
+            if (!input || !currentUser) return;
             const message = input.value.trim();
             if (!message) return;
-            if (!currentUser) { showToast('Please sign in first', true); return; }
-            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
             input.value = '';
-            appendSupportMessage(message, false, new Date());
+            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+            const empty = document.getElementById('userSupportEmpty');
+            if (empty) empty.style.display = 'none';
+            // Optimistic render
+            appendUserMessage(message, false, new Date(), null);
             const { error } = await supabaseClient.from('support_chats').insert({
                 user_id: currentUser.id,
                 username: username,
@@ -3816,33 +3897,14 @@ openshell\website\index.html
                 is_read: false,
                 created_at: new Date().toISOString()
             });
-            if (error) { showToast('Failed to send', true); console.error(error); }
+            if (error) { showToast('Failed to send message', true); console.error(error); }
         }
 
-        let supportSubscription = null;
-        function setupSupportSubscription() {
-            if (supportSubscription) supportSubscription.unsubscribe();
-            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
-            supportSubscription = supabaseClient
-                .channel(`support_user_${username}`)
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_chats', filter: `username=eq.${username}` }, (payload) => {
-                    if (payload.new.is_admin) {
-                        appendSupportMessage(payload.new.message, true, new Date(payload.new.created_at));
-                    }
-                })
-                .subscribe();
-        }
-
-        // ============================================
-        // DASHBOARD ADMIN INBOX (replaces modal-based)
-        // ============================================
-        let adminInboxActiveUser = null;
-        let adminInboxSubscription = null;
-
-        async function loadAdminInboxChats(bgOnly = false) {
+        // ── ADMIN INBOX ────────────────────────────────────────
+        async function loadAdminInboxChats() {
             const list = document.getElementById('adminInboxList');
             if (!list) return;
-            if (!bgOnly) list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px;">Loading...</p>';
+            list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:16px;">Loading...</p>';
             try {
                 const { data, error } = await supabaseClient
                     .from('support_chats')
@@ -3850,69 +3912,97 @@ openshell\website\index.html
                     .order('created_at', { ascending: false });
                 if (error) throw error;
 
-                const userMsgs = (data || []).filter(m => !m.is_admin);
-                const uniqueUsers = [...new Map(userMsgs.map(m => [m.username, m])).values()];
-                const hasUnread = uniqueUsers.some(m => (data || []).some(x => x.username === m.username && !x.is_admin && !x.is_read));
+                const all = data || [];
+                // Group by username, get latest message per user
+                const userMap = new Map();
+                all.forEach(m => {
+                    if (!m.is_admin) {
+                        if (!userMap.has(m.username)) userMap.set(m.username, { latest: m, hasUnread: !m.is_read });
+                        else if (!m.is_read) userMap.get(m.username).hasUnread = true;
+                    }
+                });
 
-                // Update badge
+                // Badge update
                 const badge = document.getElementById('adminUnreadBadge');
-                if (badge) badge.style.display = hasUnread ? 'inline' : 'none';
-
-                if (bgOnly) return;
+                const anyUnread = [...userMap.values()].some(v => v.hasUnread);
+                if (badge) badge.style.display = anyUnread ? 'inline' : 'none';
 
                 list.innerHTML = '';
-                if (uniqueUsers.length === 0) {
-                    list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px;">No conversations yet</p>';
+                if (userMap.size === 0) {
+                    list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">No conversations yet</p>';
                     return;
                 }
-                uniqueUsers.forEach(msg => {
-                    const unread = (data || []).some(x => x.username === msg.username && !x.is_admin && !x.is_read);
+
+                userMap.forEach(({ latest, hasUnread }, username) => {
+                    const isActive = adminInboxActiveUser === username;
                     const item = document.createElement('div');
-                    item.style.cssText = `padding:12px; border-radius:8px; cursor:pointer; margin-bottom:6px; border:1px solid ${adminInboxActiveUser === msg.username ? 'var(--primary)' : 'transparent'}; background:${adminInboxActiveUser === msg.username ? 'rgba(124,58,237,0.1)' : 'var(--bg-input)'}; transition:all 0.2s;`;
-                    item.onmouseenter = () => { if(adminInboxActiveUser !== msg.username) item.style.background = 'rgba(255,255,255,0.05)'; };
-                    item.onmouseleave = () => { if(adminInboxActiveUser !== msg.username) item.style.background = 'var(--bg-input)'; };
-                    item.onclick = () => openAdminInboxChat(msg.username);
-                    item.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                            <span style="font-size:14px; font-weight:${unread ? '600' : '400'}; color:var(--text-primary);">${escapeHtml(msg.username)}</span>
-                            ${unread ? '<span style="background:var(--error);color:white;font-size:9px;padding:2px 6px;border-radius:10px;">NEW</span>' : ''}
-                        </div>
-                        <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(msg.message.substring(0, 35))}...</div>
-                    `;
+                    item.id = 'inbox_item_' + username;
+                    item.style.cssText = 'padding:12px 14px; border-radius:8px; cursor:pointer; border:1px solid ' +
+                        (isActive ? 'var(--primary)' : 'transparent') + '; background:' +
+                        (isActive ? 'rgba(124,58,237,0.12)' : 'rgba(255,255,255,0.03)') + '; transition:all 0.15s;';
+                    item.innerHTML =
+                        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">' +
+                        '<span style="font-size:14px; font-weight:' + (hasUnread ? '600' : '400') + '; color:' + (hasUnread ? 'var(--text-primary)' : 'var(--text-secondary)') + ';">' + escapeHtml(username) + '</span>' +
+                        (hasUnread ? '<span style="width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0;"></span>' : '') +
+                        '</div>' +
+                        '<div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' +
+                        escapeHtml(latest.message.substring(0, 40)) + (latest.message.length > 40 ? '…' : '') + '</div>';
+                    item.addEventListener('click', () => openAdminThread(username));
+                    item.addEventListener('mouseenter', () => { if (!isActive) item.style.background = 'rgba(255,255,255,0.06)'; });
+                    item.addEventListener('mouseleave', () => { if (!isActive) item.style.background = 'rgba(255,255,255,0.03)'; });
                     list.appendChild(item);
                 });
 
-                // Setup real-time for inbox
-                if (!adminInboxSubscription) {
-                    adminInboxSubscription = supabaseClient
-                        .channel('admin_inbox_all')
-                        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_chats' }, () => {
-                            loadAdminInboxChats(false);
-                            if (adminInboxActiveUser) openAdminInboxMessages(adminInboxActiveUser, true);
+                // Setup real-time once
+                if (!adminInboxSub) {
+                    adminInboxSub = supabaseClient
+                        .channel('admin_inbox_rt')
+                        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_chats' }, payload => {
+                            loadAdminInboxChats();
+                            if (adminInboxActiveUser && payload.new.username === adminInboxActiveUser) {
+                                appendAdminMessage(payload.new.message, payload.new.is_admin, new Date(payload.new.created_at), payload.new.id);
+                            }
                         })
                         .subscribe();
                 }
             } catch(e) {
-                console.error('Admin inbox load error:', e);
-                if (!bgOnly) list.innerHTML = '<p style="color:var(--error);font-size:13px;padding:12px;">Failed to load</p>';
+                console.error('Admin inbox error:', e);
+                list.innerHTML = '<p style="color:var(--error);font-size:13px;text-align:center;padding:16px;">Failed to load</p>';
             }
         }
 
-        async function openAdminInboxChat(username) {
+        async function openAdminThread(username) {
             adminInboxActiveUser = username;
-            document.getElementById('adminInboxActiveName').textContent = username;
-            document.getElementById('adminInboxActiveName').style.color = 'var(--text-primary)';
-            document.getElementById('adminInboxReplyInput').placeholder = `Reply to ${username}...`;
-            await openAdminInboxMessages(username, false);
-            // Mark as read
-            await supabaseClient.from('support_chats').update({ is_read: true }).eq('username', username).eq('is_admin', false);
-            loadAdminInboxChats(false); // refresh list to clear badge
-        }
 
-        async function openAdminInboxMessages(username, appendOnly = false) {
-            const container = document.getElementById('adminInboxMessages');
-            if (!container) return;
-            if (!appendOnly) container.innerHTML = '';
+            // Update UI state
+            const nameEl = document.getElementById('adminInboxActiveName');
+            const infoEl = document.getElementById('adminInboxActiveInfo');
+            const deleteBtn = document.getElementById('adminDeleteBtn');
+            const replyInput = document.getElementById('adminInboxReplyInput');
+            const replyBtn = document.getElementById('adminReplyBtn');
+            const msgsEl = document.getElementById('adminInboxMessages');
+            const placeholder = document.getElementById('adminInboxPlaceholder');
+
+            if (nameEl) { nameEl.textContent = username; nameEl.style.color = 'var(--text-primary)'; }
+            if (infoEl) infoEl.textContent = 'Viewing conversation thread';
+            if (deleteBtn) deleteBtn.style.display = 'inline-flex';
+            if (replyInput) { replyInput.disabled = false; replyInput.style.opacity = '1'; replyInput.placeholder = 'Reply to ' + username + '...'; }
+            if (replyBtn) { replyBtn.disabled = false; replyBtn.style.opacity = '1'; }
+            if (placeholder) placeholder.style.display = 'none';
+            if (msgsEl) {
+                // Remove old messages but keep placeholder
+                Array.from(msgsEl.children).forEach(c => { if (c.id !== 'adminInboxPlaceholder') c.remove(); });
+            }
+
+            // Highlight active item
+            document.querySelectorAll('[id^="inbox_item_"]').forEach(el => {
+                el.style.background = 'rgba(255,255,255,0.03)';
+                el.style.borderColor = 'transparent';
+            });
+            const activeItem = document.getElementById('inbox_item_' + username);
+            if (activeItem) { activeItem.style.background = 'rgba(124,58,237,0.12)'; activeItem.style.borderColor = 'var(--primary)'; }
+
+            // Load messages
             try {
                 const { data, error } = await supabaseClient
                     .from('support_chats')
@@ -3920,24 +4010,35 @@ openshell\website\index.html
                     .eq('username', username)
                     .order('created_at', { ascending: true });
                 if (error) throw error;
-                if (!appendOnly) container.innerHTML = '';
-                (data || []).forEach(msg => {
-                    // Avoid duplicates when called repeatedly
-                    const msgId = 'msg_' + msg.id;
-                    if (document.getElementById(msgId)) return;
-                    const div = document.createElement('div');
-                    div.id = msgId;
-                    div.style.cssText = `display:flex; flex-direction:column; max-width:75%; ${msg.is_admin ? 'align-self:flex-end;' : 'align-self:flex-start;'}`;
-                    div.innerHTML = `
-                        <div style="padding:10px 14px; border-radius:12px; font-size:14px; ${msg.is_admin ? 'background:var(--primary); color:white; border-bottom-right-radius:4px;' : 'background:var(--bg-input); color:var(--text-primary); border-bottom-left-radius:4px;'}">${escapeHtml(msg.message)}</div>
-                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px; ${msg.is_admin ? 'text-align:right;' : 'text-align:left;'}">${msg.is_admin ? 'You · ' : username + ' · '}${new Date(msg.created_at).toLocaleTimeString()}</div>
-                    `;
-                    container.appendChild(div);
-                });
-                container.scrollTop = container.scrollHeight;
-            } catch(e) {
-                console.error('Error loading admin chat messages:', e);
-            }
+                (data || []).forEach(m => appendAdminMessage(m.message, m.is_admin, new Date(m.created_at), m.id));
+            } catch(e) { console.error('Thread load error:', e); }
+
+            // Mark as read
+            await supabaseClient.from('support_chats').update({ is_read: true }).eq('username', username).eq('is_admin', false);
+            loadAdminInboxChats();
+
+            // Focus reply
+            if (replyInput) setTimeout(() => replyInput.focus(), 100);
+        }
+
+        function appendAdminMessage(text, isAdmin, timestamp, id) {
+            const container = document.getElementById('adminInboxMessages');
+            if (!container) return;
+            if (id && document.getElementById('am_' + id)) return; // dedupe
+            const wrap = document.createElement('div');
+            if (id) wrap.id = 'am_' + id;
+            wrap.style.cssText = 'display:flex; flex-direction:column; max-width:72%;' + (isAdmin ? 'align-self:flex-end;' : 'align-self:flex-start;');
+            wrap.innerHTML =
+                '<div style="padding:10px 15px; border-radius:12px; font-size:14px; line-height:1.5; word-wrap:break-word;' +
+                (isAdmin
+                    ? 'background:var(--primary); color:white; border-bottom-right-radius:4px;'
+                    : 'background:rgba(255,255,255,0.08); color:var(--text-primary); border-bottom-left-radius:4px;') +
+                '">' + escapeHtml(text) + '</div>' +
+                '<div style="font-size:11px; color:var(--text-muted); margin-top:4px;' + (isAdmin ? 'text-align:right;' : '') + '">' +
+                (isAdmin ? 'You · ' : (adminInboxActiveUser || 'User') + ' · ') +
+                timestamp.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</div>';
+            container.appendChild(wrap);
+            container.scrollTop = container.scrollHeight;
         }
 
         async function sendAdminInboxReply() {
@@ -3946,7 +4047,9 @@ openshell\website\index.html
             const message = input.value.trim();
             if (!message) return;
             input.value = '';
-            await supabaseClient.from('support_chats').insert({
+            // Optimistic render
+            appendAdminMessage(message, true, new Date(), null);
+            const { error } = await supabaseClient.from('support_chats').insert({
                 user_id: null,
                 username: adminInboxActiveUser,
                 ip_address: userIP,
@@ -3955,259 +4058,54 @@ openshell\website\index.html
                 is_read: false,
                 created_at: new Date().toISOString()
             });
-            openAdminInboxMessages(adminInboxActiveUser, true);
+            if (error) { showToast('Failed to send reply', true); console.error(error); }
         }
 
-        // compat shim — old modal functions now no-op
+        async function deleteAdminTicket() {
+            if (!adminInboxActiveUser) return;
+            if (!confirm('Delete all messages in this ticket from ' + adminInboxActiveUser + '? This cannot be undone.')) return;
+            const { error } = await supabaseClient
+                .from('support_chats')
+                .delete()
+                .eq('username', adminInboxActiveUser);
+            if (error) { showToast('Failed to delete ticket', true); console.error(error); return; }
+            // Reset UI
+            adminInboxActiveUser = null;
+            const nameEl = document.getElementById('adminInboxActiveName');
+            const infoEl = document.getElementById('adminInboxActiveInfo');
+            const deleteBtn = document.getElementById('adminDeleteBtn');
+            const replyInput = document.getElementById('adminInboxReplyInput');
+            const replyBtn = document.getElementById('adminReplyBtn');
+            const msgsEl = document.getElementById('adminInboxMessages');
+            const placeholder = document.getElementById('adminInboxPlaceholder');
+            if (nameEl) { nameEl.textContent = 'Select a conversation'; nameEl.style.color = 'var(--text-muted)'; }
+            if (infoEl) infoEl.textContent = '';
+            if (deleteBtn) deleteBtn.style.display = 'none';
+            if (replyInput) { replyInput.disabled = true; replyInput.style.opacity = '0.5'; replyInput.placeholder = 'Select a conversation first...'; }
+            if (replyBtn) { replyBtn.disabled = true; replyBtn.style.opacity = '0.5'; }
+            if (msgsEl) Array.from(msgsEl.children).forEach(c => { if (c.id !== 'adminInboxPlaceholder') c.remove(); });
+            if (placeholder) placeholder.style.display = 'block';
+            showToast('Ticket deleted', false, true);
+            loadAdminInboxChats();
+        }
+
+        // Legacy shims to avoid any broken references
+        function toggleChat() { navigateTo('support'); }
         function openAdminInbox() { switchDashboardSection('adminInbox'); }
         async function showAdminInterface() { switchDashboardSection('adminInbox'); }
         function closeAdminModal() {}
         function loadAdminChats() { loadAdminInboxChats(); }
-
-        // ============================================
-        // LEGACY toggleChat — kept as no-op safety shim
-        // ============================================
-        function toggleChat() {
-          // Chat is now on the Support page — redirect there
-          if (!currentUser) { showToast('Please sign in to access support', true); setTimeout(() => showLogin(), 100); return; }
-          navigateTo('support');
-        }
-
-        function closeChat() {
-        document.getElementById('chatWindow').classList.add('hidden');
-        }
-
-        async function loadChatMessages() {
-        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
-        // Auto-route owner directly to admin inbox
-        if (currentUserName === 'TheNoSkillDev') {
-            document.getElementById('chatWindow').classList.add('hidden');
-            showAdminInterface();
-            return;
-        }
-        const messagesContainer = document.getElementById('chatMessages');
-        messagesContainer.innerHTML = '';
-        const { data, error } = await supabaseClient
-        .from('support_chats')
-        .select('*')
-        .eq('username', currentUserName)
-        .order('created_at', { ascending: true });
-        if (error) {
-        console.error('Error loading chat:', error);
-        return;
-        }
-        if (!data || data.length === 0) {
-        messagesContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Welcome to OpenShell support! How can we help you today?</p>';
-        } else {
-        data.forEach(msg => {
-        appendMessage(msg.message, msg.is_admin, new Date(msg.created_at));
-        });
-        }
-        setupChatSubscription();
-        }
-
-        function appendMessage(text, isAdmin, timestamp) {
-        const messagesContainer = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `chat-message ${isAdmin ? 'chat-message-admin' : 'chat-message-user'}`;
-        messageDiv.innerHTML = `
-        <div class="chat-message-content">${escapeHtml(text)}</div>
-        <div class="chat-message-time">${timestamp.toLocaleTimeString()}</div>
-        `;
-        messagesContainer.appendChild(messageDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+        function initSupportPage() {}
+        function sendSupportMessage() {}
+        function closeChat() {}
 
         function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        async function sendChatMessage() {
-        const input = document.getElementById('chatMessageInput');
-        const message = input.value.trim();
-        if (!message) return;
-        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
-        if (currentUserName === 'TheNoSkillDev') {
-        showToast('Please use the admin inbox', true);
-        return;
-        }
-        input.value = '';
-        const userId = currentUser?.id || null;
-        const { error } = await supabaseClient.from('support_chats').insert({
-        user_id: userId,
-        username: currentUserName,
-        ip_address: userIP,
-        message: message,
-        is_admin: false,
-        is_read: false,
-        created_at: new Date().toISOString()
-        });
-        if (error) {
-        console.error('Error sending message:', error);
-        showToast('Failed to send message', true);
-        }
-        }
-
-        function setupChatSubscription() {
-        if (chatSubscription) {
-        chatSubscription.unsubscribe();
-        }
-        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
-        chatSubscription = supabaseClient
-        .channel(`support_chat_${currentUserName}`)
-        .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'support_chats',
-        filter: `username=eq.${currentUserName}`
-        }, (payload) => {
-        if (payload.new.is_admin) {
-        appendMessage(payload.new.message, true, new Date(payload.new.created_at));
-        }
-        })
-        .subscribe();
-        }
-
-        function openAdminInbox() {
-        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || '';
-        if (currentUserName !== 'TheNoSkillDev') {
-            showToast('Access denied: admin only', true);
-            return;
-        }
-        showAdminInterface();
-        }
-
-        function closeAdminPasswordModal() {
-        // No-op: password modal removed, kept for compatibility
-        }
-
-        function verifyAdminPassword() {
-        // No-op: password modal removed, kept for compatibility
-        }
-
-        async function showAdminInterface() {
-        document.getElementById('adminModal').classList.add('active');
-        loadAdminChats();
-        setupAdminSubscription();
-        }
-
-        function closeAdminModal() {
-        document.getElementById('adminModal').classList.remove('active');
-        if (adminChatSubscription) {
-        adminChatSubscription.unsubscribe();
-        adminChatSubscription = null;
-        }
-        }
-
-        async function loadAdminChats() {
-        const { data, error } = await supabaseClient
-        .from('support_chats')
-        .select('*')
-        .order('created_at', { ascending: false });
-        if (error) {
-        console.error('Error loading admin chats:', error);
-        return;
-        }
-        const chatList = document.getElementById('adminChatList');
-        chatList.innerHTML = '';
-        const userMessages = data.filter(msg => !msg.is_admin);
-        const uniqueUsers = [...new Map(userMessages.map(msg => [msg.username, msg])).values()];
-        uniqueUsers.forEach(msg => {
-        const hasUnread = data.some(m => m.username === msg.username && m.is_admin === false && m.is_read === false);
-        const chatItem = document.createElement('div');
-        chatItem.className = 'admin-chat-item';
-        chatItem.onclick = () => openAdminChat(msg.username);
-        chatItem.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-weight: ${hasUnread ? '600' : '400'};">${escapeHtml(msg.username)}</span>
-        ${hasUnread ? '<span style="background: var(--primary); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">NEW</span>' : ''}
-        </div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${escapeHtml(msg.message.substring(0, 30))}...</div>
-        `;
-        chatList.appendChild(chatItem);
-        });
-        }
-
-        function openAdminChat(username) {
-        currentAdminChatUser = username;
-        document.getElementById('adminChatUser').textContent = username;
-        loadAdminChatMessages(username);
-        }
-
-        async function loadAdminChatMessages(username) {
-        const chatView = document.getElementById('adminChatView');
-        chatView.innerHTML = '';
-        const { data, error } = await supabaseClient
-        .from('support_chats')
-        .select('*')
-        .eq('username', username)
-        .order('created_at', { ascending: true });
-        if (error) {
-        console.error('Error loading chat messages:', error);
-        return;
-        }
-        data.forEach(msg => {
-        appendAdminMessage(msg.message, msg.is_admin, new Date(msg.created_at));
-        });
-        chatView.scrollTop = chatView.scrollHeight;
-        await supabaseClient
-        .from('support_chats')
-        .update({ is_read: true })
-        .eq('username', username)
-        .eq('is_admin', false);
-        loadAdminChats();
-        }
-
-        function appendAdminMessage(text, isAdmin, timestamp) {
-        const chatView = document.getElementById('adminChatView');
-        const messageDiv = document.createElement('div');
-        messageDiv.style.cssText = `max-width: 80%; padding: 10px 15px; border-radius: 12px; font-size: 14px; ${isAdmin ? 'background: var(--primary); color: white; align-self: flex-end;' : 'background: var(--bg-input); color: var(--text-primary); align-self: flex-start;'}`;
-        messageDiv.innerHTML = `
-        <div>${escapeHtml(text)}</div>
-        <div style="font-size: 11px; opacity: 0.7; margin-top: 5px; text-align: right;">${timestamp.toLocaleTimeString()}</div>
-        `;
-        chatView.appendChild(messageDiv);
-        chatView.scrollTop = chatView.scrollHeight;
-        }
-
-        async function sendAdminMessage() {
-        const input = document.getElementById('adminChatInput');
-        const message = input.value.trim();
-        if (!message || !currentAdminChatUser) return;
-        input.value = '';
-        await supabaseClient.from('support_chats').insert({
-        user_id: null,
-        username: currentAdminChatUser,
-        ip_address: userIP,
-        message: message,
-        is_admin: true,
-        is_read: false,
-        created_at: new Date().toISOString()
-        });
-        loadAdminChatMessages(currentAdminChatUser);
-        }
-
-        function setupAdminSubscription() {
-        if (adminChatSubscription) {
-        adminChatSubscription.unsubscribe();
-        }
-        adminChatSubscription = supabaseClient
-        .channel('admin_support_chats')
-        .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'support_chats'
-        }, (payload) => {
-        loadAdminChats();
-        if (currentAdminChatUser === payload.new.username) {
-        loadAdminChatMessages(currentAdminChatUser);
-        }
-        })
-        .subscribe();
-        }
-    </script>
+</script>
 
     <!-- Support Chat Widget -->
     <div id="chatWidget" class="chat-widget" style="display: none !important; pointer-events: none;">

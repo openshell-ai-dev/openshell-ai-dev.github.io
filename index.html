@@ -2363,28 +2363,44 @@ openshell\website\index.html
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
-          // Initialize Discord visibility
-          const socialLinksColumn = document.getElementById('socialLinksColumn');
-          if (socialLinksColumn) {
-            socialLinksColumn.style.display = SITE_SETTINGS.discordEnabled ? 'block' : 'none';
-          }
+        	// Initialize Discord visibility
+        	const socialLinksColumn = document.getElementById('socialLinksColumn');
+        	if (socialLinksColumn) {
+        		socialLinksColumn.style.display = SITE_SETTINGS.discordEnabled ? 'block' : 'none';
+        	}
 
-          // Initialize settings
-          initializeSettings();
+        	// Initialize settings
+        	initializeSettings();
 
-          // Show loader
-          showSiteLoader();
+        	// Show loader
+        	showSiteLoader();
 
-          // Setup event listeners
-          setupEventListeners();
+        	// Setup event listeners
+        	setupEventListeners();
 
-          try {
-            // Handle OAuth callback first before checking session
-            const hasOAuthCallback = window.location.hash.includes('access_token') ||
-              window.location.hash.includes('provider_token') ||
-              window.location.hash.includes('expires_at');
+        	// ALWAYS hide loader after 3 seconds, no matter what
+        	setTimeout(() => {
+        		hideSiteLoader();
+        		// Show home content after loader hides
+        		setTimeout(() => {
+        			if (!currentUser && (currentPage === 'home' || window.location.hash === '')) {
+        				navigateTo('home');
+        				setTimeout(() => {
+        					document.querySelectorAll('.page-container').forEach(el => {
+        						el.classList.add('visible');
+        					});
+        				}, 100);
+        			}
+        		}, 100);
+        	}, 3000);
 
-            if (hasOAuthCallback) {
+        	try {
+        		// Handle OAuth callback first before checking session
+        		const hasOAuthCallback = window.location.hash.includes('access_token') ||
+        			window.location.hash.includes('provider_token') ||
+        			window.location.hash.includes('expires_at');
+
+        		if (hasOAuthCallback) {
               // Wait for supabase to process the auth callback
               let attempts = 0;
               const checkAuthInterval = setInterval(async () => {
@@ -2436,23 +2452,7 @@ openshell\website\index.html
             console.error('Initialization error:', error);
           }
 
-          // Always hide loader after duration, even if there was an error
-          setTimeout(() => {
-            hideSiteLoader();
-            // Small delay after loader hides, then show home content if not on a specific page
-            setTimeout(() => {
-              if (!currentUser && (currentPage === 'home' || window.location.hash === '')) {
-                navigateTo('home');
-                // Add visible class for fade-in animation
-                setTimeout(() => {
-                  document.querySelectorAll('.page-container').forEach(el => {
-                    el.classList.add('visible');
-                  });
-                }, 100);
-              }
-            }, 100);
-          }, SITE_SETTINGS.loaderDuration);
-        });
+          });
 
         // ============================================
         // SITE LOADER

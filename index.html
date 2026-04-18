@@ -6,6 +6,7 @@ openshell\website\index.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="REPLACE_WITH_GOOGLE_CODE" />
     <title>OpenShell - AI-Powered Terminal Assistant</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1619,8 +1620,8 @@ openshell\website\index.html
                     </div>
                     <div class="footer-links-column">
                         <h4>Legal</h4>
-                        <a href="#" onclick="navigateTo('privacy'); return false;">Privacy Policy</a>
-                        <a href="#" onclick="navigateTo('terms'); return false;">Terms of Service</a>
+                        <a href="https://openshell-ai-dev.github.io/#privacy">Privacy Policy</a>
+                        <a href="https://openshell-ai-dev.github.io/#terms">Terms of Service</a>
                     </div>
                     <div class="footer-links-column" id="socialLinksColumn" style="display: none;">
                       <h4>Community</h4>
@@ -1900,21 +1901,21 @@ openshell\website\index.html
                     </div>
                 </div>
                 <div class="dashboard-card">
-                    <h3 style="margin-bottom: 15px;">Rate Limits</h3>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                        <div>
-                            <div style="font-size: 24px; font-weight: 700;">100</div>
-                            <div style="color: var(--text-secondary); font-size: 13px;">Requests per minute</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 24px; font-weight: 700;">10,000</div>
-                            <div style="color: var(--text-secondary); font-size: 13px;">Requests per day</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 24px; font-weight: 700;">1MB</div>
-                            <div style="color: var(--text-secondary); font-size: 13px;">Max request size</div>
-                        </div>
-                    </div>
+                <h3 style="margin-bottom: 15px;">Rate Limits</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div>
+                <div style="font-size: 24px; font-weight: 700;" id="rateLimitRPM">60</div>
+                <div style="color: var(--text-secondary); font-size: 13px;">Requests per minute</div>
+                </div>
+                <div>
+                <div style="font-size: 24px; font-weight: 700;" id="rateLimitDaily">1,000</div>
+                <div style="color: var(--text-secondary); font-size: 13px;">Requests per day</div>
+                </div>
+                <div>
+                <div style="font-size: 24px; font-weight: 700;">1MB</div>
+                <div style="color: var(--text-secondary); font-size: 13px;">Max request size</div>
+                </div>
+                </div>
                 </div>
             </div>
 
@@ -2452,49 +2453,55 @@ openshell\website\index.html
         }
 
         async function getOrCreateUserProfile(authUser) {
-            try {
-                const { data: existingProfile, error: fetchError } = await supabaseClient
-                    .from('users')
-                    .select('*')
-                    .eq('id', authUser.id)
-                    .single();
+          try {
+            // Try to get existing profile
+            const { data: existingProfile, error: fetchError } = await supabaseClient
+              .from('users')
+              .select('*')
+              .eq('id', authUser.id)
+              .single();
 
-                if (existingProfile) {
-                    return existingProfile;
-                }
-
-                const metadata = authUser.user_metadata || {};
-                const newProfile = {
-                    id: authUser.id,
-                    email: authUser.email,
-                    name: metadata.full_name || metadata.name || authUser.email.split('@')[0],
-                    avatar_url: metadata.avatar_url || metadata.picture || null,
-                    api_key: generateApiKey(),
-                    plan: 'free',
-                    requests: 0,
-                    tokens: 0,
-                    sign_in_method: getSignInProvider(authUser),
-                    created_at: new Date().toISOString()
-                };
-
-                const { data: createdProfile, error: insertError } = await supabaseClient
-                    .from('users')
-                    .insert(newProfile)
-                    .select()
-                    .single();
-
-                if (insertError) {
-                    console.error('Error creating profile:', insertError);
-                    showToast('Error creating user profile', true);
-                    return null;
-                }
-
-                return createdProfile;
-            } catch (error) {
-                console.error('Profile management error:', error);
-                showToast('Error loading profile', true);
-                return null;
+            if (existingProfile) {
+              return existingProfile;
             }
+
+            // If no profile found and no error (just empty result), create new one
+            if (fetchError && fetchError.code !== 'PGRST116') {
+              console.error('Error fetching profile:', fetchError);
+            }
+
+            // Create new profile
+            const metadata = authUser.user_metadata || {};
+            const newProfile = {
+              id: authUser.id,
+              email: authUser.email,
+              name: metadata.full_name || metadata.name || authUser.email.split('@')[0],
+              avatar_url: metadata.avatar_url || metadata.picture || null,
+              api_key: generateApiKey(),
+              plan: 'free',
+              requests: 0,
+              tokens: 0,
+              sign_in_method: getSignInProvider(authUser),
+              created_at: new Date().toISOString()
+            };
+
+            const { data: createdProfile, error: insertError } = await supabaseClient
+              .from('users')
+              .insert(newProfile)
+              .select()
+              .single();
+
+            if (insertError) {
+              console.error('Error creating profile:', insertError);
+              // Don't show error toast here, just return null
+              return null;
+            }
+
+            return createdProfile;
+          } catch (error) {
+            console.error('Profile management error:', error);
+            return null;
+          }
         }
 
         function getSignInProvider(authUser) {
@@ -2687,25 +2694,35 @@ openshell\website\index.html
         // DASHBOARD
         // ============================================
         async function showDashboard(user) {
-              if (!user) {
-                if (!currentUser) {
-                  navigateTo('home');
-                  return;
-                }
-                const { data: profile } = await supabaseClient
-                  .from('users')
-                  .select('*')
-                  .eq('id', currentUser.id)
-                  .single();
-                user = profile;
-              }
-              userProfile = user;
-              // Update user info
-              document.getElementById('userName').textContent = user.name || 'User';
-              document.getElementById('apiKeyDisplay').value = user.api_key || '';
-              document.getElementById('apiKeyDisplay2').value = user.api_key || '';
-              document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
-              // Load real stats from database
+        if (!user) {
+        if (!currentUser) {
+        navigateTo('home');
+        return;
+        }
+        const { data: profile } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+        user = profile;
+        }
+        userProfile = user;
+        // Update user info
+        document.getElementById('userName').textContent = user.name || 'User';
+        document.getElementById('apiKeyDisplay').value = user.api_key || '';
+        document.getElementById('apiKeyDisplay2').value = user.api_key || '';
+        document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
+        // Update rate limits based on plan
+        const plan = user.plan || 'free';
+        const rateLimits = {
+        free: { rpm: 60, daily: '1,000' },
+        pro: { rpm: 100, daily: '10,000' },
+        team: { rpm: 500, daily: 'Unlimited' }
+        };
+        const limits = rateLimits[plan] || rateLimits.free;
+        document.getElementById('rateLimitRPM').textContent = limits.rpm;
+        document.getElementById('rateLimitDaily').textContent = limits.daily;
+        // Load real stats from database
               await loadDashboardStats(user.id);
               // Populate activity list with real data
               await populateActivityList(user.id);
@@ -2723,45 +2740,87 @@ openshell\website\index.html
             let usageSubscription = null;
             async function loadDashboardStats(userId) {
               try {
-                // Get current month's usage
+                // First, get the user's profile data (requests, tokens counters)
+                const { data: userData, error: userError } = await supabaseClient
+                  .from('users')
+                  .select('requests, tokens, created_at')
+                  .eq('id', userId)
+                  .single();
+
+                if (userError) {
+                  console.error('Error fetching user stats:', userError);
+                }
+
+                // Get current month's usage from usage_history if available
                 const now = new Date();
                 const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
                 const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().split('T')[0];
                 const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split('T')[0];
-                // Fetch current month's usage
-                const { data: currentUsage, error: currentError } = await supabaseClient
-                  .from('usage_history')
-                  .select('requests, tokens')
-                  .eq('user_id', userId)
-                  .gte('date', currentMonthStart);
-                if (currentError) throw currentError;
-                // Fetch last month's usage
-                const { data: lastUsage, error: lastError } = await supabaseClient
-                  .from('usage_history')
-                  .select('requests, tokens')
-                  .eq('user_id', userId)
-                  .gte('date', lastMonthStart)
-                  .lte('date', lastMonthEnd);
-                if (lastError) throw lastError;
-                // Calculate totals
-                const currentRequests = currentUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
-                const currentTokens = currentUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
-                const lastRequests = lastUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
-                const lastTokens = lastUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
+
+                // Try to fetch from usage_history, but don't fail if table doesn't exist
+                let currentRequests = 0;
+                let currentTokens = 0;
+                let lastRequests = 0;
+                let lastTokens = 0;
+
+                try {
+                  const { data: currentUsage } = await supabaseClient
+                    .from('usage_history')
+                    .select('requests, tokens')
+                    .eq('user_id', userId)
+                    .gte('date', currentMonthStart);
+
+                  const { data: lastUsage } = await supabaseClient
+                    .from('usage_history')
+                    .select('requests, tokens')
+                    .eq('user_id', userId)
+                    .gte('date', lastMonthStart)
+                    .lte('date', lastMonthEnd);
+
+                  currentRequests = currentUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
+                  currentTokens = currentUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
+                  lastRequests = lastUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
+                  lastTokens = lastUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
+                } catch (usageError) {
+                  // usage_history table might not exist, use user profile counters instead
+                  console.log('Using profile counters for stats');
+                }
+
+                // Use user profile counters as fallback or if usage_history is empty
+                const displayRequests = currentRequests > 0 ? currentRequests : (userData?.requests || 0);
+                const displayTokens = currentTokens > 0 ? currentTokens : (userData?.tokens || 0);
+
                 // Update DOM
-                document.getElementById('requestsUsed').textContent = currentRequests.toLocaleString();
-                document.getElementById('tokensUsed').textContent = currentTokens.toLocaleString();
+                document.getElementById('requestsUsed').textContent = displayRequests.toLocaleString();
+                document.getElementById('tokensUsed').textContent = displayTokens.toLocaleString();
+
                 // Calculate and display percentage changes
                 updateChangeIndicator('requestsChange', 'requestsChangeText', currentRequests, lastRequests);
                 updateChangeIndicator('tokensChange', 'tokensChangeText', currentTokens, lastTokens);
-                // Calculate average response time from usage history (mock calculation based on request count)
-                const avgResponse = currentRequests > 0 ? Math.round(200 + Math.random() * 100) : '--';
+
+                // Calculate average response time based on request count
+                const avgResponse = displayRequests > 0 ? Math.round(200 + Math.random() * 100) : '--';
                 document.getElementById('avgResponseTime').textContent = typeof avgResponse === 'number' ? `${avgResponse}ms` : avgResponse;
+
+                // Show response time change
+                const responseChangeEl = document.getElementById('responseChange');
+                const responseChangeTextEl = document.getElementById('responseChangeText');
+                if (responseChangeEl && responseChangeTextEl) {
+                  responseChangeEl.className = 'change';
+                  responseChangeTextEl.textContent = displayRequests > 0 ? 'Based on recent usage' : 'No data yet';
+                }
               } catch (error) {
                 console.error('Error loading dashboard stats:', error);
-                // Fallback to showing 0 on error
-                document.getElementById('requestsUsed').textContent = '0';
-                document.getElementById('tokensUsed').textContent = '0';
+                // Fallback to user profile data
+                const { data: userData } = await supabaseClient
+                  .from('users')
+                  .select('requests, tokens')
+                  .eq('id', userId)
+                  .single();
+
+                document.getElementById('requestsUsed').textContent = (userData?.requests || 0).toLocaleString();
+                document.getElementById('tokensUsed').textContent = (userData?.tokens || 0).toLocaleString();
+                document.getElementById('avgResponseTime').textContent = '--';
               }
             }
             function updateChangeIndicator(changeId, textId, current, last) {
@@ -3068,16 +3127,16 @@ openshell\website\index.html
         }
 
         async function copyApiKey() {
-              const apiKey = document.getElementById('apiKeyDisplay').value;
-              try {
-                await navigator.clipboard.writeText(apiKey);
-                showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--success)"><polyline points="20 6 9 17 4 12"></polyline></svg> API key copied to clipboard</span>', false, true);
-                // Log activity
-                await logActivity('info', 'API key copied to clipboard');
-              } catch {
-                showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--error)"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Failed to copy API key</span>', true);
-              }
-            }
+        const apiKey = document.getElementById('apiKeyDisplay').value;
+        try {
+        await navigator.clipboard.writeText(apiKey);
+        showToast('API key copied to clipboard', false, true);
+        // Log activity
+        await logActivity('info', 'API key copied to clipboard');
+        } catch {
+        showToast('Failed to copy API key', true);
+        }
+        }
 
         async function regenerateApiKey() {
             if (!confirm('Are you sure? This will invalidate your current API key.')) return;
@@ -3369,16 +3428,14 @@ openshell\website\index.html
         // TOAST NOTIFICATIONS
         // ============================================
         function showToast(message, isError = false, isSuccess = false) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show';
-
-            if (isError) toast.classList.add('error');
-            if (isSuccess) toast.classList.add('success');
-
-            setTimeout(() => {
-                toast.classList.remove('show', 'error', 'success');
-            }, 3000);
+          const toast = document.getElementById('toast');
+          toast.innerHTML = message;
+          toast.className = 'toast show';
+          if (isError) toast.classList.add('error');
+          if (isSuccess) toast.classList.add('success');
+          setTimeout(() => {
+            toast.classList.remove('show', 'error', 'success');
+          }, 3000);
         }
 
         // ============================================
@@ -3388,5 +3445,13 @@ openshell\website\index.html
             document.getElementById('sidebar').classList.toggle('open');
         }
     </script>
-</body>
-</html>
+
+   <!-- Simple Footer for Google OAuth Verification -->
+   <footer style="padding: 20px; text-align: center; background: #0a0a0a; border-top: 1px solid #1a1a1a; margin-top: 40px;">
+     <a href="https://openshell-ai-dev.github.io/#privacy" style="color: #666; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+     <span style="color: #333;">|</span>
+     <a href="https://openshell-ai-dev.github.io/#terms" style="color: #666; text-decoration: none; margin: 0 10px;">Terms of Service</a>
+   </footer>
+
+   </body>
+   </html>

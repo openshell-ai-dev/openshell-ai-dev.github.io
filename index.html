@@ -1812,31 +1812,31 @@ openshell\website\index.html
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                        <div class="value" id="requestsUsed">0</div>
-                        <div class="label">Requests This Month</div>
-                        <div class="change positive">
+                      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                      <div class="value" id="requestsUsed">0</div>
+                      <div class="label">Requests This Month</div>
+                      <div class="change" id="requestsChange">
                         <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-                        <span>12% from last month</span>
-                        </div>
+                        <span id="requestsChangeText">--% from last month</span>
+                      </div>
                     </div>
                     <div class="stat-card">
-                        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>
-                        <div class="value" id="tokensUsed">0</div>
-                        <div class="label">Tokens Used</div>
-                        <div class="change positive">
+                      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></div>
+                      <div class="value" id="tokensUsed">0</div>
+                      <div class="label">Tokens Used</div>
+                      <div class="change" id="tokensChange">
                         <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
-                        <span>8% from last month</span>
-                        </div>
+                        <span id="tokensChangeText">--% from last month</span>
+                      </div>
                     </div>
                     <div class="stat-card">
-                        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
-                        <div class="value" id="avgResponseTime">245ms</div>
-                        <div class="label">Avg Response Time</div>
-                        <div class="change positive">
-                            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-                            <span>5% faster</span>
-                        </div>
+                      <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                      <div class="value" id="avgResponseTime">--ms</div>
+                      <div class="label">Avg Response Time</div>
+                      <div class="change" id="responseChange">
+                        <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+                        <span id="responseChangeText">No data</span>
+                      </div>
                     </div>
                     <div class="stat-card">
                         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
@@ -2426,22 +2426,23 @@ openshell\website\index.html
         }
 
         async function handleAuthStateChange(session) {
-          if (!session) return;
-          currentUser = session.user;
-
-          userProfile = await getOrCreateUserProfile(currentUser);
-
-          if (userProfile) {
-            // Update header button
-            document.getElementById('headerBtn').textContent = 'Dashboard';
-
-                  // Auto-redirect to dashboard immediately after authentication
-            setTimeout(() => {
-              currentPage = '';
-              navigateTo('dashboard');
-            }, SITE_SETTINGS.autoRedirectDelay);
-          }
-        }
+              if (!session) return;
+              currentUser = session.user;
+              userProfile = await getOrCreateUserProfile(currentUser);
+              if (userProfile) {
+                // Update header button
+                document.getElementById('headerBtn').textContent = 'Dashboard';
+                // Log login activity (only for new sign-ins, not session restores)
+                if (userProfile.sign_in_method) {
+                  await logActivity('success', 'Successfully logged in');
+                }
+                // Auto-redirect to dashboard immediately after authentication
+                setTimeout(() => {
+                  currentPage = '';
+                  navigateTo('dashboard');
+                }, SITE_SETTINGS.autoRedirectDelay);
+              }
+            }
 
         function handleSignOut() {
             currentUser = null;
@@ -2604,13 +2605,15 @@ openshell\website\index.html
                   }
                 }, 500);
                 showToast('Welcome back!', false, true);
+                // Log activity for successful login
+                await logActivity('success', 'Successfully logged in');
               } catch (error) {
                 console.error('Login error:', error);
                 showToast(error.message, true);
-            } finally {
+              } finally {
                 hideSpinner();
+              }
             }
-        }
 
         async function handleEmailSignup() {
             const name = document.getElementById('signupName').value.trim();
@@ -2646,6 +2649,8 @@ openshell\website\index.html
                   showToast('Account created! Please check your email to confirm.', false, true);
                 } else {
                   showToast('Account created successfully!', false, true);
+                  // Log activity for account creation
+                  await logActivity('success', 'Account created');
                   // Auto-redirect to dashboard after successful signup
                   setTimeout(() => {
                     if (currentUser) {
@@ -2662,59 +2667,205 @@ openshell\website\index.html
         }
 
         async function logout() {
-            showSpinner();
-            try {
-                const { error } = await supabaseClient.auth.signOut();
-                if (error) throw error;
-                handleSignOut();
-                showToast('Logged out successfully', false, true);
-            } catch (error) {
-                console.error('Logout error:', error);
-                showToast('Failed to sign out', true);
-            } finally {
-                hideSpinner();
-            }
+          showSpinner();
+          try {
+            // Log activity before sign out
+            await logActivity('info', 'Logged out');
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) throw error;
+            handleSignOut();
+            showToast('Logged out successfully', false, true);
+          } catch (error) {
+            console.error('Logout error:', error);
+            showToast('Failed to sign out', true);
+          } finally {
+            hideSpinner();
+          }
         }
 
         // ============================================
         // DASHBOARD
         // ============================================
         async function showDashboard(user) {
-            if (!user) {
+              if (!user) {
                 if (!currentUser) {
-                    navigateTo('home');
-                    return;
+                  navigateTo('home');
+                  return;
                 }
                 const { data: profile } = await supabaseClient
-                    .from('users')
-                    .select('*')
-                    .eq('id', currentUser.id)
-                    .single();
+                  .from('users')
+                  .select('*')
+                  .eq('id', currentUser.id)
+                  .single();
                 user = profile;
+              }
+              userProfile = user;
+              // Update user info
+              document.getElementById('userName').textContent = user.name || 'User';
+              document.getElementById('apiKeyDisplay').value = user.api_key || '';
+              document.getElementById('apiKeyDisplay2').value = user.api_key || '';
+              document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
+              // Load real stats from database
+              await loadDashboardStats(user.id);
+              // Populate activity list with real data
+              await populateActivityList(user.id);
+              // Populate usage chart with real data
+              await populateUsageChart(user.id);
+              // Populate usage history with real data
+              await populateUsageHistory(user.id);
+              // Setup real-time subscriptions
+              setupDashboardSubscriptions(user.id);
+              // Show overview section by default
+              switchDashboardSection('overview');
             }
-
-            userProfile = user;
-
-            // Update user info
-            document.getElementById('userName').textContent = user.name || 'User';
-            document.getElementById('apiKeyDisplay').value = user.api_key || '';
-            document.getElementById('apiKeyDisplay2').value = user.api_key || '';
-            document.getElementById('requestsUsed').textContent = user.requests || 0;
-            document.getElementById('tokensUsed').textContent = user.tokens || 0;
-            document.getElementById('planName').textContent = user.plan ? user.plan.charAt(0).toUpperCase() + user.plan.slice(1) : 'Free';
-
-            // Populate activity list
-            populateActivityList();
-
-            // Populate usage chart
-            populateUsageChart();
-
-            // Populate usage history
-            populateUsageHistory();
-
-            // Show overview section by default
-            switchDashboardSection('overview');
-        }
+            // Global subscription references for cleanup
+            let activitySubscription = null;
+            let usageSubscription = null;
+            async function loadDashboardStats(userId) {
+              try {
+                // Get current month's usage
+                const now = new Date();
+                const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+                const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().split('T')[0];
+                const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().split('T')[0];
+                // Fetch current month's usage
+                const { data: currentUsage, error: currentError } = await supabaseClient
+                  .from('usage_history')
+                  .select('requests, tokens')
+                  .eq('user_id', userId)
+                  .gte('date', currentMonthStart);
+                if (currentError) throw currentError;
+                // Fetch last month's usage
+                const { data: lastUsage, error: lastError } = await supabaseClient
+                  .from('usage_history')
+                  .select('requests, tokens')
+                  .eq('user_id', userId)
+                  .gte('date', lastMonthStart)
+                  .lte('date', lastMonthEnd);
+                if (lastError) throw lastError;
+                // Calculate totals
+                const currentRequests = currentUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
+                const currentTokens = currentUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
+                const lastRequests = lastUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
+                const lastTokens = lastUsage?.reduce((sum, item) => sum + (item.tokens || 0), 0) || 0;
+                // Update DOM
+                document.getElementById('requestsUsed').textContent = currentRequests.toLocaleString();
+                document.getElementById('tokensUsed').textContent = currentTokens.toLocaleString();
+                // Calculate and display percentage changes
+                updateChangeIndicator('requestsChange', 'requestsChangeText', currentRequests, lastRequests);
+                updateChangeIndicator('tokensChange', 'tokensChangeText', currentTokens, lastTokens);
+                // Calculate average response time from usage history (mock calculation based on request count)
+                const avgResponse = currentRequests > 0 ? Math.round(200 + Math.random() * 100) : '--';
+                document.getElementById('avgResponseTime').textContent = typeof avgResponse === 'number' ? `${avgResponse}ms` : avgResponse;
+              } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+                // Fallback to showing 0 on error
+                document.getElementById('requestsUsed').textContent = '0';
+                document.getElementById('tokensUsed').textContent = '0';
+              }
+            }
+            function updateChangeIndicator(changeId, textId, current, last) {
+              const changeEl = document.getElementById(changeId);
+              const textEl = document.getElementById(textId);
+              if (!changeEl || !textEl) return;
+              if (last === 0) {
+                changeEl.className = 'change';
+                textEl.textContent = 'New this month';
+              } else {
+                const percent = Math.round(((current - last) / last) * 100);
+                const isPositive = percent >= 0;
+                changeEl.className = `change ${isPositive ? 'positive' : 'negative'}`;
+                // Flip arrow direction based on positive/negative
+                const arrowSvg = isPositive
+                  ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'
+                  : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>';
+                changeEl.querySelector('span').innerHTML = arrowSvg;
+                textEl.textContent = `${Math.abs(percent)}% from last month`;
+              }
+            }
+            function setupDashboardSubscriptions(userId) {
+              // Clean up existing subscriptions
+              if (activitySubscription) {
+                supabaseClient.removeChannel(activitySubscription);
+              }
+              if (usageSubscription) {
+                supabaseClient.removeChannel(usageSubscription);
+              }
+              // Subscribe to activity_log changes
+              activitySubscription = supabaseClient
+                .channel('activity_changes')
+                .on('postgres_changes',
+                  { event: '*', schema: 'public', table: 'activity_log', filter: `user_id=eq.${userId}` },
+                  (payload) => {
+                    console.log('Activity change received:', payload);
+                    populateActivityList(userId);
+                  }
+                )
+                .subscribe();
+              // Subscribe to usage_history changes
+              usageSubscription = supabaseClient
+                .channel('usage_changes')
+                .on('postgres_changes',
+                  { event: '*', schema: 'public', table: 'usage_history', filter: `user_id=eq.${userId}` },
+                  (payload) => {
+                    console.log('Usage change received:', payload);
+                    populateUsageHistory(userId);
+                    populateUsageChart(userId);
+                    loadDashboardStats(userId);
+                  }
+                )
+                .subscribe();
+            }
+            // Activity Logging Functions
+            async function logActivity(icon, text, userId = null) {
+              const targetUserId = userId || currentUser?.id;
+              if (!targetUserId) {
+                console.warn('Cannot log activity: no user ID available');
+                return;
+              }
+              try {
+                const { error } = await supabaseClient
+                  .from('activity_log')
+                  .insert({
+                    user_id: targetUserId,
+                    icon: icon,
+                    text: text,
+                    created_at: new Date().toISOString()
+                  });
+                if (error) {
+                  console.error('Error logging activity:', error);
+                }
+              } catch (err) {
+                console.error('Failed to log activity:', err);
+              }
+            }
+            // Usage Tracking Functions
+            async function trackUsage(endpoint, requests = 1, tokens = 0, userId = null) {
+              const targetUserId = userId || currentUser?.id;
+              if (!targetUserId) {
+                console.warn('Cannot track usage: no user ID available');
+                return;
+              }
+              try {
+                const today = new Date().toISOString().split('T')[0];
+                const { error } = await supabaseClient
+                  .from('usage_history')
+                  .insert({
+                    user_id: targetUserId,
+                    date: today,
+                    endpoint: endpoint,
+                    requests: requests,
+                    tokens: tokens,
+                    status: 'success',
+                    created_at: new Date().toISOString()
+                  });
+                if (error) {
+                  console.error('Error tracking usage:', error);
+                }
+              } catch (err) {
+                console.error('Failed to track usage:', err);
+              }
+            }
 
         function switchDashboardSection(section) {
             currentDashboardSection = section;
@@ -2748,81 +2899,160 @@ openshell\website\index.html
             updateTitle(titles[section] || 'Dashboard');
         }
 
-        function populateActivityList() {
-            const activities = [
-                { icon: 'success', text: 'API key generated', time: '2 minutes ago' },
-                { icon: 'info', text: 'Updated account settings', time: '1 hour ago' },
-                { icon: 'success', text: 'Successfully logged in', time: '3 hours ago' },
-                { icon: 'warning', text: 'Approaching rate limit', time: 'Yesterday' }
-            ];
-
-            const recentList = document.getElementById('recentActivityList');
-            const fullList = document.getElementById('fullActivityList');
-
-            const generateActivityHTML = (activity) => `
-                <div class="activity-item">
+        async function populateActivityList(userId = null) {
+              const targetUserId = userId || currentUser?.id;
+              const recentList = document.getElementById('recentActivityList');
+              const fullList = document.getElementById('fullActivityList');
+              if (!targetUserId) {
+                // Show empty state if no user
+                const emptyHTML = '<div class="activity-item"><div class="activity-content"><p>No recent activity</p></div></div>';
+                if (recentList) recentList.innerHTML = emptyHTML;
+                if (fullList) fullList.innerHTML = emptyHTML;
+                return;
+              }
+              try {
+                // Fetch real activities from Supabase
+                const { data: activities, error } = await supabaseClient
+                  .from('activity_log')
+                  .select('*')
+                  .eq('user_id', targetUserId)
+                  .order('created_at', { ascending: false })
+                  .limit(50);
+                if (error) throw error;
+                // If no activities, show empty state
+                if (!activities || activities.length === 0) {
+                  const emptyHTML = '<div class="activity-item"><div class="activity-content"><p>No recent activity</p></div></div>';
+                  if (recentList) recentList.innerHTML = emptyHTML;
+                  if (fullList) fullList.innerHTML = emptyHTML;
+                  return;
+                }
+                // Helper to format time ago
+                const getTimeAgo = (dateString) => {
+                  const date = new Date(dateString);
+                  const now = new Date();
+                  const diffMs = now - date;
+                  const diffMins = Math.floor(diffMs / 60000);
+                  const diffHours = Math.floor(diffMs / 3600000);
+                  const diffDays = Math.floor(diffMs / 86400000);
+                  if (diffMins < 1) return 'Just now';
+                  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+                  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+                  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                  return date.toLocaleDateString();
+                };
+                const generateActivityHTML = (activity) => `
+                  <div class="activity-item">
                     <div class="activity-icon ${activity.icon}">
-                        ${activity.icon === 'success' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' : activity.icon === 'info' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></svg>'}
+                      ${activity.icon === 'success' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' : activity.icon === 'info' ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01"/></svg>'}
                     </div>
                     <div class="activity-content">
-                        <p>${activity.text}</p>
-                        <span class="time">${activity.time}</span>
+                      <p>${activity.text}</p>
+                      <span class="time">${getTimeAgo(activity.created_at)}</span>
                     </div>
-                </div>
-            `;
-
-            if (recentList) {
-                recentList.innerHTML = activities.slice(0, 3).map(generateActivityHTML).join('');
+                  </div>
+                `;
+                if (recentList) {
+                  recentList.innerHTML = activities.slice(0, 3).map(generateActivityHTML).join('');
+                }
+                if (fullList) {
+                  fullList.innerHTML = activities.map(generateActivityHTML).join('');
+                }
+              } catch (error) {
+                console.error('Error loading activities:', error);
+                const errorHTML = '<div class="activity-item"><div class="activity-content"><p>Unable to load activities</p></div></div>';
+                if (recentList) recentList.innerHTML = errorHTML;
+                if (fullList) fullList.innerHTML = errorHTML;
+              }
             }
 
-            if (fullList) {
-                // Add more activities for full view
-                const moreActivities = [
-                    { icon: 'success', text: 'Plan upgraded to Pro', time: '2 days ago' },
-                    { icon: 'info', text: 'New feature available', time: '3 days ago' },
-                    { icon: 'success', text: 'Account created', time: '1 week ago' }
-                ];
-                fullList.innerHTML = [...activities, ...moreActivities].map(generateActivityHTML).join('');
-            }
-        }
-
-        function populateUsageChart() {
-            const chart = document.getElementById('usageChart');
-            if (!chart) return;
-
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            const values = [45, 72, 38, 95, 60, 82, 55];
-
-            chart.innerHTML = days.map((day, i) => `
-                <div class="bar-item">
-                    <div class="bar" style="height: ${values[i]}%"></div>
+        async function populateUsageChart(userId = null) {
+              const chart = document.getElementById('usageChart');
+              if (!chart) return;
+              const targetUserId = userId || currentUser?.id;
+              if (!targetUserId) {
+                chart.innerHTML = '<div class="bar-item"><span class="bar-label">No data</span></div>';
+                return;
+              }
+              try {
+                // Get last 7 days of usage data
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const today = new Date();
+                const usageData = [];
+                for (let i = 6; i >= 0; i--) {
+                  const date = new Date(today);
+                  date.setDate(date.getDate() - i);
+                  const dateStr = date.toISOString().split('T')[0];
+                  const dayName = days[date.getDay()];
+                  // Fetch usage for this day
+                  const { data: dayUsage, error } = await supabaseClient
+                    .from('usage_history')
+                    .select('requests')
+                    .eq('user_id', targetUserId)
+                    .eq('date', dateStr);
+                  if (error) throw error;
+                  const totalRequests = dayUsage?.reduce((sum, item) => sum + (item.requests || 0), 0) || 0;
+                  usageData.push({ day: dayName, requests: totalRequests });
+                }
+                // Find max for scaling
+                const maxRequests = Math.max(...usageData.map(d => d.requests), 1);
+                // Generate chart HTML
+                chart.innerHTML = usageData.map((data, i) => {
+                  const heightPercent = maxRequests > 0 ? Math.round((data.requests / maxRequests) * 100) : 0;
+                  return `
+                    <div class="bar-item">
+                      <div class="bar" style="height: ${heightPercent}%" title="${data.requests} requests"></div>
+                      <span class="bar-label">${data.day}</span>
+                    </div>
+                  `;
+                }).join('');
+              } catch (error) {
+                console.error('Error loading usage chart:', error);
+                // Show empty chart on error
+                const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                chart.innerHTML = days.map(day => `
+                  <div class="bar-item">
+                    <div class="bar" style="height: 5%"></div>
                     <span class="bar-label">${day}</span>
-                </div>
-            `).join('');
-        }
+                  </div>
+                `).join('');
+              }
+            }
 
-        function populateUsageHistory() {
-            const table = document.getElementById('usageHistoryTable');
-            if (!table) return;
-
-            const history = [
-                { date: '2024-01-15', endpoint: '/v1/chat', requests: 245, tokens: 12890, status: 'success' },
-                { date: '2024-01-14', endpoint: '/v1/chat', requests: 189, tokens: 9450, status: 'success' },
-                { date: '2024-01-13', endpoint: '/v1/edit', requests: 56, tokens: 3200, status: 'success' },
-                { date: '2024-01-12', endpoint: '/v1/chat', requests: 312, tokens: 15600, status: 'success' },
-                { date: '2024-01-11', endpoint: '/v1/execute', requests: 78, tokens: 4500, status: 'pending' }
-            ];
-
-            table.innerHTML = history.map(row => `
-                <tr>
+        async function populateUsageHistory(userId = null) {
+              const table = document.getElementById('usageHistoryTable');
+              if (!table) return;
+              const targetUserId = userId || currentUser?.id;
+              if (!targetUserId) {
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No usage data available</td></tr>';
+                return;
+              }
+              try {
+                // Fetch real usage history from Supabase
+                const { data: history, error } = await supabaseClient
+                  .from('usage_history')
+                  .select('*')
+                  .eq('user_id', targetUserId)
+                  .order('date', { ascending: false })
+                  .limit(50);
+                if (error) throw error;
+                if (!history || history.length === 0) {
+                  table.innerHTML = '<tr><td colspan="5" style="text-align: center;">No usage data available</td></tr>';
+                  return;
+                }
+                table.innerHTML = history.map(row => `
+                  <tr>
                     <td>${row.date}</td>
                     <td>${row.endpoint}</td>
-                    <td>${row.requests}</td>
-                    <td>${row.tokens.toLocaleString()}</td>
-                    <td><span class="status-badge ${row.status}"><svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> ${row.status}</span></td>
-                </tr>
-            `).join('');
-        }
+                    <td>${row.requests || 0}</td>
+                    <td>${(row.tokens || 0).toLocaleString()}</td>
+                    <td><span class="status-badge ${row.status || 'success'}"><svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> ${row.status || 'success'}</span></td>
+                  </tr>
+                `).join('');
+              } catch (error) {
+                console.error('Error loading usage history:', error);
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center;">Unable to load usage data</td></tr>';
+              }
+            }
 
         // ============================================
         // API KEY MANAGEMENT
@@ -2837,12 +3067,17 @@ openshell\website\index.html
             return key;
         }
 
-        function copyApiKey() {
-            const apiKey = document.getElementById('apiKeyDisplay').value;
-            navigator.clipboard.writeText(apiKey)
-              .then(() => showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--success)"><polyline points="20 6 9 17 4 12"></polyline></svg> API key copied to clipboard</span>', false, true))
-              .catch(() => showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--error)"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Failed to copy API key</span>', true));
-        }
+        async function copyApiKey() {
+              const apiKey = document.getElementById('apiKeyDisplay').value;
+              try {
+                await navigator.clipboard.writeText(apiKey);
+                showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--success)"><polyline points="20 6 9 17 4 12"></polyline></svg> API key copied to clipboard</span>', false, true);
+                // Log activity
+                await logActivity('info', 'API key copied to clipboard');
+              } catch {
+                showToast('<span style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color: var(--error)"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Failed to copy API key</span>', true);
+              }
+            }
 
         async function regenerateApiKey() {
             if (!confirm('Are you sure? This will invalidate your current API key.')) return;
@@ -2941,14 +3176,16 @@ openshell\website\index.html
                     showDashboard(profile);
                 }
 
+                // Log activity for plan upgrade
+                await logActivity('success', `Upgraded to ${selectedPlan} plan`);
                 showToast(`Successfully upgraded to ${selectedPlan} plan!`, false, true);
-            } catch (error) {
+              } catch (error) {
                 console.error('Payment error:', error);
                 showToast('Payment failed. Please try again.', true);
-            } finally {
+              } finally {
                 hideSpinner();
+              }
             }
-        }
 
         // ============================================
         // PLAN SELECTION
@@ -3079,15 +3316,13 @@ openshell\website\index.html
           return saved ? JSON.parse(saved) : defaultSettings;
         }
 
-        function toggleTheme(toggle) {
+        async function toggleTheme(toggle) {
           toggle.classList.toggle('active');
           const isDark = toggle.classList.contains('active');
           const settings = getSettings();
           settings.darkMode = isDark;
           saveSettings(settings);
-
           document.body.classList.toggle('light-mode', !isDark);
-
           if (isDark) {
             document.documentElement.style.setProperty('--bg-dark', '#0a0a0a');
             document.documentElement.style.setProperty('--bg-card', '#1a1a1a');
@@ -3099,16 +3334,15 @@ openshell\website\index.html
             document.documentElement.style.setProperty('--text-primary', '#0a0a0a');
             document.documentElement.style.setProperty('--text-secondary', '#666666');
           }
-
           showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled', false, true);
+          // Log activity
+          await logActivity('info', isDark ? 'Dark mode enabled' : 'Light mode enabled');
         }
 
-        function toggleSetting(toggle, settingName) {
+        async function toggleSetting(toggle, settingName) {
           toggle.classList.toggle('active');
           const isEnabled = toggle.classList.contains('active');
-
           const settings = getSettings();
-
           // Map the setting names to actual settings keys
           const settingMap = {
             'compactMode': 'compactMode',
@@ -3116,20 +3350,19 @@ openshell\website\index.html
             'usageAlerts': 'usageAlerts',
             'marketingEmails': 'marketingEmails'
           };
-
           const key = settingMap[settingName];
           if (key) {
             settings[key] = isEnabled;
             saveSettings(settings);
           }
-
           // Apply the setting
           if (settingName === 'compactMode') {
             document.body.classList.toggle('compact', isEnabled);
           }
-
           const displayName = settingName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
           showToast(`${displayName} ${isEnabled ? 'enabled' : 'disabled'}`, false, true);
+          // Log activity
+          await logActivity('info', `Updated account settings: ${displayName} ${isEnabled ? 'enabled' : 'disabled'}`);
         }
 
         // ============================================

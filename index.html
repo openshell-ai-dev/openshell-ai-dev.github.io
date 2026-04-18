@@ -1464,10 +1464,187 @@ openshell\website\index.html
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.3);
         }
-    </style>
-</head>
+
+        /* Support Chat Widget */
+        .chat-widget {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 9999;
+        }
+
+        .chat-toggle {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: var(--primary);
+          color: white;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+          transition: var(--transition);
+        }
+
+        .chat-toggle:hover {
+          transform: scale(1.1);
+          background: var(--primary-hover);
+        }
+
+        .chat-window {
+          position: absolute;
+          bottom: 70px;
+          right: 0;
+          width: 350px;
+          height: 450px;
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+          overflow: hidden;
+          transition: var(--transition);
+        }
+
+        .chat-header {
+          background: var(--primary);
+          color: white;
+          padding: 15px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .chat-header-actions {
+          display: flex;
+          gap: 10px;
+        }
+
+        .chat-body {
+          flex: 1;
+          overflow-y: auto;
+          padding: 15px;
+          background: var(--bg-dark);
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-input {
+          display: flex;
+          gap: 10px;
+          padding: 15px;
+          background: var(--bg-card);
+          border-top: 1px solid var(--border);
+        }
+
+        .chat-input input {
+          flex: 1;
+          background: var(--bg-input);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 10px 15px;
+          color: white;
+          font-size: 14px;
+        }
+
+        .chat-input input:focus {
+          outline: none;
+          border-color: var(--primary);
+        }
+
+        .chat-input button {
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          padding: 10px 20px;
+          cursor: pointer;
+          font-weight: 600;
+        }
+
+        .chat-input button:hover {
+          background: var(--primary-hover);
+        }
+
+        /* Chat Messages */
+        .chat-message {
+          margin-bottom: 15px;
+          max-width: 80%;
+        }
+
+        .chat-message-user {
+          align-self: flex-end;
+        }
+
+        .chat-message-admin {
+          align-self: flex-start;
+        }
+
+        .chat-message-content {
+          padding: 10px 15px;
+          border-radius: 12px;
+          font-size: 14px;
+          word-wrap: break-word;
+        }
+
+        .chat-message-user .chat-message-content {
+          background: var(--primary);
+          color: white;
+          border-bottom-right-radius: 4px;
+        }
+
+        .chat-message-admin .chat-message-content {
+          background: var(--bg-input);
+          color: var(--text-primary);
+          border-bottom-left-radius: 4px;
+        }
+
+        .chat-message-time {
+          font-size: 11px;
+          color: var(--text-muted);
+          margin-top: 4px;
+        }
+
+        .chat-typing {
+          font-size: 12px;
+          color: var(--text-muted);
+          font-style: italic;
+          padding: 10px;
+        }
+
+        /* Admin Chat List */
+        .admin-chat-item {
+          padding: 12px;
+          background: var(--bg-input);
+          border-radius: 8px;
+          margin-bottom: 8px;
+          cursor: pointer;
+          transition: var(--transition);
+          border: 1px solid transparent;
+        }
+
+        .admin-chat-item:hover {
+          background: rgba(124, 58, 237, 0.1);
+          border-color: var(--primary);
+        }
+
+        /* Additional utility */
+        .chat-message {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-message-user {
+          margin-left: auto;
+        }
+
+        </style>
+        </head>
 <body>
     <!-- Site Loader -->
     <div id="siteLoader" class="site-loader">
@@ -1555,53 +1732,61 @@ openshell\website\index.html
 
         <!-- Pricing Section -->
         <section id="pricing" class="container pricing page-container">
-            <h2>Simple, Transparent Pricing</h2>
-            <p>Choose the plan that fits your needs.</p>
-            <p style="color: var(--primary); margin-top: 10px; font-weight: 500">All plans include your API key and full access to documentation</p>
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <h3>Free</h3>
-                    <div class="price">$0<span>/month</span></div>
-                    <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Forever free, no credit card</p>
-                    <ul>
-                        <li>25 requests per month</li>
-                        <li>Basic model access only</li>
-                        <li>7-day history</li>
-                        <li>Single API key</li>
-                    </ul>
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('free')">Get Started Free</button>
-                </div>
-                <div class="pricing-card popular">
-                    <h3>Pro</h3>
-                    <div class="price">$4.99<span>/month</span></div>
-                    <p style="color: var(--primary); margin: 15px 0 20px; font-size: 13px;">Recommended - Best value</p>
-                    <ul>
-                        <li>Unlimited requests</li>
-                        <li>All model provider access</li>
-                        <li>Priority support</li>
-                        <li>Unlimited history</li>
-                        <li>Custom system prompts</li>
-                        <li>Advanced analytics</li>
-                        <li>Early access to new features</li>
-                    </ul>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('pro')">Upgrade to Pro</button>
-                </div>
-                <div class="pricing-card">
-                    <h3>Team</h3>
-                    <div class="price">$9.99<span>/month</span></div>
-                    <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Perfect for teams and organizations</p>
-                    <ul>
-                        <li>Everything in Pro</li>
-                        <li>Up to 10 team members</li>
-                        <li>Shared API keys & rotation</li>
-                        <li>Admin dashboard</li>
-                        <li>Custom integrations</li>
-                        <li>Dedicated support channel</li>
-                        <li>Usage reports & billing</li>
-                    </ul>
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('team')">Get Team Plan</button>
-                </div>
-            </div>
+        <h2>Simple, Transparent Pricing</h2>
+        <p>Choose the plan that fits your needs.</p>
+        <p style="color: var(--primary); margin-top: 10px; font-weight: 500">All plans include your API key and full access to documentation</p>
+        <div class="pricing-cards">
+        <div class="pricing-card">
+        <h3>Free</h3>
+        <div class="price">$0<span>/month</span></div>
+        <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Forever free, no credit card</p>
+        <ul>
+        <li>50 requests per day</li>
+        <li>25 RPM rate limit</li>
+        <li>All model providers included</li>
+        <li>16-hour cooldown after limit reached</li>
+        <li>7-day history</li>
+        <li>Single API key</li>
+        </ul>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('free')">Get Started Free</button>
+        </div>
+        <div class="pricing-card popular">
+        <h3>Pro</h3>
+        <div class="price">$9.99<span>/month</span></div>
+        <p style="color: var(--primary); margin: 15px 0 20px; font-size: 13px;">Recommended - Best value</p>
+        <ul>
+        <li>125 requests per day</li>
+        <li>62.5 RPM rate limit</li>
+        <li>All model providers included</li>
+        <li>8-hour cooldown after limit reached</li>
+        <li>Priority support</li>
+        <li>Unlimited history</li>
+        <li>Custom system prompts</li>
+        <li>Advanced analytics</li>
+        <li>Early access to new features</li>
+        </ul>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('pro')">Upgrade to Pro</button>
+        </div>
+        <div class="pricing-card">
+        <h3>Team</h3>
+        <div class="price">$19.99<span>/month</span></div>
+        <p style="color: var(--text-secondary); margin: 15px 0 20px; font-size: 13px;">Perfect for teams and organizations</p>
+        <ul>
+        <li>Unlimited requests</li>
+        <li>No RPM limits</li>
+        <li>All model providers included</li>
+        <li>No cooldown periods</li>
+        <li>Everything in Pro</li>
+        <li>Up to 10 team members</li>
+        <li>Shared API keys & rotation</li>
+        <li>Admin dashboard</li>
+        <li>Custom integrations</li>
+        <li>Dedicated support channel</li>
+        <li>Usage reports & billing</li>
+        </ul>
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="handlePlanClick('team')">Get Team Plan</button>
+        </div>
+        </div>
         </section>
 
         <!-- Footer -->
@@ -1637,30 +1822,24 @@ openshell\website\index.html
 
     <!-- Support Page -->
     <div id="supportPage" class="support-container page-container">
-        <div class="container">
-            <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Home
-            </button>
-            <div class="support-form">
-                <h1 style="margin-bottom: 10px;">Contact Support</h1>
-                <p style="color: var(--text-secondary); margin-bottom: 30px;">Having trouble? Fill out the form below and we'll get back to you as soon as possible.</p>
-                <form id="supportForm">
-                    <div class="form-group">
-                        <label for="supportEmail">Email Address</label>
-                        <input type="email" id="supportEmail" placeholder="your@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="supportSubject">Subject</label>
-                        <input type="text" id="supportSubject" placeholder="Brief description of your issue" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="supportMessage">Message</label>
-                        <textarea id="supportMessage" placeholder="Please describe your issue in detail..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
-                </form>
-            </div>
-        </div>
+    <div class="container">
+    <button class="btn btn-secondary" onclick="navigateTo('home')" style="margin-bottom: 30px; display: flex; align-items: center; gap: 8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Home
+    </button>
+    <div class="support-form">
+    <h1 style="margin-bottom: 10px;">Contact Support</h1>
+    <p style="color: var(--text-secondary); margin-bottom: 30px;">Having trouble? Use the chat widget in the bottom right corner to get real-time support from our team.</p>
+    <div style="text-align: center; padding: 40px;">
+    <button class="btn btn-primary" onclick="navigateTo('home'); setTimeout(() => toggleChat(), 500);">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+    Open Support Chat
+    </button>
+    </div>
+    </div>
+    </div>
     </div>
 
     <!-- Privacy Policy Page -->
@@ -1706,7 +1885,7 @@ openshell\website\index.html
                 <p>We use third-party services for authentication (GitHub, Google) and payment processing. These services have their own privacy policies.</p>
 
                 <h2>7. Contact Us</h2>
-                <p>If you have any questions about this Privacy Policy, please contact us at support@openshell.dev</p>
+                <p>If you have any questions about this Privacy Policy, please <a href="#" onclick="navigateTo('home'); setTimeout(() => toggleChat(), 500); return false;">open a support chat</a> with our team.</p>
             </div>
         </div>
     </div>
@@ -1753,7 +1932,7 @@ openshell\website\index.html
                 <p>We reserve the right to modify these terms at any time. We will notify users of any material changes via email or through the service.</p>
 
                 <h2>9. Contact Information</h2>
-                <p>For any questions about these Terms, please contact us at legal@openshell.dev</p>
+                <p>For any questions about these Terms, please <a href="#" onclick="navigateTo('home'); setTimeout(() => toggleChat(), 500); return false;">open a support chat</a> with our team.</p>
             </div>
         </div>
     </div>
@@ -1904,11 +2083,11 @@ openshell\website\index.html
                 <h3 style="margin-bottom: 15px;">Rate Limits</h3>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                 <div>
-                <div style="font-size: 24px; font-weight: 700;" id="rateLimitRPM">60</div>
+                <div style="font-size: 24px; font-weight: 700;" id="rateLimitRPM">25</div>
                 <div style="color: var(--text-secondary); font-size: 13px;">Requests per minute</div>
                 </div>
                 <div>
-                <div style="font-size: 24px; font-weight: 700;" id="rateLimitDaily">1,000</div>
+                <div style="font-size: 24px; font-weight: 700;" id="rateLimitDaily">50</div>
                 <div style="color: var(--text-secondary); font-size: 13px;">Requests per day</div>
                 </div>
                 <div>
@@ -2043,13 +2222,22 @@ openshell\website\index.html
                                     <div class="description">Permanently delete your account and all data</div>
                                 </div>
                                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteAccount()">Delete</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </div>
+                                </div>
+                                </div>
+                                <div class="settings-section">
+                                <h4>Admin</h4>
+                                <div class="setting-item">
+                                <div>
+                                <label>Admin Inbox</label>
+                                <div class="description">Access support chat inbox (admin users only)</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="openAdminInbox()">Open Inbox</button>
+                                </div>
+                                </div>
+                                </form>
+                                </div>
+                                </div>
+                                </div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
@@ -2622,55 +2810,90 @@ openshell\website\index.html
               }
             }
 
+        async function generateUniqueUsername(baseName) {
+        // Prevent reserved username
+        if (baseName === 'TheNoSkillDev') {
+        showToast('This username is reserved', true);
+        return null;
+        }
+        let username = baseName;
+        let counter = 1;
+        while (true) {
+        const { data, error } = await supabaseClient
+        .from('users')
+        .select('name')
+        .eq('name', username)
+        .single();
+        if (error || !data) {
+        return username;
+        }
+        if (counter === 1) {
+        username = baseName + '1';
+        } else {
+        username = baseName + counter;
+        }
+        counter++;
+        if (counter > 999) {
+        showToast('Unable to generate unique username', true);
+        return null;
+        }
+        }
+        }
+
         async function handleEmailSignup() {
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-
-            if (!name || !email || !password) {
-                showToast('Please fill in all fields', true);
-                return;
-            }
-
-            if (password.length < 6) {
-                showToast('Password must be at least 6 characters', true);
-                return;
-            }
-
-            showSpinner();
-            try {
-                const { data, error } = await supabaseClient.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: { data: { full_name: name } }
-                });
-
-                if (error) throw error;
-
-                document.getElementById('signupName').value = '';
-                document.getElementById('signupEmail').value = '';
-                document.getElementById('signupPassword').value = '';
-                closeAuthModal();
-
-                if (data.user && !data.session) {
-                  showToast('Account created! Please check your email to confirm.', false, true);
-                } else {
-                  showToast('Account created successfully!', false, true);
-                  // Log activity for account creation
-                  await logActivity('success', 'Account created');
-                  // Auto-redirect to dashboard after successful signup
-                  setTimeout(() => {
-                    if (currentUser) {
-                      navigateTo('dashboard');
-                    }
-                  }, SITE_SETTINGS.autoRedirectDelay);
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                showToast(error.message, true);
-            } finally {
-                hideSpinner();
-            }
+        const nameInput = document.getElementById('signupName').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        if (!nameInput || !email || !password) {
+        showToast('Please fill in all fields', true);
+        return;
+        }
+        if (password.length < 6) {
+        showToast('Password must be at least 6 characters', true);
+        return;
+        }
+        if (nameInput === 'TheNoSkillDev') {
+        showToast('This username is reserved', true);
+        return;
+        }
+        showSpinner();
+        try {
+        const uniqueName = await generateUniqueUsername(nameInput);
+        if (!uniqueName) {
+        hideSpinner();
+        return;
+        }
+        const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+        data: { full_name: uniqueName }
+        }
+        });
+        if (error) throw error;
+        document.getElementById('signupName').value = '';
+        document.getElementById('signupEmail').value = '';
+        document.getElementById('signupPassword').value = '';
+        closeAuthModal();
+        if (data.user && !data.session) {
+        showToast('Account created! Please check your email to confirm.', false, true);
+        } else {
+        showToast('Account created successfully!', false, true);
+        // Log activity for account creation
+        await logActivity('success', 'Account created');
+        // Auto-redirect to dashboard after successful signup
+        setTimeout(() => {
+        if (currentUser) {
+        navigateTo('dashboard');
+        }
+        }, SITE_SETTINGS.autoRedirectDelay);
+        }
+        } catch (error) {
+        console.error('Signup error:', error);
+        showToast(error.message, true);
+        } finally {
+        hideSpinner();
+        }
         }
 
         async function logout() {
@@ -2715,9 +2938,9 @@ openshell\website\index.html
         // Update rate limits based on plan
         const plan = user.plan || 'free';
         const rateLimits = {
-        free: { rpm: 60, daily: '1,000' },
-        pro: { rpm: 100, daily: '10,000' },
-        team: { rpm: 500, daily: 'Unlimited' }
+        free: { rpm: 25, daily: '50' },
+        pro: { rpm: 62.5, daily: '125' },
+        team: { rpm: 'Unlimited', daily: 'Unlimited' }
         };
         const limits = rateLimits[plan] || rateLimits.free;
         document.getElementById('rateLimitRPM').textContent = limits.rpm;
@@ -3269,41 +3492,9 @@ openshell\website\index.html
         // SUPPORT
         // ============================================
         async function submitSupportForm(e) {
-            e.preventDefault();
-            const email = document.getElementById('supportEmail').value.trim();
-            const subject = document.getElementById('supportSubject').value.trim();
-            const message = document.getElementById('supportMessage').value.trim();
-
-            if (!email || !subject || !message) {
-                showToast('Please fill in all fields', true);
-                return;
-            }
-
-            showSpinner();
-            try {
-                const { error } = await supabaseClient.from('support_requests').insert({
-                    email: email,
-                    subject: subject,
-                    message: message,
-                    status: 'pending',
-                    created_at: new Date().toISOString()
-                });
-
-                if (error) throw error;
-
-                document.getElementById('supportEmail').value = '';
-                document.getElementById('supportSubject').value = '';
-                document.getElementById('supportMessage').value = '';
-
-                showToast('Support request submitted! We\'ll get back to you soon.', false, true);
-
-                setTimeout(() => navigateTo('home'), 1500);
-            } catch (error) {
-                console.error('Support form error:', error);
-                showToast('Failed to submit support request', true);
-            } finally {
-                hideSpinner();
-            }
+        e.preventDefault();
+        navigateTo('home');
+        setTimeout(() => toggleChat(), 500);
         }
 
         // ============================================
@@ -3442,7 +3633,339 @@ openshell\website\index.html
         // MOBILE MENU
         // ============================================
         function toggleMobileMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebar').classList.toggle('open');
+        }
+        <footer style="padding: 20px; text-align: center; background: #0a0a0a; border-top: 1px solid #1a1a1a; margin-top: 40px;">
+        <a href="https://openshell-ai-dev.github.io/#privacy" style="color: #666; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+        <span style="color: #333;">|</span>
+        <a href="https://openshell-ai-dev.github.io/#terms" style="color: #666; text-decoration: none; margin: 0 10px;">Terms of Service</a>
+        </footer>
+        <!-- Support Chat Widget -->
+        <div id="chatWidget" class="chat-widget">
+        <button id="chatToggle" class="chat-toggle" onclick="toggleChat()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        </svg>
+        </button>
+        <div id="chatWindow" class="chat-window hidden">
+        <div class="chat-header">
+        <span id="chatTitle">Support Chat</span>
+        <div class="chat-header-actions">
+        <button onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">&minus;</button>
+        <button onclick="closeChat()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">&times;</button>
+        </div>
+        </div>
+        <div id="chatBody" class="chat-body">
+        <div id="chatMessages"></div>
+        <div id="chatTyping" class="chat-typing hidden">Support is typing...</div>
+        </div>
+        <div class="chat-input">
+        <input type="text" id="chatMessageInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+        <button onclick="sendChatMessage()">Send</button>
+        </div>
+        </div>
+        </div>
+        <!-- Admin Modal -->
+        <div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 900px; width: 95%; height: 85vh; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Admin Inbox</h2>
+        <button onclick="closeAdminModal()" style="background: none; border: none; color: var(--text-primary); font-size: 24px; cursor: pointer;">&times;</button>
+        </div>
+        <div style="display: flex; flex: 1; gap: 20px; overflow: hidden;">
+        <div style="flex: 1; display: flex; flex-direction: column; background: var(--bg-card); border-radius: 8px; overflow: hidden;">
+        <h3 style="padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px;">Active Chats</h3>
+        <div id="adminChatList" style="flex: 1; overflow-y: auto; padding: 10px;"></div>
+        </div>
+        <div style="flex: 2; display: flex; flex-direction: column; background: var(--bg-card); border-radius: 8px; overflow: hidden;">
+        <div style="padding: 15px; border-bottom: 1px solid var(--border);">
+        <h3 id="adminChatUser" style="font-size: 14px;">Select a chat</h3>
+        </div>
+        <div id="adminChatView" style="flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+        <p style="color: var(--text-muted); text-align: center; margin-top: 50px;">Select a user from the list to view their chat</p>
+        </div>
+        <div style="padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px;">
+        <input type="text" id="adminChatInput" placeholder="Type your response..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: white;" onkeypress="if(event.key==='Enter')sendAdminMessage()">
+        <button class="btn btn-primary btn-sm" onclick="sendAdminMessage()">Send</button>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <!-- Admin Password Modal -->
+        <div id="adminPasswordModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+        <h2 style="margin-bottom: 20px;">Admin Access</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Enter admin password to access the inbox</p>
+        <div class="form-group" style="margin-bottom: 20px;">
+        <input type="password" id="adminPasswordInput" placeholder="Password" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: white;">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn btn-ghost" onclick="closeAdminPasswordModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="verifyAdminPassword()">Verify</button>
+        </div>
+        </div>
+        </div>
+
+        let chatSubscription = null;
+        let adminChatSubscription = null;
+        let currentChatSession = null;
+        let currentAdminChatUser = null;
+        let userIP = 'unknown';
+
+        async function getUserIP() {
+        try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        userIP = data.ip;
+        } catch (e) {
+        userIP = 'unknown';
+        }
+        }
+
+        function toggleChat() {
+        const chatWindow = document.getElementById('chatWindow');
+        chatWindow.classList.toggle('hidden');
+        if (!chatWindow.classList.contains('hidden')) {
+        document.getElementById('chatMessageInput').focus();
+        loadChatMessages();
+        }
+        }
+
+        function closeChat() {
+        document.getElementById('chatWindow').classList.add('hidden');
+        }
+
+        async function loadChatMessages() {
+        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = '';
+        if (currentUserName === 'TheNoSkillDev') {
+        messagesContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Switch to admin inbox from Account Settings.</p>';
+        return;
+        }
+        const { data, error } = await supabaseClient
+        .from('support_chats')
+        .select('*')
+        .eq('username', currentUserName)
+        .order('created_at', { ascending: true });
+        if (error) {
+        console.error('Error loading chat:', error);
+        return;
+        }
+        if (!data || data.length === 0) {
+        messagesContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Welcome to OpenShell support! How can we help you today?</p>';
+        } else {
+        data.forEach(msg => {
+        appendMessage(msg.message, msg.is_admin, new Date(msg.created_at));
+        });
+        }
+        setupChatSubscription();
+        }
+
+        function appendMessage(text, isAdmin, timestamp) {
+        const messagesContainer = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${isAdmin ? 'chat-message-admin' : 'chat-message-user'}`;
+        messageDiv.innerHTML = `
+        <div class="chat-message-content">${escapeHtml(text)}</div>
+        <div class="chat-message-time">${timestamp.toLocaleTimeString()}</div>
+        `;
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+        }
+
+        async function sendChatMessage() {
+        const input = document.getElementById('chatMessageInput');
+        const message = input.value.trim();
+        if (!message) return;
+        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+        if (currentUserName === 'TheNoSkillDev') {
+        showToast('Please use the admin inbox', true);
+        return;
+        }
+        input.value = '';
+        const userId = currentUser?.id || null;
+        const { error } = await supabaseClient.from('support_chats').insert({
+        user_id: userId,
+        username: currentUserName,
+        ip_address: userIP,
+        message: message,
+        is_admin: false,
+        is_read: false,
+        created_at: new Date().toISOString()
+        });
+        if (error) {
+        console.error('Error sending message:', error);
+        showToast('Failed to send message', true);
+        }
+        }
+
+        function setupChatSubscription() {
+        if (chatSubscription) {
+        chatSubscription.unsubscribe();
+        }
+        const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+        chatSubscription = supabaseClient
+        .channel(`support_chat_${currentUserName}`)
+        .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'support_chats',
+        filter: `username=eq.${currentUserName}`
+        }, (payload) => {
+        if (payload.new.is_admin) {
+        appendMessage(payload.new.message, true, new Date(payload.new.created_at));
+        }
+        })
+        .subscribe();
+        }
+
+        function openAdminInbox() {
+        document.getElementById('adminPasswordModal').classList.add('active');
+        setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+        }
+
+        function closeAdminPasswordModal() {
+        document.getElementById('adminPasswordModal').classList.remove('active');
+        document.getElementById('adminPasswordInput').value = '';
+        }
+
+        function verifyAdminPassword() {
+        const password = document.getElementById('adminPasswordInput').value;
+        if (password === 'X7#mK2$pL9!vQ4nR8') {
+        closeAdminPasswordModal();
+        showAdminInterface();
+        } else {
+        showToast('Incorrect password', true);
+        }
+        }
+
+        async function showAdminInterface() {
+        document.getElementById('adminModal').classList.add('active');
+        loadAdminChats();
+        setupAdminSubscription();
+        }
+
+        function closeAdminModal() {
+        document.getElementById('adminModal').classList.remove('active');
+        if (adminChatSubscription) {
+        adminChatSubscription.unsubscribe();
+        adminChatSubscription = null;
+        }
+        }
+
+        async function loadAdminChats() {
+        const { data, error } = await supabaseClient
+        .from('support_chats')
+        .select('*')
+        .order('created_at', { ascending: false });
+        if (error) {
+        console.error('Error loading admin chats:', error);
+        return;
+        }
+        const chatList = document.getElementById('adminChatList');
+        chatList.innerHTML = '';
+        const userMessages = data.filter(msg => !msg.is_admin);
+        const uniqueUsers = [...new Map(userMessages.map(msg => [msg.username, msg])).values()];
+        uniqueUsers.forEach(msg => {
+        const hasUnread = data.some(m => m.username === msg.username && m.is_admin === false && m.is_read === false);
+        const chatItem = document.createElement('div');
+        chatItem.className = 'admin-chat-item';
+        chatItem.onclick = () => openAdminChat(msg.username);
+        chatItem.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: ${hasUnread ? '600' : '400'};">${escapeHtml(msg.username)}</span>
+        ${hasUnread ? '<span style="background: var(--primary); color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px;">NEW</span>' : ''}
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${escapeHtml(msg.message.substring(0, 30))}...</div>
+        `;
+        chatList.appendChild(chatItem);
+        });
+        }
+
+        function openAdminChat(username) {
+        currentAdminChatUser = username;
+        document.getElementById('adminChatUser').textContent = username;
+        loadAdminChatMessages(username);
+        }
+
+        async function loadAdminChatMessages(username) {
+        const chatView = document.getElementById('adminChatView');
+        chatView.innerHTML = '';
+        const { data, error } = await supabaseClient
+        .from('support_chats')
+        .select('*')
+        .eq('username', username)
+        .order('created_at', { ascending: true });
+        if (error) {
+        console.error('Error loading chat messages:', error);
+        return;
+        }
+        data.forEach(msg => {
+        appendAdminMessage(msg.message, msg.is_admin, new Date(msg.created_at));
+        });
+        chatView.scrollTop = chatView.scrollHeight;
+        await supabaseClient
+        .from('support_chats')
+        .update({ is_read: true })
+        .eq('username', username)
+        .eq('is_admin', false);
+        loadAdminChats();
+        }
+
+        function appendAdminMessage(text, isAdmin, timestamp) {
+        const chatView = document.getElementById('adminChatView');
+        const messageDiv = document.createElement('div');
+        messageDiv.style.cssText = `max-width: 80%; padding: 10px 15px; border-radius: 12px; font-size: 14px; ${isAdmin ? 'background: var(--primary); color: white; align-self: flex-end;' : 'background: var(--bg-input); color: var(--text-primary); align-self: flex-start;'}`;
+        messageDiv.innerHTML = `
+        <div>${escapeHtml(text)}</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 5px; text-align: right;">${timestamp.toLocaleTimeString()}</div>
+        `;
+        chatView.appendChild(messageDiv);
+        chatView.scrollTop = chatView.scrollHeight;
+        }
+
+        async function sendAdminMessage() {
+        const input = document.getElementById('adminChatInput');
+        const message = input.value.trim();
+        if (!message || !currentAdminChatUser) return;
+        input.value = '';
+        await supabaseClient.from('support_chats').insert({
+        user_id: null,
+        username: currentAdminChatUser,
+        ip_address: userIP,
+        message: message,
+        is_admin: true,
+        is_read: false,
+        created_at: new Date().toISOString()
+        });
+        loadAdminChatMessages(currentAdminChatUser);
+        }
+
+        function setupAdminSubscription() {
+        if (adminChatSubscription) {
+        adminChatSubscription.unsubscribe();
+        }
+        adminChatSubscription = supabaseClient
+        .channel('admin_support_chats')
+        .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'support_chats'
+        }, (payload) => {
+        loadAdminChats();
+        if (currentAdminChatUser === payload.new.username) {
+        loadAdminChatMessages(currentAdminChatUser);
+        }
+        })
+        .subscribe();
         }
     </script>
 

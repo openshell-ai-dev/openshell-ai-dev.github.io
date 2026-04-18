@@ -2272,23 +2272,23 @@ openshell\website\index.html
                 </div>
                 <div class="dashboard-card" style="padding: 0; overflow: hidden; display: flex; height: 580px;">
                     <!-- Left: conversation list -->
-                    <div style="width: 280px; border-right: 1px solid var(--border); display: flex; flex-direction: column;">
-                        <div style="padding: 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Conversations</div>
+                    <div style="width: 280px; border-right: 1px solid var(--border); display: flex; flex-direction: column; background: rgba(255,255,255,0.03);">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Conversations</div>
                         <div id="adminInboxList" style="flex: 1; overflow-y: auto; padding: 8px;">
                             <p style="color: var(--text-muted); font-size: 13px; padding: 12px;">No messages yet</p>
                         </div>
                     </div>
                     <!-- Right: active chat -->
-                    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
-                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;">
+                    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0; background: rgba(255,255,255,0.01);">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03);">
                             <div id="adminInboxActiveName" style="font-weight: 600; font-size: 15px; color: var(--text-muted); flex: 1;">Select a conversation</div>
                             <button id="adminDeleteConvoBtn" onclick="deleteAdminConversation()" class="btn btn-danger btn-sm" style="display:none; font-size:12px; padding:6px 12px;">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
                                 Delete
                             </button>
                         </div>
-                        <div id="adminInboxMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background: var(--bg-dark);">
-                            <p style="color: var(--text-muted); text-align: center; margin-top: 60px; font-size: 14px;">Select a conversation from the left to view messages</p>
+                        <div id="adminInboxMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,0.02);">
+                            <p style="color: var(--text-secondary); text-align: center; margin-top: 60px; font-size: 14px;">Select a conversation from the left to view messages</p>
                         </div>
                         <div id="adminInboxReplyArea" style="padding: 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: var(--bg-card);">
                             <input type="text" id="adminInboxReplyInput" placeholder="Reply to user..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px 15px; color: white; font-family: inherit; font-size: 14px;" onkeypress="if(event.key==='Enter') sendAdminInboxReply()">
@@ -3786,7 +3786,8 @@ openshell\website\index.html
                     data.forEach(msg => appendSupportMessage(msg.message, msg.is_admin, new Date(msg.created_at)));
                 }
             } catch(e) {
-                container.innerHTML = '<p style="color:var(--error);text-align:center;font-size:13px;">Failed to load messages</p>';
+                console.error('loadSupportMessages error:', e);
+                container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;font-size:13px;margin-top:40px;">Send a message below to get started!</p>';
             }
         }
 
@@ -3867,7 +3868,7 @@ openshell\website\index.html
 
                 list.innerHTML = '';
                 if (uniqueUsers.length === 0) {
-                    list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px;">No conversations yet</p>';
+                    list.innerHTML = '<p style="color:var(--text-secondary);font-size:13px;padding:12px;">No conversations yet. Users will appear here once they send a message from the Support page.</p>';
                     return;
                 }
                 uniqueUsers.forEach(msg => {
@@ -3899,7 +3900,7 @@ openshell\website\index.html
                 }
             } catch(e) {
                 console.error('Admin inbox load error:', e);
-                if (!bgOnly) list.innerHTML = '<p style="color:var(--error);font-size:13px;padding:12px;">Failed to load</p>';
+                if (!bgOnly) list.innerHTML = '<p style="color:var(--text-secondary);font-size:13px;padding:12px;line-height:1.6;">Unable to load conversations.<br><span style="color:var(--text-muted);font-size:12px;">Check Supabase RLS policies for the support_chats table.</span></p>';
             }
         }
 
@@ -3947,7 +3948,7 @@ openshell\website\index.html
         async function openAdminInboxMessages(username, appendOnly = false) {
             const container = document.getElementById('adminInboxMessages');
             if (!container) return;
-            if (!appendOnly) container.innerHTML = '';
+            if (!appendOnly) container.innerHTML = '<p style="color:var(--text-secondary);text-align:center;margin-top:40px;font-size:13px;">Loading messages...</p>';
             try {
                 const { data, error } = await supabaseClient
                     .from('support_chats')

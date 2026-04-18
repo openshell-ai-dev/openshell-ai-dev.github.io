@@ -2378,29 +2378,36 @@ openshell\website\index.html
           // Setup event listeners
           setupEventListeners();
 
-          // Handle OAuth callback first before checking session
+          try {
+            // Handle OAuth callback first before checking session
             const hasOAuthCallback = window.location.hash.includes('access_token') ||
-                                       window.location.hash.includes('provider_token') ||
-                                       window.location.hash.includes('expires_at');
+              window.location.hash.includes('provider_token') ||
+              window.location.hash.includes('expires_at');
 
             if (hasOAuthCallback) {
               // Wait for supabase to process the auth callback
               let attempts = 0;
               const checkAuthInterval = setInterval(async () => {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
+                try {
+                  const { data: { session } } = await supabaseClient.auth.getSession();
+                  if (session) {
+                    clearInterval(checkAuthInterval);
+                    // Clean up URL by removing hash
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                    // Hide loader before showing dashboard
+                    hideSiteLoader();
+                    // Show dashboard after successful OAuth
+                    await handleAuthStateChange(session);
+                  } else if (attempts++ > 50) { // Timeout after 5 seconds
+                    clearInterval(checkAuthInterval);
+                    // Hide loader before handling sign out
+                    hideSiteLoader();
+                    handleSignOut();
+                  }
+                } catch (err) {
                   clearInterval(checkAuthInterval);
-                  // Clean up URL by removing hash
-                  history.replaceState(null, '', window.location.pathname + window.location.search);
-                  // Hide loader before showing dashboard
                   hideSiteLoader();
-                  // Show dashboard after successful OAuth
-                  await handleAuthStateChange(session);
-                } else if (attempts++ > 50) { // Timeout after 5 seconds
-                  clearInterval(checkAuthInterval);
-                  // Hide loader before handling sign out
-                  hideSiteLoader();
-                  handleSignOut();
+                  console.error('OAuth check error:', err);
                 }
               }, 100);
               return; // Skip normal initialization
@@ -2409,17 +2416,27 @@ openshell\website\index.html
             // Handle hash-based routing
             handleHashChange();
 
-          // Listen for auth state changes
-          supabaseClient.auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event);
-            if (event === 'SIGNED_IN') {
-              handleAuthStateChange(session);
-            } else if (event === 'SIGNED_OUT') {
-              handleSignOut();
-            }
-          });
+            // Listen for auth state changes
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+              console.log('Auth state changed:', event);
+              if (event === 'SIGNED_IN') {
+                handleAuthStateChange(session);
+                // Show chat widget when user is logged in
+                const chatWidget = document.getElementById('chatWidget');
+                if (chatWidget) chatWidget.style.display = 'block';
+              } else if (event === 'SIGNED_OUT') {
+                handleSignOut();
+                // Hide chat widget when user is logged out
+                const chatWidget = document.getElementById('chatWidget');
+                if (chatWidget) chatWidget.style.display = 'none';
+              }
+            });
 
-          // Hide loader after animation completes, then show content
+          } catch (error) {
+            console.error('Initialization error:', error);
+          }
+
+          // Always hide loader after duration, even if there was an error
           setTimeout(() => {
             hideSiteLoader();
             // Small delay after loader hides, then show home content if not on a specific page
@@ -3636,12 +3653,13 @@ openshell\website\index.html
         document.getElementById('sidebar').classList.toggle('open');
         }
         <footer style="padding: 20px; text-align: center; background: #0a0a0a; border-top: 1px solid #1a1a1a; margin-top: 40px;">
-        <a href="https://openshell-ai-dev.github.io/#privacy" style="color: #666; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
-        <span style="color: #333;">|</span>
-        <a href="https://openshell-ai-dev.github.io/#terms" style="color: #666; text-decoration: none; margin: 0 10px;">Terms of Service</a>
+          <a href="https://openshell-ai-dev.github.io/#privacy" style="color: #666; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+          <span style="color: #333;">|</span>
+          <a href="https://openshell-ai-dev.github.io/#terms" style="color: #666; text-decoration: none; margin: 0 10px;">Terms of Service</a>
         </footer>
-        <!-- Support Chat Widget -->
-        <div id="chatWidget" class="chat-widget">
+
+        <!-- Support Chat Widget (Hidden when not logged in, controlled by JS) -->
+        <div id="chatWidget" class="chat-widget" style="display: none;">
         <button id="chatToggle" class="chat-toggle" onclick="toggleChat()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -3724,6 +3742,12 @@ openshell\website\index.html
         }
 
         function toggleChat() {
+          // Restrict chat to logged-in users only
+          if (!currentUser) {
+            showToast('Please sign in to access support chat', true);
+            setTimeout(() => showLogin(), 100);
+            return;
+          }
         const chatWindow = document.getElementById('chatWindow');
         chatWindow.classList.toggle('hidden');
         if (!chatWindow.classList.contains('hidden')) {

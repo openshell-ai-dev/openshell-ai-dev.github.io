@@ -1829,15 +1829,31 @@ openshell\website\index.html
     </button>
     <div class="support-form">
     <h1 style="margin-bottom: 10px;">Contact Support</h1>
-    <p style="color: var(--text-secondary); margin-bottom: 30px;">Having trouble? Use the chat widget in the bottom right corner to get real-time support from our team.</p>
-    <div style="text-align: center; padding: 40px;">
-    <button class="btn btn-primary" onclick="navigateTo('home'); setTimeout(() => toggleChat(), 500);">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-    </svg>
-    Open Support Chat
-    </button>
+    <p style="color: var(--text-secondary); margin-bottom: 24px;">Send a message and our team will get back to you as soon as possible.</p>
+
+    <!-- Not logged in state -->
+    <div id="supportLoginPrompt" style="text-align: center; padding: 40px; display: none;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-muted); margin-bottom: 16px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Sign in to access support chat</p>
+        <button class="btn btn-primary" onclick="showLogin()">Sign In to Chat</button>
     </div>
+
+    <!-- Logged in: embedded chat panel -->
+    <div id="supportChatPanel" style="display: none; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; height: 520px;">
+        <div style="background: var(--primary); padding: 16px 20px; display: flex; align-items: center; gap: 12px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: white;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <span style="color: white; font-weight: 600; font-size: 15px;">Support Chat</span>
+            <span id="supportChatStatus" style="margin-left: auto; font-size: 12px; color: rgba(255,255,255,0.75);">● Online</span>
+        </div>
+        <div id="supportMessages" style="flex: 1; overflow-y: auto; padding: 20px; background: var(--bg-dark); display: flex; flex-direction: column; gap: 12px; min-height: 0;">
+            <!-- messages injected here -->
+        </div>
+        <div style="padding: 16px; background: var(--bg-card); border-top: 1px solid var(--border); display: flex; gap: 10px;">
+            <input type="text" id="supportChatInput" placeholder="Type your message..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px 15px; color: white; font-family: inherit; font-size: 14px;" onkeypress="if(event.key==='Enter') sendSupportMessage()">
+            <button class="btn btn-primary" onclick="sendSupportMessage()">Send</button>
+        </div>
+    </div>
+
     </div>
     </div>
     </div>
@@ -1968,6 +1984,15 @@ openshell\website\index.html
                 <button class="sidebar-nav-item" onclick="showBillingModal()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                     Billing
+                </button>
+            </div>
+            <!-- Admin-only section — shown by JS when username === TheNoSkillDev -->
+            <div class="sidebar-section" id="adminSidebarSection" style="display: none;">
+                <div class="sidebar-section-title">Owner</div>
+                <button class="sidebar-nav-item" data-section="adminInbox" onclick="switchDashboardSection('adminInbox')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Support Inbox
+                    <span id="adminUnreadBadge" style="display:none; margin-left:auto; background:var(--error); color:white; font-size:10px; padding:1px 6px; border-radius:10px;">●</span>
                 </button>
             </div>
             <div class="sidebar-section">
@@ -2224,20 +2249,49 @@ openshell\website\index.html
                                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteAccount()">Delete</button>
                                 </div>
                                 </div>
-                                <div class="settings-section">
-                                <h4>Admin</h4>
-                                <div class="setting-item">
-                                <div>
-                                <label>Admin Inbox</label>
-                                <div class="description">Access support chat inbox (admin users only)</div>
-                                </div>
-                                <button type="button" class="btn btn-secondary btn-sm" onclick="openAdminInbox()">Open Inbox</button>
-                                </div>
-                                </div>
-                                </form>
-                                </div>
-                                </div>
-                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Inbox Section (TheNoSkillDev only) -->
+            <div id="adminInboxSection" class="dashboard-section hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h1>Support Inbox</h1>
+                        <p>View and respond to user support messages in real-time</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="loadAdminInboxChats()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        Refresh
+                    </button>
+                </div>
+                <div class="dashboard-card" style="padding: 0; overflow: hidden; display: flex; height: 580px;">
+                    <!-- Left: conversation list -->
+                    <div style="width: 280px; border-right: 1px solid var(--border); display: flex; flex-direction: column;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Conversations</div>
+                        <div id="adminInboxList" style="flex: 1; overflow-y: auto; padding: 8px;">
+                            <p style="color: var(--text-muted); font-size: 13px; padding: 12px;">No messages yet</p>
+                        </div>
+                    </div>
+                    <!-- Right: active chat -->
+                    <div style="flex: 1; display: flex; flex-direction: column; min-width: 0;">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;">
+                            <div id="adminInboxActiveName" style="font-weight: 600; font-size: 15px; color: var(--text-muted);">Select a conversation</div>
+                        </div>
+                        <div id="adminInboxMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; background: var(--bg-dark);">
+                            <p style="color: var(--text-muted); text-align: center; margin-top: 60px; font-size: 14px;">Select a conversation from the left to view messages</p>
+                        </div>
+                        <div id="adminInboxReplyArea" style="padding: 16px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: var(--bg-card);">
+                            <input type="text" id="adminInboxReplyInput" placeholder="Reply to user..." style="flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; padding: 10px 15px; color: white; font-family: inherit; font-size: 14px;" onkeypress="if(event.key==='Enter') sendAdminInboxReply()">
+                            <button class="btn btn-primary" onclick="sendAdminInboxReply()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
 
     <!-- Auth Modal -->
     <div id="authModal" class="modal">
@@ -2516,6 +2570,8 @@ openshell\website\index.html
                     document.getElementById('supportPage').classList.add('active');
                     currentPage = 'support';
                     updateTitle('Support');
+                    // Init embedded chat panel
+                    setTimeout(() => initSupportPage(), 50);
                     break;
                 case 'privacy':
                     document.getElementById('privacyPage').classList.add('active');
@@ -2973,8 +3029,18 @@ openshell\website\index.html
               await populateUsageHistory(user.id);
               // Setup real-time subscriptions
               setupDashboardSubscriptions(user.id);
+              // Show/hide admin sidebar based on username
+              const uname = user.name || '';
+              const adminSidebar = document.getElementById('adminSidebarSection');
+              if (adminSidebar) adminSidebar.style.display = (uname === 'TheNoSkillDev') ? 'block' : 'none';
+
               // Show overview section by default
               switchDashboardSection('overview');
+
+              // If admin, pre-load inbox in background so badge updates
+              if (uname === 'TheNoSkillDev') {
+                setTimeout(() => loadAdminInboxChats(true), 1000);
+              }
             }
             // Global subscription references for cleanup
             let activitySubscription = null;
@@ -3185,6 +3251,7 @@ openshell\website\index.html
 
             // Show selected section with animation
             const selectedSection = document.getElementById(section + 'Section');
+            if (!selectedSection) return;
             selectedSection.classList.remove('hidden');
             selectedSection.classList.add('fade-in');
 
@@ -3194,9 +3261,15 @@ openshell\website\index.html
                 api: 'API Keys',
                 usage: 'Usage Analytics',
                 activity: 'Activity Log',
-                settings: 'Settings'
+                settings: 'Settings',
+                adminInbox: 'Support Inbox'
             };
             updateTitle(titles[section] || 'Dashboard');
+
+            // Load admin inbox data when switching to it
+            if (section === 'adminInbox') {
+                loadAdminInboxChats();
+            }
         }
 
         async function populateActivityList(userId = null) {
@@ -3669,25 +3742,235 @@ openshell\website\index.html
         }
         }
 
+        // ============================================
+        // SUPPORT PAGE — Embedded Chat
+        // ============================================
+        function initSupportPage() {
+            const panel = document.getElementById('supportChatPanel');
+            const prompt = document.getElementById('supportLoginPrompt');
+            if (!panel || !prompt) return;
+
+            if (!currentUser) {
+                panel.style.display = 'none';
+                prompt.style.display = 'block';
+                return;
+            }
+            // Logged in — show panel, hide prompt
+            prompt.style.display = 'none';
+            panel.style.display = 'flex';
+            loadSupportMessages();
+            setupSupportSubscription();
+        }
+
+        async function loadSupportMessages() {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+            container.innerHTML = '<p style="color:var(--text-muted);text-align:center;font-size:13px;">Loading...</p>';
+            try {
+                const { data, error } = await supabaseClient
+                    .from('support_chats')
+                    .select('*')
+                    .eq('username', username)
+                    .order('created_at', { ascending: true });
+                if (error) throw error;
+                container.innerHTML = '';
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;font-size:13px;margin-top:40px;">No messages yet. Send one below to get started!</p>';
+                } else {
+                    data.forEach(msg => appendSupportMessage(msg.message, msg.is_admin, new Date(msg.created_at)));
+                }
+            } catch(e) {
+                container.innerHTML = '<p style="color:var(--error);text-align:center;font-size:13px;">Failed to load messages</p>';
+            }
+        }
+
+        function appendSupportMessage(text, isAdmin, timestamp) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            const div = document.createElement('div');
+            div.style.cssText = `display:flex; flex-direction:column; max-width:75%; ${isAdmin ? 'align-self:flex-start;' : 'align-self:flex-end;'}`;
+            div.innerHTML = `
+                <div style="padding:10px 14px; border-radius:12px; font-size:14px; word-wrap:break-word; ${isAdmin ? 'background:var(--bg-input); color:var(--text-primary); border-bottom-left-radius:4px;' : 'background:var(--primary); color:white; border-bottom-right-radius:4px;'}">${escapeHtml(text)}</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:3px; ${isAdmin ? 'text-align:left;' : 'text-align:right;'}">${isAdmin ? 'Support · ' : ''}${timestamp.toLocaleTimeString()}</div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendSupportMessage() {
+            const input = document.getElementById('supportChatInput');
+            if (!input) return;
+            const message = input.value.trim();
+            if (!message) return;
+            if (!currentUser) { showToast('Please sign in first', true); return; }
+            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+            input.value = '';
+            appendSupportMessage(message, false, new Date());
+            const { error } = await supabaseClient.from('support_chats').insert({
+                user_id: currentUser.id,
+                username: username,
+                ip_address: userIP,
+                message: message,
+                is_admin: false,
+                is_read: false,
+                created_at: new Date().toISOString()
+            });
+            if (error) { showToast('Failed to send', true); console.error(error); }
+        }
+
+        let supportSubscription = null;
+        function setupSupportSubscription() {
+            if (supportSubscription) supportSubscription.unsubscribe();
+            const username = userProfile?.name || currentUser?.user_metadata?.full_name || 'Guest';
+            supportSubscription = supabaseClient
+                .channel(`support_user_${username}`)
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_chats', filter: `username=eq.${username}` }, (payload) => {
+                    if (payload.new.is_admin) {
+                        appendSupportMessage(payload.new.message, true, new Date(payload.new.created_at));
+                    }
+                })
+                .subscribe();
+        }
+
+        // ============================================
+        // DASHBOARD ADMIN INBOX (replaces modal-based)
+        // ============================================
+        let adminInboxActiveUser = null;
+        let adminInboxSubscription = null;
+
+        async function loadAdminInboxChats(bgOnly = false) {
+            const list = document.getElementById('adminInboxList');
+            if (!list) return;
+            if (!bgOnly) list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px;">Loading...</p>';
+            try {
+                const { data, error } = await supabaseClient
+                    .from('support_chats')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+
+                const userMsgs = (data || []).filter(m => !m.is_admin);
+                const uniqueUsers = [...new Map(userMsgs.map(m => [m.username, m])).values()];
+                const hasUnread = uniqueUsers.some(m => (data || []).some(x => x.username === m.username && !x.is_admin && !x.is_read));
+
+                // Update badge
+                const badge = document.getElementById('adminUnreadBadge');
+                if (badge) badge.style.display = hasUnread ? 'inline' : 'none';
+
+                if (bgOnly) return;
+
+                list.innerHTML = '';
+                if (uniqueUsers.length === 0) {
+                    list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:12px;">No conversations yet</p>';
+                    return;
+                }
+                uniqueUsers.forEach(msg => {
+                    const unread = (data || []).some(x => x.username === msg.username && !x.is_admin && !x.is_read);
+                    const item = document.createElement('div');
+                    item.style.cssText = `padding:12px; border-radius:8px; cursor:pointer; margin-bottom:6px; border:1px solid ${adminInboxActiveUser === msg.username ? 'var(--primary)' : 'transparent'}; background:${adminInboxActiveUser === msg.username ? 'rgba(124,58,237,0.1)' : 'var(--bg-input)'}; transition:all 0.2s;`;
+                    item.onmouseenter = () => { if(adminInboxActiveUser !== msg.username) item.style.background = 'rgba(255,255,255,0.05)'; };
+                    item.onmouseleave = () => { if(adminInboxActiveUser !== msg.username) item.style.background = 'var(--bg-input)'; };
+                    item.onclick = () => openAdminInboxChat(msg.username);
+                    item.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                            <span style="font-size:14px; font-weight:${unread ? '600' : '400'}; color:var(--text-primary);">${escapeHtml(msg.username)}</span>
+                            ${unread ? '<span style="background:var(--error);color:white;font-size:9px;padding:2px 6px;border-radius:10px;">NEW</span>' : ''}
+                        </div>
+                        <div style="font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(msg.message.substring(0, 35))}...</div>
+                    `;
+                    list.appendChild(item);
+                });
+
+                // Setup real-time for inbox
+                if (!adminInboxSubscription) {
+                    adminInboxSubscription = supabaseClient
+                        .channel('admin_inbox_all')
+                        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_chats' }, () => {
+                            loadAdminInboxChats(false);
+                            if (adminInboxActiveUser) openAdminInboxMessages(adminInboxActiveUser, true);
+                        })
+                        .subscribe();
+                }
+            } catch(e) {
+                console.error('Admin inbox load error:', e);
+                if (!bgOnly) list.innerHTML = '<p style="color:var(--error);font-size:13px;padding:12px;">Failed to load</p>';
+            }
+        }
+
+        async function openAdminInboxChat(username) {
+            adminInboxActiveUser = username;
+            document.getElementById('adminInboxActiveName').textContent = username;
+            document.getElementById('adminInboxActiveName').style.color = 'var(--text-primary)';
+            document.getElementById('adminInboxReplyInput').placeholder = `Reply to ${username}...`;
+            await openAdminInboxMessages(username, false);
+            // Mark as read
+            await supabaseClient.from('support_chats').update({ is_read: true }).eq('username', username).eq('is_admin', false);
+            loadAdminInboxChats(false); // refresh list to clear badge
+        }
+
+        async function openAdminInboxMessages(username, appendOnly = false) {
+            const container = document.getElementById('adminInboxMessages');
+            if (!container) return;
+            if (!appendOnly) container.innerHTML = '';
+            try {
+                const { data, error } = await supabaseClient
+                    .from('support_chats')
+                    .select('*')
+                    .eq('username', username)
+                    .order('created_at', { ascending: true });
+                if (error) throw error;
+                if (!appendOnly) container.innerHTML = '';
+                (data || []).forEach(msg => {
+                    // Avoid duplicates when called repeatedly
+                    const msgId = 'msg_' + msg.id;
+                    if (document.getElementById(msgId)) return;
+                    const div = document.createElement('div');
+                    div.id = msgId;
+                    div.style.cssText = `display:flex; flex-direction:column; max-width:75%; ${msg.is_admin ? 'align-self:flex-end;' : 'align-self:flex-start;'}`;
+                    div.innerHTML = `
+                        <div style="padding:10px 14px; border-radius:12px; font-size:14px; ${msg.is_admin ? 'background:var(--primary); color:white; border-bottom-right-radius:4px;' : 'background:var(--bg-input); color:var(--text-primary); border-bottom-left-radius:4px;'}">${escapeHtml(msg.message)}</div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px; ${msg.is_admin ? 'text-align:right;' : 'text-align:left;'}">${msg.is_admin ? 'You · ' : username + ' · '}${new Date(msg.created_at).toLocaleTimeString()}</div>
+                    `;
+                    container.appendChild(div);
+                });
+                container.scrollTop = container.scrollHeight;
+            } catch(e) {
+                console.error('Error loading admin chat messages:', e);
+            }
+        }
+
+        async function sendAdminInboxReply() {
+            const input = document.getElementById('adminInboxReplyInput');
+            if (!input || !adminInboxActiveUser) return;
+            const message = input.value.trim();
+            if (!message) return;
+            input.value = '';
+            await supabaseClient.from('support_chats').insert({
+                user_id: null,
+                username: adminInboxActiveUser,
+                ip_address: userIP,
+                message: message,
+                is_admin: true,
+                is_read: false,
+                created_at: new Date().toISOString()
+            });
+            openAdminInboxMessages(adminInboxActiveUser, true);
+        }
+
+        // compat shim — old modal functions now no-op
+        function openAdminInbox() { switchDashboardSection('adminInbox'); }
+        async function showAdminInterface() { switchDashboardSection('adminInbox'); }
+        function closeAdminModal() {}
+        function loadAdminChats() { loadAdminInboxChats(); }
+
+        // ============================================
+        // LEGACY toggleChat — kept as no-op safety shim
+        // ============================================
         function toggleChat() {
-          // Restrict chat to logged-in users only
-          if (!currentUser) {
-            showToast('Please sign in to access support chat', true);
-            setTimeout(() => showLogin(), 100);
-            return;
-          }
-          // Owner gets auto-routed to admin inbox, no password needed
-          const currentUserName = userProfile?.name || currentUser?.user_metadata?.full_name || '';
-          if (currentUserName === 'TheNoSkillDev') {
-            showAdminInterface();
-            return;
-          }
-          const chatWindow = document.getElementById('chatWindow');
-          chatWindow.classList.toggle('hidden');
-          if (!chatWindow.classList.contains('hidden')) {
-            document.getElementById('chatMessageInput').focus();
-            loadChatMessages();
-          }
+          // Chat is now on the Support page — redirect there
+          if (!currentUser) { showToast('Please sign in to access support', true); setTimeout(() => showLogin(), 100); return; }
+          navigateTo('support');
         }
 
         function closeChat() {
@@ -3927,7 +4210,7 @@ openshell\website\index.html
     </script>
 
     <!-- Support Chat Widget -->
-    <div id="chatWidget" class="chat-widget" style="display: none;">
+    <div id="chatWidget" class="chat-widget" style="display: none !important; pointer-events: none;">
         <button id="chatToggle" class="chat-toggle" onclick="toggleChat()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
